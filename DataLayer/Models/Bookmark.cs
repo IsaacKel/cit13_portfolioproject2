@@ -3,12 +3,12 @@ using System;
 
 namespace DataLayer.Models
 {
-  public class User
+  public class Bookmark
   {
     public int Id { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public string Email { get; set; }
+    public string TConst { get; set; }
+    public string NConst { get; set; }
+    public string Note { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
   }
