@@ -2,8 +2,11 @@ using DataLayer;
 using DataLayer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Mapster;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddMapster();
 
 // Add services to the container.
 // Register MovieDatabase with the dependency injection container
