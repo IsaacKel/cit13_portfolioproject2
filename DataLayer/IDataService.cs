@@ -20,7 +20,7 @@ namespace DataLayer
     // --SEARCH HISTORY--
     IList<SearchHistory> GetSearchHistory(int userId);
     SearchHistory GetSearchHistory(int userId, string searchQuery, DateTime createdAt);
-    SearchHistory AddSearchHistory(int userId, string searchQuery);
+    SearchHistory AddSearchHistory(int userId, string searchQuery, DateTime createdAt);
     void DeleteSearchHistory(int userId, string searchQuery, DateTime createdAt);
 
     // --USER RATING--

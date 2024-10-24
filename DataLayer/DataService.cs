@@ -104,7 +104,7 @@ namespace DataLayer
                                         && sh.CreatedAt == createdAt);
     }
 
-    public SearchHistory AddSearchHistory(int userId, string searchQuery)
+    public SearchHistory AddSearchHistory(int userId, string searchQuery, DateTime createdAt)
     {
       var searchHistory = new SearchHistory
       {
