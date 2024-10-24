@@ -1,0 +1,13 @@
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/Debug/net8.0/DataLayer.csproj.AssemblyReference.cache
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/Debug/net8.0/DataLayer.GeneratedMSBuildEditorConfig.editorconfig
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/Debug/net8.0/DataLayer.AssemblyInfoInputs.cache
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/Debug/net8.0/DataLayer.AssemblyInfo.cs
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/Debug/net8.0/DataLayer.csproj.CoreCompileInputs.cache
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/Debug/net8.0/DataLayer.sourcelink.json
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/bin/Debug/net8.0/DataLayer.deps.json
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/bin/Debug/net8.0/DataLayer.dll
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/bin/Debug/net8.0/DataLayer.pdb
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/Debug/net8.0/DataLayer.dll
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/Debug/net8.0/refint/DataLayer.dll
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/Debug/net8.0/DataLayer.pdb
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/Debug/net8.0/ref/DataLayer.dll

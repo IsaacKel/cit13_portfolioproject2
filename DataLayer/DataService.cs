@@ -19,145 +19,156 @@ namespace DataLayer
       _context = new MovieDbContext(options);
     }
 
-    // --BOOKMARKS--
-    public IList<Bookmark> GetBookmarks()
+    // --USER--
+    public User AddUser(string username, string password, string email)
     {
-      //return _context.Bookmarks.ToList();
-      return _context.Bookmarks
-            .Include(b => b.User)
-            .Select(b => new Bookmark
-            {
-              Id = b.Id,
-              TConst = b.TConst,
-              NConst = b.NConst,
-              Note = b.Note,
-              CreatedAt = b.CreatedAt,
-              UpdatedAt = b.UpdatedAt,
-              User = new User
-              {
-                Id = b.User.Id,
-                Username = b.User.Username,
-                Password = b.User.Password,
-                Email = b.User.Email,
-                CreatedAt = b.User.CreatedAt,
-                UpdatedAt = b.User.UpdatedAt
-              }
-            })
-            .ToList();
+      var user = new User
+      {
+        Username = username,
+        Password = password,
+        Email = email
+      };
+      _context.Users.Add(user);
+      _context.SaveChanges();
+      return user;
     }
 
-    public Bookmark GetBookmark(int id)
+    public User GetUser(string username)
     {
-      return _context.Bookmarks.FirstOrDefault(b => b.Id == id);
+      return _context.Users.FirstOrDefault(u => u.Username == username);
     }
 
-    public void AddBookmark(Bookmark bookmark)
+    public User GetUser(int userId)
     {
+      return _context.Users.FirstOrDefault(u => u.Id == userId);
+    }
+
+    public void DeleteUser(int userId)
+    {
+      var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+      if (user != null)
+      {
+        _context.Users.Remove(user);
+        _context.SaveChanges();
+      }
+    }
+
+    // --BOOKMARK--
+    public IList<Bookmark> GetBookmarks(int userId)
+    {
+      return _context.Bookmarks.Where(b => b.UserId == userId).ToList();
+    }
+
+    public Bookmark GetBookmark(int userId, int bookmarkId)
+    {
+      return _context.Bookmarks.FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
+    }
+
+    public Bookmark AddBookmark(int userId, string tconst, string nconst, string note)
+    {
+      var bookmark = new Bookmark
+      {
+        UserId = userId,
+        TConst = tconst,
+        NConst = nconst,
+        Note = note
+      };
       _context.Bookmarks.Add(bookmark);
       _context.SaveChanges();
+      return bookmark;
     }
 
-    public void UpdateBookmark(Bookmark bookmark)
+    public void DeleteBookmark(int userId, int bookmarkId)
     {
-      _context.Bookmarks.Update(bookmark);
-      _context.SaveChanges();
-    }
-
-    public void DeleteBookmark(int id)
-    {
-      var bookmark = _context.Bookmarks.FirstOrDefault(b => b.Id == id);
-      _context.Bookmarks.Remove(bookmark);
-      _context.SaveChanges();
+      var bookmark = _context.Bookmarks.FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
+      if (bookmark != null)
+      {
+        _context.Bookmarks.Remove(bookmark);
+        _context.SaveChanges();
+      }
     }
 
     // --SEARCH HISTORY--
-    public IList<SearchHistory> GetSearchHistory()
+    public IList<SearchHistory> GetSearchHistory(int userId)
     {
-      return _context.SearchHistories.ToList();
+      return _context.SearchHistories
+                     .Where(sh => sh.UserId == userId)
+                     .ToList();
     }
 
-    public SearchHistory GetSearchHistory(int id)
+    public SearchHistory GetSearchHistory(int userId, string searchQuery, DateTime createdAt)
     {
-      return _context.SearchHistories.FirstOrDefault(s => s.UserId == id);
+      return _context.SearchHistories
+                     .FirstOrDefault(sh => sh.UserId == userId
+                                        && sh.SearchQuery == searchQuery
+                                        && sh.CreatedAt == createdAt);
     }
 
-    public void AddSearchHistory(SearchHistory searchHistory)
+    public SearchHistory AddSearchHistory(int userId, string searchQuery)
     {
+      var searchHistory = new SearchHistory
+      {
+        UserId = userId,
+        SearchQuery = searchQuery,
+        CreatedAt = DateTime.UtcNow
+      };
       _context.SearchHistories.Add(searchHistory);
       _context.SaveChanges();
+      return searchHistory;
     }
 
-    public void UpdateSearchHistory(SearchHistory searchHistory)
+    public void DeleteSearchHistory(int userId, string searchQuery, DateTime createdAt)
     {
-      _context.SearchHistories.Update(searchHistory);
-      _context.SaveChanges();
+      var searchHistory = _context.SearchHistories
+                                  .FirstOrDefault(sh => sh.UserId == userId
+                                                     && sh.SearchQuery == searchQuery
+                                                     && sh.CreatedAt == createdAt);
+      if (searchHistory != null)
+      {
+        _context.SearchHistories.Remove(searchHistory);
+        _context.SaveChanges();
+      }
     }
 
-    public void DeleteSearchHistory(int id)
+    // --USER RATING--
+    public IList<UserRating> GetUserRatings(int userId)
     {
-      var searchHistory = _context.SearchHistories.FirstOrDefault(s => s.UserId == id);
-      _context.SearchHistories.Remove(searchHistory);
-      _context.SaveChanges();
+      return _context.UserRatings
+                     .Where(ur => ur.UserId == userId)
+                     .ToList();
     }
 
-    // --USER--
-    public IList<User> GetUsers()
+    public UserRating GetUserRating(int userId, int tconst)
     {
-      return _context.Users.ToList();
+      return _context.UserRatings
+                     .FirstOrDefault(ur => ur.UserId == userId
+                                        && ur.TConst == tconst);
     }
 
-    public User GetUser(int id)
+    public UserRating AddUserRating(int userId, int tconst, int rating)
     {
-      return _context.Users.FirstOrDefault(u => u.Id == id);
-    }
-
-    public void AddUser(User user)
-    {
-      _context.Users.Add(user);
-      _context.SaveChanges();
-    }
-
-    public void UpdateUser(User user)
-    {
-      _context.Users.Update(user);
-      _context.SaveChanges();
-    }
-
-    public void DeleteUser(int id)
-    {
-      var user = _context.Users.FirstOrDefault(u => u.Id == id);
-      _context.Users.Remove(user);
-      _context.SaveChanges();
-    }
-
-    // --USER RATINGS--
-    public IList<UserRating> GetUserRatings()
-    {
-      return _context.UserRatings.ToList();
-    }
-
-    public UserRating GetUserRating(int userId, int tConst)
-    {
-      return _context.UserRatings.FirstOrDefault(ur => ur.UserId == userId && ur.TConst == tConst);
-    }
-
-    public void AddUserRating(UserRating userRating)
-    {
+      var userRating = new UserRating
+      {
+        UserId = userId,
+        TConst = tconst,
+        Rating = rating,
+        CreatedAt = DateTime.UtcNow
+      };
       _context.UserRatings.Add(userRating);
       _context.SaveChanges();
+      return userRating;
     }
 
-    public void UpdateUserRating(UserRating userRating)
+    public void DeleteUserRating(int userId, int tconst)
     {
-      _context.UserRatings.Update(userRating);
-      _context.SaveChanges();
-    }
-
-    public void DeleteUserRating(int userId, int tConst)
-    {
-      var userRating = _context.UserRatings.FirstOrDefault(ur => ur.UserId == userId && ur.TConst == tConst);
-      _context.UserRatings.Remove(userRating);
-      _context.SaveChanges();
+      var userRating = _context.UserRatings
+                               .FirstOrDefault(ur => ur.UserId == userId
+                                                  && ur.TConst == tconst);
+      if (userRating != null)
+      {
+        _context.UserRatings.Remove(userRating);
+        _context.SaveChanges();
+      }
     }
   }
 }

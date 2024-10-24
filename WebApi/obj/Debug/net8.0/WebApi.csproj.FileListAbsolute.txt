@@ -1,0 +1,8 @@
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/WebApi/obj/Debug/net8.0/WebApi.csproj.AssemblyReference.cache
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/WebApi/obj/Debug/net8.0/WebApi.GeneratedMSBuildEditorConfig.editorconfig
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/WebApi/obj/Debug/net8.0/WebApi.AssemblyInfoInputs.cache
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/WebApi/obj/Debug/net8.0/WebApi.AssemblyInfo.cs
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/WebApi/obj/Debug/net8.0/WebApi.csproj.CoreCompileInputs.cache
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/WebApi/obj/Debug/net8.0/WebApi.MvcApplicationPartsAssemblyInfo.cs
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/WebApi/obj/Debug/net8.0/WebApi.MvcApplicationPartsAssemblyInfo.cache
+/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/WebApi/obj/Debug/net8.0/WebApi.sourcelink.json

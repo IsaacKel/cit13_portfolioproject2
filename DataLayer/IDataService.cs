@@ -19,14 +19,14 @@ namespace DataLayer
 
     // --SEARCH HISTORY--
     IList<SearchHistory> GetSearchHistory(int userId);
-    SearchHistory GetSearchHistory(int userId, int searchHistoryId);
+    SearchHistory GetSearchHistory(int userId, string searchQuery, DateTime createdAt);
     SearchHistory AddSearchHistory(int userId, string searchQuery);
-    void DeleteSearchHistory(int userId, int searchHistoryId);
+    void DeleteSearchHistory(int userId, string searchQuery, DateTime createdAt);
 
     // --USER RATING--
     IList<UserRating> GetUserRatings(int userId);
-    UserRating GetUserRating(int userId, int userRatingId);
+    UserRating GetUserRating(int userId, int tconst);
     UserRating AddUserRating(int userId, int tconst, int rating);
-    void DeleteUserRating(int userId, int userRatingId);
+    void DeleteUserRating(int userId, int tconst);
   }
 }

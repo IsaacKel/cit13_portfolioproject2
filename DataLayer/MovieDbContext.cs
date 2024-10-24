@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataLayer.Models;
 
 namespace DataLayer;
 
-public class MovieDbContext : MovieDbContext
+public class MovieDbContext : DbContext
 {
   public MovieDbContext(DbContextOptions<MovieDbContext> options) : base(options)
   {
@@ -18,7 +19,7 @@ public class MovieDbContext : MovieDbContext
   public DbSet<UserRating> UserRatings { get; set; }
   public DbSet<SearchHistory> SearchHistories { get; set; }
 
-  public override void OnModelCreating(ModelBuilder modelBuilder)
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     MapUsers(modelBuilder);
     MapBookmarks(modelBuilder);
@@ -53,22 +54,23 @@ public class MovieDbContext : MovieDbContext
   //User Ratings Table Mapping
   private static void MapUserRatings(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<Bookmark>().ToTable("user_ratings");
+    modelBuilder.Entity<UserRating>().ToTable("user_ratings");
     // modelBuilder.Entity<Bookmark>().HasKey(u => u.Id);
-    modelBuilder.Entity<Bookmark>().Property(u => u.Id).HasColumnName("userId");
-    modelBuilder.Entity<Bookmark>().Property(u => u.TConst).HasColumnName("tconst");
-    modelBuilder.Entity<Bookmark>().Property(u => u.Rating).HasColumnName("rating");
-    modelBuilder.Entity<Bookmark>().Property(u => u.CreatedAt).HasColumnName("ratingDate");
+    modelBuilder.Entity<UserRating>().HasKey(ur => new { ur.TConst, ur.UserId });
+    modelBuilder.Entity<UserRating>().Property(u => u.UserId).HasColumnName("userId");
+    modelBuilder.Entity<UserRating>().Property(u => u.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<UserRating>().Property(u => u.Rating).HasColumnName("rating");
+    modelBuilder.Entity<UserRating>().Property(u => u.CreatedAt).HasColumnName("ratingDate");
   }
 
   //Search History Table Mapping
   private static void MapSearchHistories(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<Bookmark>().ToTable("search_history");
-    modelBuilder.Entity<Bookmark>().HasKey(s => s.Id);
-    modelBuilder.Entity<Bookmark>().Property(s => s.Id).HasColumnName("userId");
-    modelBuilder.Entity<Bookmark>().Property(s => s.SearchQuery).HasColumnName("searchQuery");
-    modelBuilder.Entity<Bookmark>().Property(s => s.CreatedAt).HasColumnName("searchDate");
+    modelBuilder.Entity<SearchHistory>().ToTable("search_history");
+    modelBuilder.Entity<SearchHistory>().HasKey(sh => new { sh.UserId, sh.SearchQuery, sh.CreatedAt });
+    modelBuilder.Entity<SearchHistory>().Property(s => s.UserId).HasColumnName("userId");
+    modelBuilder.Entity<SearchHistory>().Property(s => s.SearchQuery).HasColumnName("searchQuery");
+    modelBuilder.Entity<SearchHistory>().Property(s => s.CreatedAt).HasColumnName("searchDate");
   }
 }
 
