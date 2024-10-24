@@ -40,7 +40,7 @@ public class MovieDbContext : DbContext
   //Bookmark Table Mapping
   private static void MapBookmarks(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<Bookmark>().ToTable("bookmarks");
+    modelBuilder.Entity<Bookmark>().ToTable("userbookmarks");
     modelBuilder.Entity<Bookmark>().HasKey(b => b.Id);
     modelBuilder.Entity<Bookmark>().Property(b => b.Id).HasColumnName("bookmarkId");
     modelBuilder.Entity<Bookmark>().Property(b => b.TConst).HasColumnName("tconst");
@@ -52,7 +52,7 @@ public class MovieDbContext : DbContext
   //User Ratings Table Mapping
   private static void MapUserRatings(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<UserRating>().ToTable("user_ratings");
+    modelBuilder.Entity<UserRating>().ToTable("userratings");
     modelBuilder.Entity<UserRating>().HasKey(ur => new { ur.TConst, ur.UserId });
     modelBuilder.Entity<UserRating>().Property(u => u.UserId).HasColumnName("userId");
     modelBuilder.Entity<UserRating>().Property(u => u.TConst).HasColumnName("tconst");
@@ -63,7 +63,7 @@ public class MovieDbContext : DbContext
   //Search History Table Mapping
   private static void MapSearchHistories(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<SearchHistory>().ToTable("search_history");
+    modelBuilder.Entity<SearchHistory>().ToTable("usersearchhistory");
     modelBuilder.Entity<SearchHistory>().HasKey(sh => new { sh.UserId, sh.SearchQuery, sh.CreatedAt });
     modelBuilder.Entity<SearchHistory>().Property(s => s.UserId).HasColumnName("userId");
     modelBuilder.Entity<SearchHistory>().Property(s => s.SearchQuery).HasColumnName("searchQuery");
