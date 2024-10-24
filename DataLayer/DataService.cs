@@ -71,11 +71,25 @@ namespace DataLayer
         UserId = userId,
         TConst = tconst,
         NConst = nconst,
-        Note = note
+        Note = note,
+        CreatedAt = DateTime.UtcNow
       };
       _context.Bookmarks.Add(bookmark);
       _context.SaveChanges();
       return bookmark;
+    }
+
+    public void UpdateBookmark(int userId, int bookmarkId, string tconst, string nconst, string note)
+    {
+      var bookmark = _context.Bookmarks.FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
+      if (bookmark != null)
+      {
+        bookmark.TConst = tconst;
+        bookmark.NConst = nconst;
+        bookmark.Note = note;
+        bookmark.UpdatedAt = DateTime.UtcNow;
+        _context.SaveChanges();
+      }
     }
 
     public void DeleteBookmark(int userId, int bookmarkId)

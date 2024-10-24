@@ -47,15 +47,12 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<Bookmark>().Property(b => b.NConst).HasColumnName("nconst");
     modelBuilder.Entity<Bookmark>().Property(b => b.Note).HasColumnName("note");
     modelBuilder.Entity<Bookmark>().Property(b => b.CreatedAt).HasColumnName("bookmarkDate");
-    // modelBuilder.Entity<Bookmark>().Property(b => b.UpdatedAt).HasColumnName("updated_at");
-
   }
 
   //User Ratings Table Mapping
   private static void MapUserRatings(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<UserRating>().ToTable("user_ratings");
-    // modelBuilder.Entity<Bookmark>().HasKey(u => u.Id);
     modelBuilder.Entity<UserRating>().HasKey(ur => new { ur.TConst, ur.UserId });
     modelBuilder.Entity<UserRating>().Property(u => u.UserId).HasColumnName("userId");
     modelBuilder.Entity<UserRating>().Property(u => u.TConst).HasColumnName("tconst");

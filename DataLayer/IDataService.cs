@@ -15,6 +15,7 @@ namespace DataLayer
     IList<Bookmark> GetBookmarks(int userId);
     Bookmark GetBookmark(int userId, int bookmarkId);
     Bookmark AddBookmark(int userId, string tconst, string nconst, string note);
+    void UpdateBookmark(int userId, int bookmarkId, string tconst, string nconst, string note);
     void DeleteBookmark(int userId, int bookmarkId);
 
     // --SEARCH HISTORY--
