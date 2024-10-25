@@ -103,13 +103,18 @@ namespace DataLayer
     }
 
     // --SEARCH HISTORY--
-    public IList<SearchHistory> GetSearchHistory(int userId)
+    // Method to retrieve paginated search history for a specific user
+    public IList<SearchHistory> GetSearchHistory(int userId, int pageNumber = 1, int pageSize = 10)
     {
       return _context.SearchHistories
                      .Where(sh => sh.UserId == userId)
+                     .OrderBy(sh => sh.CreatedAt)
+                     .Skip((pageNumber - 1) * pageSize)
+                     .Take(pageSize)
                      .ToList();
     }
 
+    // Method to retrieve a specific search history entry by userId, searchQuery, and createdAt
     public SearchHistory GetSearchHistory(int userId, string searchQuery, DateTime createdAt)
     {
       return _context.SearchHistories

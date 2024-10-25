@@ -12,5 +12,6 @@ namespace WebApi.DTOs
     [MinLength(1, ErrorMessage = "Search query must have at least 1 character.")]
     public string SearchQuery { get; set; }
     public DateTime CreatedAt { get; set; }
+    public string? SelfLink { get; set; }
   }
 }

@@ -19,7 +19,7 @@ namespace DataLayer
     void DeleteBookmark(int userId, int bookmarkId);
 
     // --SEARCH HISTORY--
-    IList<SearchHistory> GetSearchHistory(int userId);
+    IList<SearchHistory> GetSearchHistory(int userId, int pageNumber = 1, int pageSize = 10);
     SearchHistory GetSearchHistory(int userId, string searchQuery, DateTime createdAt);
     SearchHistory AddSearchHistory(int userId, string searchQuery, DateTime createdAt);
     void DeleteSearchHistory(int userId, string searchQuery, DateTime createdAt);
