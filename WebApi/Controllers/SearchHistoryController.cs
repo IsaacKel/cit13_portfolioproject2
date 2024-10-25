@@ -9,7 +9,6 @@ namespace WebApi.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
-  [Authorize] // Ensure the user is authenticated
   public class SearchHistoryController : ControllerBase
   {
     private readonly IDataService _dataService;

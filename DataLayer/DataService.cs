@@ -87,7 +87,7 @@ namespace DataLayer
         bookmark.TConst = tconst;
         bookmark.NConst = nconst;
         bookmark.Note = note;
-        bookmark.UpdatedAt = DateTime.UtcNow;
+        bookmark.CreatedAt = DateTime.UtcNow;
         _context.SaveChanges();
       }
     }
@@ -152,14 +152,14 @@ namespace DataLayer
                      .ToList();
     }
 
-    public UserRating GetUserRating(int userId, int tconst)
+    public UserRating GetUserRating(int userId, string tconst)
     {
       return _context.UserRatings
                      .FirstOrDefault(ur => ur.UserId == userId
                                         && ur.TConst == tconst);
     }
 
-    public UserRating AddUserRating(int userId, int tconst, int rating)
+    public UserRating AddUserRating(int userId, string tconst, int rating)
     {
       var userRating = new UserRating
       {
@@ -173,7 +173,7 @@ namespace DataLayer
       return userRating;
     }
 
-    public void DeleteUserRating(int userId, int tconst)
+    public void DeleteUserRating(int userId, string tconst)
     {
       var userRating = _context.UserRatings
                                .FirstOrDefault(ur => ur.UserId == userId

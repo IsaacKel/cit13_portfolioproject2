@@ -7,10 +7,9 @@ namespace DataLayer.Models
   {
     public int Id { get; set; }
     public int UserId { get; set; }
-    public string TConst { get; set; }
-    public string NConst { get; set; }
-    public string Note { get; set; }
+    public string? TConst { get; set; }
+    public string? NConst { get; set; }
+    public string? Note { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
   }
 }

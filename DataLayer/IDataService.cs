@@ -26,8 +26,8 @@ namespace DataLayer
 
     // --USER RATING--
     IList<UserRating> GetUserRatings(int userId);
-    UserRating GetUserRating(int userId, int tconst);
-    UserRating AddUserRating(int userId, int tconst, int rating);
-    void DeleteUserRating(int userId, int tconst);
+    UserRating GetUserRating(int userId, string tconst);
+    UserRating AddUserRating(int userId, string tconst, int rating);
+    void DeleteUserRating(int userId, string tconst);
   }
 }

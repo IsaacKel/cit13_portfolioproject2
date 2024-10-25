@@ -9,7 +9,6 @@ namespace WebApi.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
-  [Authorize] // Basic authorization
   public class UserRatingController : ControllerBase
   {
     private readonly IDataService _dataService;
@@ -50,7 +49,7 @@ namespace WebApi.Controllers
 
     // Get a specific rating by composite key (userId and tconst)
     [HttpGet("{userId}/{tconst}")]
-    public IActionResult GetUserRating(int userId, int tconst)
+    public IActionResult GetUserRating(int userId, string tconst)
     {
       var userRating = _dataService.GetUserRating(userId, tconst);
       if (userRating == null)
@@ -64,7 +63,7 @@ namespace WebApi.Controllers
 
     // Delete a rating by composite key (userId and tconst)
     [HttpDelete("{userId}/{tconst}")]
-    public IActionResult DeleteUserRating(int userId, int tconst)
+    public IActionResult DeleteUserRating(int userId, string tconst)
     {
       var existingRating = _dataService.GetUserRating(userId, tconst);
       if (existingRating == null)

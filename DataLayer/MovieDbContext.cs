@@ -31,7 +31,7 @@ public class MovieDbContext : DbContext
   {
     modelBuilder.Entity<User>().ToTable("users");
     modelBuilder.Entity<User>().HasKey(u => u.Id);
-    modelBuilder.Entity<User>().Property(u => u.Id).HasColumnName("userId");
+    modelBuilder.Entity<User>().Property(u => u.Id).HasColumnName("userid");
     modelBuilder.Entity<User>().Property(u => u.Username).HasColumnName("username");
     modelBuilder.Entity<User>().Property(u => u.Email).HasColumnName("email");
     modelBuilder.Entity<User>().Property(u => u.Password).HasColumnName("password");
@@ -42,11 +42,12 @@ public class MovieDbContext : DbContext
   {
     modelBuilder.Entity<Bookmark>().ToTable("userbookmarks");
     modelBuilder.Entity<Bookmark>().HasKey(b => b.Id);
-    modelBuilder.Entity<Bookmark>().Property(b => b.Id).HasColumnName("bookmarkId");
+    modelBuilder.Entity<Bookmark>().Property(b => b.Id).HasColumnName("bookmarkid");
+    modelBuilder.Entity<Bookmark>().Property(b => b.UserId).HasColumnName("userid");
     modelBuilder.Entity<Bookmark>().Property(b => b.TConst).HasColumnName("tconst");
     modelBuilder.Entity<Bookmark>().Property(b => b.NConst).HasColumnName("nconst");
     modelBuilder.Entity<Bookmark>().Property(b => b.Note).HasColumnName("note");
-    modelBuilder.Entity<Bookmark>().Property(b => b.CreatedAt).HasColumnName("bookmarkDate");
+    modelBuilder.Entity<Bookmark>().Property(b => b.CreatedAt).HasColumnName("bookmarkdate");
   }
 
   //User Ratings Table Mapping
@@ -54,10 +55,10 @@ public class MovieDbContext : DbContext
   {
     modelBuilder.Entity<UserRating>().ToTable("userratings");
     modelBuilder.Entity<UserRating>().HasKey(ur => new { ur.TConst, ur.UserId });
-    modelBuilder.Entity<UserRating>().Property(u => u.UserId).HasColumnName("userId");
+    modelBuilder.Entity<UserRating>().Property(u => u.UserId).HasColumnName("userid");
     modelBuilder.Entity<UserRating>().Property(u => u.TConst).HasColumnName("tconst");
     modelBuilder.Entity<UserRating>().Property(u => u.Rating).HasColumnName("rating");
-    modelBuilder.Entity<UserRating>().Property(u => u.CreatedAt).HasColumnName("ratingDate");
+    modelBuilder.Entity<UserRating>().Property(u => u.CreatedAt).HasColumnName("ratingdate");
   }
 
   //Search History Table Mapping
@@ -65,9 +66,9 @@ public class MovieDbContext : DbContext
   {
     modelBuilder.Entity<SearchHistory>().ToTable("usersearchhistory");
     modelBuilder.Entity<SearchHistory>().HasKey(sh => new { sh.UserId, sh.SearchQuery, sh.CreatedAt });
-    modelBuilder.Entity<SearchHistory>().Property(s => s.UserId).HasColumnName("userId");
-    modelBuilder.Entity<SearchHistory>().Property(s => s.SearchQuery).HasColumnName("searchQuery");
-    modelBuilder.Entity<SearchHistory>().Property(s => s.CreatedAt).HasColumnName("searchDate");
+    modelBuilder.Entity<SearchHistory>().Property(s => s.UserId).HasColumnName("userid");
+    modelBuilder.Entity<SearchHistory>().Property(s => s.SearchQuery).HasColumnName("searchquery");
+    modelBuilder.Entity<SearchHistory>().Property(s => s.CreatedAt).HasColumnName("searchdate");
   }
 }
 
