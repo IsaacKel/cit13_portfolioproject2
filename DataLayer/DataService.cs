@@ -53,19 +53,50 @@ namespace DataLayer
       }
     }
 
-    // --BOOKMARK--
-    public IList<Bookmark> GetBookmarks(int userId)
+    // --BOOKMARK-- 
+    // Get paginated bookmarks for a specific user
+    public IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10)
     {
-      return _context.Bookmarks.Where(b => b.UserId == userId).ToList();
+      // Apply pagination using Skip and Take
+      return _context.Bookmarks
+                     .Where(b => b.UserId == userId)
+                     .OrderBy(b => b.Id)
+                     .Skip((pageNumber - 1) * pageSize)
+                     .Take(pageSize)
+                     .ToList();
     }
 
+    // Get total count of bookmarks for a specific user (for pagination)
+    public int GetBookmarkCount(int userId)
+    {
+      return _context.Bookmarks.Count(b => b.UserId == userId);
+    }
+
+    // Get a specific bookmark by userId and bookmarkId
     public Bookmark GetBookmark(int userId, int bookmarkId)
     {
-      return _context.Bookmarks.FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
+      return _context.Bookmarks
+                     .FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
     }
 
+    // Add a new bookmark
     public Bookmark AddBookmark(int userId, string tconst, string nconst, string note)
     {
+      // Check if user exists
+      var userExists = _context.Users.Any(u => u.Id == userId);
+      if (!userExists)
+      {
+        throw new ArgumentException("User with specified ID does not exist.");
+      }
+
+      // Check if tconst exists
+      var titleExists = _context.Titles.Any(t => t.TConst == tconst);
+      if (!titleExists)
+      {
+        throw new ArgumentException("The specified TConst does not exist in the Titles table.");
+      }
+
+
       var bookmark = new Bookmark
       {
         UserId = userId,
@@ -79,9 +110,11 @@ namespace DataLayer
       return bookmark;
     }
 
+    // Update an existing bookmark
     public void UpdateBookmark(int userId, int bookmarkId, string tconst, string nconst, string note)
     {
-      var bookmark = _context.Bookmarks.FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
+      var bookmark = _context.Bookmarks
+                             .FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
       if (bookmark != null)
       {
         bookmark.TConst = tconst;
@@ -92,9 +125,11 @@ namespace DataLayer
       }
     }
 
+    // Delete a specific bookmark
     public void DeleteBookmark(int userId, int bookmarkId)
     {
-      var bookmark = _context.Bookmarks.FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
+      var bookmark = _context.Bookmarks
+                             .FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
       if (bookmark != null)
       {
         _context.Bookmarks.Remove(bookmark);
@@ -150,10 +185,13 @@ namespace DataLayer
     }
 
     // --USER RATING--
-    public IList<UserRating> GetUserRatings(int userId)
+    public IList<UserRating> GetUserRatings(int userId, int pageNumber = 1, int pageSize = 10)
     {
       return _context.UserRatings
                      .Where(ur => ur.UserId == userId)
+                     .OrderBy(ur => ur.UserId)
+                     .Skip((pageNumber - 1) * pageSize)
+                     .Take(pageSize)
                      .ToList();
     }
 
@@ -188,6 +226,12 @@ namespace DataLayer
         _context.UserRatings.Remove(userRating);
         _context.SaveChanges();
       }
+    }
+
+    public int GetUserRatingCount(int userId)
+    {
+      return _context.UserRatings
+                     .Count(ur => ur.UserId == userId);
     }
   }
 }
