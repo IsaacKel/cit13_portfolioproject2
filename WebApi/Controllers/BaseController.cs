@@ -1,60 +1,60 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
-namespace WebApi.Controllers;
-
-[ApiController]
-public class BaseController : ControllerBase
+namespace WebApi.Controllers
 {
-  private readonly LinkGenerator _linkGenerator;
-
-  public BaseController(LinkGenerator linkGenerator)
+  [ApiController]
+  public class BaseController : ControllerBase
   {
-    _linkGenerator = linkGenerator;
-  }
+    private readonly LinkGenerator _linkGenerator;
+    protected const int DefaultPageSize = 10;
+    private const int MaxPageSize = 25;
 
-  protected string? GetUrl(string linkName, object parameters)
-  {
-    string? url = null;
-
-    if (linkName == "GetSearchHistory")
+    public BaseController(LinkGenerator linkGenerator)
     {
-      var paramDict = parameters.GetType().GetProperties().ToDictionary(p => p.Name, p => p.GetValue(parameters, null));
-      url = $"http://localhost:5002/api/SearchHistory?page={paramDict["page"]}&pageSize={paramDict["pageSize"]}";
-    }
-    else if (linkName == "GetSearchHistoryById")
-    {
-      var paramDict = parameters.GetType().GetProperties().ToDictionary(p => p.Name, p => p.GetValue(parameters, null));
-      url = $"http://localhost:5002/api/SearchHistory/{paramDict["userId"]}/{paramDict["SearchQuery"]}/{paramDict["CreatedAt"]:MM/dd/yyyy HH:mm:ss}";
+      _linkGenerator = linkGenerator;
     }
 
-    return url;
-  }
-
-  protected string? GetLink(string linkName, int page, int pageSize)
-  {
-    return GetUrl(linkName, new { page, pageSize });
-  }
-
-  protected object CreatePaging<T>(string linkName, int page, int pageSize, int total, IEnumerable<T?> items)
-  {
-    const int MaxPageSize = 25;
-    pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
-
-    var numberOfPages = (int)Math.Ceiling(total / (double)pageSize);
-
-    var curPage = GetLink(linkName, page, pageSize);
-    var nextPage = page < numberOfPages - 1 ? GetLink(linkName, page + 1, pageSize) : null;
-    var prevPage = page > 0 ? GetLink(linkName, page - 1, pageSize) : null;
-
-    return new
+    protected string? GetUrl(string linkName, object args)
     {
-      CurPage = curPage,
-      NextPage = nextPage,
-      PrevPage = prevPage,
-      NumberOfItems = total,
-      NumberPages = numberOfPages,
-      Items = items
-    };
+      var uri = _linkGenerator.GetUriByName(HttpContext, linkName, args);
+      Console.WriteLine($"Generating URL for linkName: {linkName}, args: {args}, result: {uri}");
+      return uri;
+    }
+    protected string? GetLink(string linkName, int userId, int page, int pageSize)
+    {
+      return GetUrl(linkName, new { userId, page, pageSize });
+    }
+
+    protected object CreatePaging<T>(string linkName, int userId, int page, int pageSize, int total, IEnumerable<T?> items)
+    {
+      const int MaxPageSize = 25;
+      pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+      var numberOfPages = (int)Math.Ceiling(total / (double)pageSize);
+
+      var curPage = GetLink(linkName, userId, page, pageSize);
+      var nextPage = page < numberOfPages - 1 ? GetLink(linkName, userId, page + 1, pageSize) : null;
+      var prevPage = page > 0 ? GetLink(linkName, userId, page - 1, pageSize) : null;
+      Console.WriteLine($"Previous Page Link for {linkName}: {prevPage}");
+      Console.WriteLine($"Next Page Link for {linkName}: {nextPage}");
+      Console.WriteLine($"Current Page Link for {linkName}: {curPage}");
+
+      var result = new
+      {
+        CurPage = curPage,
+        NextPage = nextPage,
+        PrevPage = prevPage,
+        NumberOfItems = total,
+        NumberPages = numberOfPages,
+        Items = items
+      };
+
+      return result;
+    }
+
+    protected string? GenerateSelfLink(string actionName, object routeValues)
+    {
+      return Url.Action(actionName, routeValues);
+    }
   }
 }

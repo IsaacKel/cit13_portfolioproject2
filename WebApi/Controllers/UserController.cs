@@ -1,20 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs;
 using DataLayer;
-using System.Linq;
+using Mapster;
 
 namespace WebApi.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
-  public class UserController : ControllerBase
+  public class UserController : BaseController
   {
     private readonly IDataService _dataService;
 
-    public UserController(IDataService dataService)
+    public UserController(IDataService dataService, LinkGenerator linkGenerator)
+      : base(linkGenerator)
     {
       _dataService = dataService;
     }
+
 
     // -- GET USER by ID --
     [HttpGet("{userId}")]
@@ -22,16 +24,12 @@ namespace WebApi.Controllers
     {
       var user = _dataService.GetUser(userId);
       if (user == null)
-        return NotFound();  // Return 404 if user is not found
+        return NotFound("User not found.");
 
-      var userDto = new UserDTO
-      {
-        Id = user.Id,
-        Username = user.Username,
-        Email = user.Email
-      };
+      var userDto = user.Adapt<UserDTO>();
+      userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId });
 
-      return Ok(userDto);  // Return 200 with the user DTO
+      return Ok(userDto);
     }
 
     // -- GET USER by USERNAME --
@@ -40,51 +38,37 @@ namespace WebApi.Controllers
     {
       var user = _dataService.GetUser(username);
       if (user == null)
-        return NotFound();  // Return 404 if user is not found
+        return NotFound("User not found.");
 
-      var userDto = new UserDTO
-      {
-        Id = user.Id,
-        Username = user.Username,
-        Email = user.Email
-      };
+      var userDto = user.Adapt<UserDTO>();
+      userDto.SelfLink = GenerateSelfLink(nameof(GetUserByUsername), new { username });
 
-      return Ok(userDto);  // Return 200 with the user DTO
+      return Ok(userDto);
     }
 
     // -- REGISTER USER (Create) --
     [HttpPost("register")]
-    public IActionResult RegisterUser(UserRegisterDTO dto)
+    public IActionResult RegisterUser([FromBody] UserRegisterDTO dto)
     {
-      // Simple validation to ensure username and password aren't empty
-      if (string.IsNullOrEmpty(dto.Username) || string.IsNullOrEmpty(dto.Password) || string.IsNullOrEmpty(dto.Email))
-        return BadRequest("Username, Password, and Email are required.");
+      if (!ModelState.IsValid)  // Validation via ModelState
+        return BadRequest(ModelState);
 
-      // Add user via data service
       var user = _dataService.AddUser(dto.Username, dto.Password, dto.Email);
+      var userDto = user.Adapt<UserDTO>();
+      userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId = user.Id });
 
-      // Return the created user as a DTO
-      var userDto = new UserDTO
-      {
-        Id = user.Id,
-        Username = user.Username,
-        Email = user.Email
-      };
-
-      return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, userDto);  // Return 201 Created with user DTO
+      return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, userDto);
     }
 
     // -- DELETE USER --
     [HttpDelete("{userId}")]
     public IActionResult DeleteUser(int userId)
     {
-      var existingUser = _dataService.GetUser(userId);
-      if (existingUser == null)
-        return NotFound();  // Return 404 if user does not exist
+      if (_dataService.GetUser(userId) == null)
+        return NotFound("User not found.");
 
-      _dataService.DeleteUser(userId);  // Perform deletion
-
-      return NoContent();  // Return 204 No Content as there's no response body
+      _dataService.DeleteUser(userId);
+      return NoContent();
     }
   }
 }

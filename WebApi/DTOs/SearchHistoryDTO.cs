@@ -6,6 +6,9 @@ namespace WebApi.DTOs
   public class SearchHistoryDTO
   {
     [Required]
+    public int Id { get; set; }
+
+    [Required]
     public int UserId { get; set; }
 
     [Required(ErrorMessage = "Search query cannot be empty.")]

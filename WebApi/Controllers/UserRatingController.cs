@@ -3,54 +3,59 @@ using DataLayer.Models;
 using DataLayer;
 using WebApi.DTOs;
 using Mapster;
+using System.Linq;
 
 namespace WebApi.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
-  public class UserRatingController : ControllerBase
+  public class UserRatingController : BaseController
   {
     private readonly IDataService _dataService;
-    private const int DefaultPageSize = 10;
 
-    public UserRatingController(IDataService dataService)
+    public UserRatingController(IDataService dataService, LinkGenerator linkGenerator)
+      : base(linkGenerator)
     {
       _dataService = dataService;
     }
 
     // Get all ratings for a user with pagination and self-links
-    [HttpGet("{userId}")]
+    [HttpGet("{userId}", Name = nameof(GetUserRatings))]
     public IActionResult GetUserRatings(int userId, int pageNumber = 1, int pageSize = DefaultPageSize)
     {
       var totalRatings = _dataService.GetUserRatingCount(userId);
+
       if (totalRatings == 0)
       {
         return NotFound("No ratings found for this user.");
       }
 
-      pageSize = Math.Min(pageSize, DefaultPageSize);
       var userRatings = _dataService.GetUserRatings(userId, pageNumber, pageSize);
-
-      var userRatingDtos = userRatings.Select(r => new UserRatingDto
+      var userRatingDtos = userRatings.Select(r =>
       {
-        UserId = r.UserId,
-        TConst = r.TConst,
-        Rating = r.Rating,
-        SelfLink = Url.Action(nameof(GetUserRating), new { userId = r.UserId, tconst = r.TConst })
+        var dto = r.Adapt<UserRatingDto>();
+        dto.SelfLink = GetUrl(nameof(GetUserRatingById), new { userId = r.UserId, ratingId = r.Id });
+        return dto;
       }).ToList();
+      Console.WriteLine("Link Name in GetUserRatings: " + nameof(GetUserRatings));
+      var paginatedResult = CreatePaging(nameof(GetUserRatings), userId, pageNumber, pageSize, totalRatings, userRatingDtos);
+      return Ok(paginatedResult);
+    }
 
-      var totalPages = (int)Math.Ceiling(totalRatings / (double)pageSize);
-      var paginationMetadata = new
+    // Get a specific rating by userId and ratingId
+    [HttpGet("{userId}/{ratingId}", Name = nameof(GetUserRatingById))]
+    public IActionResult GetUserRatingById(int userId, int ratingId)
+    {
+      var userRating = _dataService.GetUserRating(userId, ratingId);
+      if (userRating == null)
       {
-        totalCount = totalRatings,
-        pageSize,
-        currentPage = pageNumber,
-        totalPages,
-        previousPageLink = pageNumber > 1 ? Url.Action(nameof(GetUserRatings), new { userId, pageNumber = pageNumber - 1, pageSize }) : null,
-        nextPageLink = pageNumber < totalPages ? Url.Action(nameof(GetUserRatings), new { userId, pageNumber = pageNumber + 1, pageSize }) : null
-      };
+        return NotFound("Rating not found.");
+      }
 
-      return Ok(new { ratings = userRatingDtos, pagination = paginationMetadata });
+      var userRatingDto = userRating.Adapt<UserRatingDto>();
+      userRatingDto.SelfLink = GetUrl(nameof(GetUserRatingById), new { userId, ratingId });
+
+      return Ok(userRatingDto);
     }
 
     // Add a new rating
@@ -64,56 +69,41 @@ namespace WebApi.Controllers
 
       var userRating = _dataService.AddUserRating(userRatingDto.UserId, userRatingDto.TConst, userRatingDto.Rating);
       var userRatingDtoResult = userRating.Adapt<UserRatingDto>();
+      userRatingDtoResult.SelfLink = GetUrl(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id });
 
-      return CreatedAtAction(nameof(GetUserRating), new { userId = userRatingDto.UserId, tconst = userRatingDto.TConst }, userRatingDtoResult);
+      return CreatedAtAction(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id }, userRatingDtoResult);
     }
 
-    // Get a specific rating by composite key (userId and tconst)
-    [HttpGet("{userId}/{tconst}")]
-    public IActionResult GetUserRating(int userId, string tconst)
+    // Delete a rating
+    [HttpDelete("{userId}/{ratingId}")]
+    public IActionResult DeleteUserRating(int userId, int ratingId)
     {
-      var userRating = _dataService.GetUserRating(userId, tconst);
-      if (userRating == null)
+      var existingUserRating = _dataService.GetUserRating(userId, ratingId);
+      if (existingUserRating == null)
       {
         return NotFound("Rating not found.");
       }
 
-      var userRatingDto = userRating.Adapt<UserRatingDto>();
-      userRatingDto.SelfLink = Url.Action(nameof(GetUserRating), new { userId, tconst });
-      return Ok(userRatingDto);
+      _dataService.DeleteUserRating(userId, ratingId);
+      return NoContent();
     }
 
-    // Delete a rating by composite key (userId and tconst)
-    [HttpDelete("{userId}/{tconst}")]
-    public IActionResult DeleteUserRating(int userId, string tconst)
-    {
-      var existingRating = _dataService.GetUserRating(userId, tconst);
-      if (existingRating == null)
-      {
-        return NotFound("Rating not found.");
-      }
-
-      _dataService.DeleteUserRating(userId, tconst);
-      return NoContent(); // 204 status code for successful deletion
-    }
-
-    //Update a rating by composite key (userId and tconst)
-    [HttpPut("{userId}/{tconst}")]
-    public IActionResult UpdateUserRating(int userId, string tconst, UserRatingDto userRatingDto)
+    // Update a rating by ratingId
+    [HttpPut("{userId}/{ratingId}")]
+    public IActionResult UpdateUserRating(int userId, int ratingId, [FromBody] UserRatingDto userRatingDto)
     {
       if (!ModelState.IsValid)
       {
         return BadRequest(ModelState); // Return validation errors
       }
 
-      var existingRating = _dataService.GetUserRating(userId, tconst);
+      var existingRating = _dataService.GetUserRating(userId, ratingId);
       if (existingRating == null)
       {
         return NotFound("Rating not found.");
       }
 
-      existingRating.Rating = userRatingDto.Rating;
-      _dataService.UpdateUserRating(userId, tconst, existingRating.Rating);
+      _dataService.UpdateUserRating(userId, ratingId, userRatingDto.Rating);
       return NoContent(); // 204 status code for successful update
     }
   }
