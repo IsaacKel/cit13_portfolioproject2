@@ -67,11 +67,18 @@ namespace WebApi.Controllers
         return BadRequest(ModelState); // Return validation errors
       }
 
-      var userRating = _dataService.AddUserRating(userRatingDto.UserId, userRatingDto.TConst, userRatingDto.Rating);
-      var userRatingDtoResult = userRating.Adapt<UserRatingDto>();
-      userRatingDtoResult.SelfLink = GetUrl(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id });
+      try
+      {
+        var userRating = _dataService.AddUserRating(userRatingDto.UserId, userRatingDto.TConst, userRatingDto.Rating);
+        var userRatingDtoResult = userRating.Adapt<UserRatingDto>();
+        userRatingDtoResult.SelfLink = GetUrl(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id });
 
-      return CreatedAtAction(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id }, userRatingDtoResult);
+        return CreatedAtAction(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id }, userRatingDtoResult);
+      }
+      catch (ArgumentException ex)
+      {
+        return BadRequest(ex.Message); // Return a bad request with the error message
+      }
     }
 
     // Delete a rating
