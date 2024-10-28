@@ -20,6 +20,7 @@ namespace DataLayer
     }
 
     // --USER--
+
     public User AddUser(string username, string password, string email)
     {
       var user = new User
@@ -54,6 +55,7 @@ namespace DataLayer
     }
 
     // --BOOKMARK-- 
+
     // Get paginated bookmarks for a specific user
     public IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10)
     {
@@ -89,12 +91,21 @@ namespace DataLayer
         throw new ArgumentException("User with specified ID does not exist.");
       }
 
+<<<<<<< Updated upstream
       //// Check if tconst exists
       //var titleExists = _context.Titles.Any(t => t.TConst == tconst);
       //if (!titleExists)
       //{
       //  throw new ArgumentException("The specified TConst does not exist in the Titles table.");
       //}
+=======
+      // // Check if tconst exists
+      // var titleExists = _context.Titles.Any(t => t.TConst == tconst);
+      // if (!titleExists)
+      // {
+      //   throw new ArgumentException("The specified TConst does not exist in the Titles table.");
+      // }
+>>>>>>> Stashed changes
 
 
       var bookmark = new Bookmark
@@ -138,6 +149,7 @@ namespace DataLayer
     }
 
     // --SEARCH HISTORY--
+
     // Method to retrieve paginated search history for a specific user
     public IList<SearchHistory> GetSearchHistory(int userId, int pageNumber = 1, int pageSize = 10)
     {
@@ -185,6 +197,7 @@ namespace DataLayer
     }
 
     // --USER RATING--
+
     public IList<UserRating> GetUserRatings(int userId, int pageNumber = 1, int pageSize = 10)
     {
       return _context.UserRatings
@@ -224,6 +237,20 @@ namespace DataLayer
       if (userRating != null)
       {
         _context.UserRatings.Remove(userRating);
+        _context.SaveChanges();
+      }
+    }
+
+    public void UpdateUserRating(int userId, string tconst, int rating)
+    {
+      var userRating = _context.UserRatings
+                               .FirstOrDefault(ur => ur.UserId == userId
+                                                  && ur.TConst == tconst);
+      if (userRating != null)
+      {
+        userRating.Rating = rating;
+        userRating.TConst = tconst;
+        userRating.CreatedAt = DateTime.UtcNow;
         _context.SaveChanges();
       }
     }

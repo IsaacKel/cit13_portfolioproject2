@@ -30,6 +30,7 @@ namespace DataLayer
     UserRating GetUserRating(int userId, string tconst);
     UserRating AddUserRating(int userId, string tconst, int rating);
     void DeleteUserRating(int userId, string tconst);
+    void UpdateUserRating(int userId, string tconst, int rating);
     int GetUserRatingCount(int userId);
   }
 }

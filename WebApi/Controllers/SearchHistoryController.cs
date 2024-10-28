@@ -9,21 +9,21 @@ namespace WebApi.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
-  public class SearchHistoryController : ControllerBase
+  public class SearchHistoryController : BaseController
   {
     private readonly IDataService _dataService;
-    private const int DefaultPageSize = 10; // Default page size for pagination
+    private const int DefaultPageSize = 10;
 
-    public SearchHistoryController(IDataService dataService)
+    public SearchHistoryController(IDataService dataService, LinkGenerator linkGenerator)
+      : base(linkGenerator)
     {
       _dataService = dataService;
     }
 
     // Get search history by userId with pagination and self-referencing URIs
-    [HttpGet("{userId}")]
-    public IActionResult GetSearchHistory(int userId, int pageNumber = 1, int pageSize = DefaultPageSize)
+    [HttpGet("{userId}", Name = nameof(GetSearchHistory))]
+    public IActionResult GetSearchHistory(int userId, int pageNumber = 0, int pageSize = DefaultPageSize)
     {
-      // Retrieve the search history for the user
       var searchHistories = _dataService.GetSearchHistory(userId);
 
       if (searchHistories == null || !searchHistories.Any())
@@ -31,40 +31,30 @@ namespace WebApi.Controllers
         return NotFound("No search history found for this user.");
       }
 
-      // Calculate pagination details
-      pageSize = pageSize > DefaultPageSize ? DefaultPageSize : pageSize; // Limit page size
+      pageSize = pageSize > DefaultPageSize ? DefaultPageSize : pageSize;
+
       var pagedHistories = searchHistories
           .Skip((pageNumber - 1) * pageSize)
           .Take(pageSize)
-          .ToList();
+          .Adapt<List<SearchHistoryDTO>>();
 
-      // Map to DTO and add self-referencing URIs
-      var searchHistoryDtos = pagedHistories.Adapt<List<SearchHistoryDTO>>();
-      foreach (var dto in searchHistoryDtos)
+      foreach (var dto in pagedHistories)
       {
-        dto.SelfLink = Url.Action(nameof(GetSearchHistoryById), new { userId = dto.UserId, searchQuery = dto.SearchQuery, createdAt = dto.CreatedAt });
+        dto.SelfLink = GetUrl(nameof(GetSearchHistoryById), new { userId = dto.UserId, dto.SearchQuery, dto.CreatedAt });
       }
 
-      // Generate links for pagination
-      var totalRecords = searchHistories.Count();
-      var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
-
-      var response = new
-      {
-        TotalRecords = totalRecords,
-        PageSize = pageSize,
-        PageNumber = pageNumber,
-        TotalPages = totalPages,
-        Data = searchHistoryDtos,
-        PreviousPage = pageNumber > 1 ? Url.Action(nameof(GetSearchHistory), new { userId, pageNumber = pageNumber - 1, pageSize }) : null,
-        NextPage = pageNumber < totalPages ? Url.Action(nameof(GetSearchHistory), new { userId, pageNumber = pageNumber + 1, pageSize }) : null
-      };
+      var response = CreatePaging(
+          nameof(GetSearchHistory),
+          pageNumber,
+          pageSize,
+          searchHistories.Count(),
+          pagedHistories);
 
       return Ok(response);
     }
 
     // Specific endpoint for retrieving a single search history item
-    [HttpGet("{userId}/{searchQuery}/{createdAt}")]
+    [HttpGet("{userId}/{searchQuery}/{createdAt}", Name = nameof(GetSearchHistoryById))]
     public IActionResult GetSearchHistoryById(int userId, string searchQuery, DateTime createdAt)
     {
       var searchHistory = _dataService.GetSearchHistory(userId, searchQuery, createdAt);
@@ -75,7 +65,7 @@ namespace WebApi.Controllers
       }
 
       var searchHistoryDto = searchHistory.Adapt<SearchHistoryDTO>();
-      searchHistoryDto.SelfLink = Url.Action(nameof(GetSearchHistoryById), new { userId, searchQuery, createdAt });
+      searchHistoryDto.SelfLink = GetUrl(nameof(GetSearchHistoryById), new { userId, searchQuery, createdAt });
 
       return Ok(searchHistoryDto);
     }
@@ -91,7 +81,7 @@ namespace WebApi.Controllers
 
       var searchHistory = _dataService.AddSearchHistory(searchHistoryDto.UserId, searchHistoryDto.SearchQuery, createdAt);
       var searchHistoryDtoResult = searchHistory.Adapt<SearchHistoryDTO>();
-      searchHistoryDtoResult.SelfLink = Url.Action(nameof(GetSearchHistoryById), new { userId = searchHistoryDto.UserId, searchHistoryDto.SearchQuery, createdAt });
+      searchHistoryDtoResult.SelfLink = GetUrl(nameof(GetSearchHistoryById), new { userId = searchHistoryDto.UserId, searchHistoryDto.SearchQuery, createdAt });
 
       return CreatedAtAction(nameof(GetSearchHistoryById), new { userId = searchHistoryDto.UserId, searchHistoryDto.SearchQuery, createdAt }, searchHistoryDtoResult);
     }

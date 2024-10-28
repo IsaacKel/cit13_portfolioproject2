@@ -28,7 +28,6 @@ namespace WebApi.Controllers
         return NotFound("No ratings found for this user.");
       }
 
-      // Ensure pageSize is within acceptable limits
       pageSize = Math.Min(pageSize, DefaultPageSize);
       var userRatings = _dataService.GetUserRatings(userId, pageNumber, pageSize);
 
@@ -96,6 +95,26 @@ namespace WebApi.Controllers
 
       _dataService.DeleteUserRating(userId, tconst);
       return NoContent(); // 204 status code for successful deletion
+    }
+
+    //Update a rating by composite key (userId and tconst)
+    [HttpPut("{userId}/{tconst}")]
+    public IActionResult UpdateUserRating(int userId, string tconst, UserRatingDto userRatingDto)
+    {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState); // Return validation errors
+      }
+
+      var existingRating = _dataService.GetUserRating(userId, tconst);
+      if (existingRating == null)
+      {
+        return NotFound("Rating not found.");
+      }
+
+      existingRating.Rating = userRatingDto.Rating;
+      _dataService.UpdateUserRating(userId, tconst, existingRating.Rating);
+      return NoContent(); // 204 status code for successful update
     }
   }
 }
