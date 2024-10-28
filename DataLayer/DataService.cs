@@ -89,12 +89,12 @@ namespace DataLayer
         throw new ArgumentException("User with specified ID does not exist.");
       }
 
-      // Check if tconst exists
-      var titleExists = _context.Titles.Any(t => t.TConst == tconst);
-      if (!titleExists)
-      {
-        throw new ArgumentException("The specified TConst does not exist in the Titles table.");
-      }
+      //// Check if tconst exists
+      //var titleExists = _context.Titles.Any(t => t.TConst == tconst);
+      //if (!titleExists)
+      //{
+      //  throw new ArgumentException("The specified TConst does not exist in the Titles table.");
+      //}
 
 
       var bookmark = new Bookmark
