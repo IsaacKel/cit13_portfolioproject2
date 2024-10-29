@@ -77,6 +77,8 @@ namespace Assignment4.Tests
 
       var deletedRating = service.GetUserRating(rating.Id);
       Assert.Null(deletedRating);
+
+      service.DeleteUser(newUser.Id);
     }
 
     /* SearchHistory Tests */
@@ -100,57 +102,46 @@ namespace Assignment4.Tests
 
       var deletedHistory = service.GetSearchHistory(newUser.Id, history.Id);
       Assert.Null(deletedHistory);
+
+      service.DeleteUser(newUser.Id);
     }
 
-    // /* UserBookmark Tests */
+    /* UserBookmark Tests */
 
-    // [Fact]
-    // public void AddUserBookmark_ValidData_CreatesAndReturnsBookmark()
-    // {
-    //   var bookmark = service.AddBookmark(1, "tt1234567", null, "Test note");
-    //   Assert.True(bookmark.Id > 0);
-    //   Assert.Equal("Test note", bookmark.Note);
+    [Fact]
+    public void AddUserBookmark_ValidData_CreatesAndReturnsBookmark()
+    {
 
-    //   // Cleanup
-    //   service.DeleteBookmark(bookmark.Id);
-    // }
-    // [Fact]
-    // public void GetBookmark_ValidId_ReturnsBookmark()
-    // {
-    //   var bookmark = service.AddBookmark(1, "tt1234567", null, "Test note");
-    //   var retrievedBookmark = service.GetBookmark(1, bookmark.Id);
+      var newUser = service.AddUser("bookmarkUser", "password", "bookmarkUser@example.com");
+      Assert.True(newUser.Id > 0);
 
-    //   Assert.Equal(bookmark.Id, retrievedBookmark.Id);
-    //   Assert.Equal("Test note", retrievedBookmark.Note);
+      var bookmark = service.AddBookmark(newUser.Id, "tt26919084", null, "Test note");
+      Assert.True(bookmark.Id > 0);
+      Assert.Equal("Test note", bookmark.Note);
 
-    //   // Cleanup
-    //   service.DeleteBookmark(bookmark.Id);
-    // }
+      var retrievedBookmark = service.GetBookmark(newUser.Id, bookmark.Id);
+      Assert.Equal(bookmark.Id, retrievedBookmark.Id);
+      Assert.Equal("Test note", retrievedBookmark.Note);
 
-    // [Fact]
-    // public void GetBookmarks_ValidUserId_ReturnsBookmarks()
-    // {
-    //   var bookmark1 = service.AddBookmark(1, null, "nm0000045", "Note 1");
-    //   var bookmark2 = service.AddBookmark(1, "tt1234568", null, "Note 2");
+      // Cleanup
+      service.DeleteBookmark(bookmark.Id);
 
-    //   var bookmarks = service.GetBookmarks(1);
+      var deletedBookmark = service.GetBookmark(newUser.Id, bookmark.Id);
+      Assert.Null(deletedBookmark);
 
-    //   Assert.Contains(bookmarks, b => b.Note == "Note 1");
-    //   Assert.Contains(bookmarks, b => b.Note == "Note 2");
+      var bookmark1 = service.AddBookmark(newUser.Id, null, "nm0000045", "Note 1");
+      var bookmark2 = service.AddBookmark(newUser.Id, "tt26919084", null, "Note 2");
 
-    //   // Cleanup
-    //   service.DeleteBookmark(bookmark1.Id);
-    //   service.DeleteBookmark(bookmark2.Id);
-    // }
+      var bookmarks = service.GetBookmarks(newUser.Id);
 
-    // [Fact]
-    // public void DeleteBookmark_ValidId_RemovesBookmark()
-    // {
-    //   var bookmark = service.AddBookmark(1, "tt1234567", null, "Temporary note");
-    //   service.DeleteBookmark(bookmark.Id);
+      Assert.Contains(bookmarks, b => b.Note == "Note 1");
+      Assert.Contains(bookmarks, b => b.Note == "Note 2");
 
-    //   var deletedBookmark = service.GetBookmark(1, bookmark.Id);
-    //   Assert.Null(deletedBookmark);
-    // }
+      // Cleanup
+      service.DeleteBookmark(bookmark1.Id);
+      service.DeleteBookmark(bookmark2.Id);
+
+      service.DeleteUser(newUser.Id);
+    }
   }
 }
