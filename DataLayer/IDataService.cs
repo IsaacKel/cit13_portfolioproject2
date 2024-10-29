@@ -16,7 +16,7 @@ namespace DataLayer
     Bookmark GetBookmark(int userId, int bookmarkId);
     Bookmark AddBookmark(int userId, string tconst, string nconst, string note);
     void UpdateBookmark(int userId, int bookmarkId, string tconst, string nconst, string note);
-    void DeleteBookmark(int userId, int bookmarkId);
+    void DeleteBookmark(int bookmarkId);
     int GetBookmarkCountByUser(int userId);
 
     // --SEARCH HISTORY--
@@ -24,14 +24,14 @@ namespace DataLayer
     IList<SearchHistory> GetSearchHistoriesByUser(int userId, int pageNumber = 1, int pageSize = 10);
     SearchHistory GetSearchHistory(int userId, int searchId);
     SearchHistory AddSearchHistory(int userId, string searchQuery);
-    void DeleteSearchHistory(int userId, int searchId);
+    void DeleteSearchHistory(int searchId);
     int GetSearchHistoryCountByUser(int userId);
 
     // --USER RATING--
     IList<UserRating> GetUserRatings(int userId, int pageNumber = 1, int pageSize = 10);
-    UserRating GetUserRating(int userId, int ratingId);
+    UserRating GetUserRating(int ratingId);
     UserRating AddUserRating(int userId, string tconst, int rating);
-    void DeleteUserRating(int userId, int ratingId);
+    void DeleteUserRating(int ratingId);
     void UpdateUserRating(int userId, int ratingId, int rating);
     int GetUserRatingCount(int userId);
   }

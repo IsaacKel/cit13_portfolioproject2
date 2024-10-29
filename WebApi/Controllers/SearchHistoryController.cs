@@ -75,7 +75,7 @@ namespace WebApi.Controllers
 
     // Delete a search history entry by searchId
     [HttpDelete("{searchId}")]
-    public IActionResult DeleteSearchHistory(int userId, int searchId)
+    public IActionResult DeleteSearchHistory(int searchId)
     {
       var existingSearchHistory = _dataService.GetSearchHistory(searchId);
       if (existingSearchHistory == null)
@@ -83,7 +83,7 @@ namespace WebApi.Controllers
         return NotFound("Search history not found.");
       }
 
-      _dataService.DeleteSearchHistory(userId, searchId);
+      _dataService.DeleteSearchHistory(searchId);
       return NoContent();
     }
   }

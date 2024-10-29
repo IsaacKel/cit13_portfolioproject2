@@ -17,7 +17,6 @@ namespace WebApi.DTOs
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Self-link to provide a URI reference to this bookmark
     public string? SelfLink { get; set; }
   }
 }

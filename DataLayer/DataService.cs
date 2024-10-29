@@ -13,13 +13,25 @@ namespace DataLayer
     public DataService(IConfiguration configuration)
     {
       var options = new DbContextOptionsBuilder<MovieDbContext>()
-        .UseNpgsql(configuration.GetConnectionString("imdbDatabase"))
-        .Options;
+          .UseNpgsql(configuration.GetConnectionString("imdbDatabase"))
+          .Options;
 
       _context = new MovieDbContext(options);
     }
 
-    // --USER--
+    // -- Helper Methods --
+
+    private IList<T> GetPagedResults<T>(IQueryable<T> query, int pageNumber, int pageSize) where T : class
+    {
+      return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+    }
+
+    private bool SaveChangesWithValidation()
+    {
+      return _context.SaveChanges() > 0;
+    }
+
+    // -- USER --
 
     public User AddUser(string username, string password, string email)
     {
@@ -30,64 +42,52 @@ namespace DataLayer
         Email = email
       };
       _context.Users.Add(user);
-      _context.SaveChanges();
+      SaveChangesWithValidation();
       return user;
     }
 
-    public User GetUser(string username)
-    {
-      return _context.Users.FirstOrDefault(u => u.Username == username);
-    }
+    public User GetUser(string username) => _context.Users.FirstOrDefault(u => u.Username == username);
 
     public User GetUser(int userId)
     {
-      return _context.Users.FirstOrDefault(u => u.Id == userId);
+      var user = _context.Users.Find(userId);
+      return user;
     }
 
     public void DeleteUser(int userId)
     {
-      var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+      var user = _context.Users.Find(userId);
       if (user != null)
       {
         _context.Users.Remove(user);
-        _context.SaveChanges();
+        SaveChangesWithValidation();
       }
     }
 
-    // --BOOKMARK-- 
+    // -- BOOKMARK --
 
-    // Get paginated bookmarks for a specific user
-    public IList<Bookmark> GetBookmarks(int userId, int pageNumber = 0, int pageSize = 10)
+    public IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10)
     {
-      var bookmarks = _context.Bookmarks
-                              .Where(b => b.UserId == userId)
-                              .OrderBy(b => b.Id)
-                              .ToList();
-
-      return bookmarks;
+      var query = _context.Bookmarks.Where(b => b.UserId == userId).OrderBy(b => b.Id);
+      return GetPagedResults(query, pageNumber, pageSize);
     }
 
-    // Get total count of bookmarks for a specific user (for pagination)
-    public int GetBookmarkCountByUser(int userId)
-    {
-      return _context.Bookmarks.Count(b => b.UserId == userId);
-    }
+    public int GetBookmarkCountByUser(int userId) => _context.Bookmarks.Count(b => b.UserId == userId);
 
-    // Get a specific bookmark by userId and bookmarkId
     public Bookmark GetBookmark(int userId, int bookmarkId)
     {
-      return _context.Bookmarks
-                     .FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
+      return _context.Bookmarks.FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
     }
 
-    // Add a new bookmark
-    public Bookmark AddBookmark(int userId, string tconst, string nconst, string note)
+    public Bookmark AddBookmark(int userId, string? tconst, string? nconst, string note)
     {
-      // Check if user exists
-      var userExists = _context.Users.Any(u => u.Id == userId);
-      if (!userExists)
-      {
+      if (!_context.Users.Any(u => u.Id == userId))
         throw new ArgumentException("User with specified ID does not exist.");
+
+      // Validate that either tconst or nconst is provided, but not both
+      if ((tconst == null && nconst == null) || (tconst != null && nconst != null))
+      {
+        throw new ArgumentException("Either tconst or nconst must be provided, but not both.");
       }
 
       var bookmark = new Bookmark
@@ -99,72 +99,54 @@ namespace DataLayer
         CreatedAt = DateTime.UtcNow
       };
       _context.Bookmarks.Add(bookmark);
-      _context.SaveChanges();
+      SaveChangesWithValidation();
       return bookmark;
     }
 
-    // Update an existing bookmark
     public void UpdateBookmark(int userId, int bookmarkId, string tconst, string nconst, string note)
     {
-      var bookmark = _context.Bookmarks
-                             .FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
+      var bookmark = GetBookmark(userId, bookmarkId);
       if (bookmark != null)
       {
         bookmark.TConst = tconst;
         bookmark.NConst = nconst;
         bookmark.Note = note;
         bookmark.CreatedAt = DateTime.UtcNow;
-        _context.SaveChanges();
+        SaveChangesWithValidation();
       }
     }
 
-    // Delete a specific bookmark
-    public void DeleteBookmark(int userId, int bookmarkId)
+    public void DeleteBookmark(int bookmarkId)
     {
-      var bookmark = _context.Bookmarks
-                             .FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
+      var bookmark = _context.Bookmarks.Find(bookmarkId);
       if (bookmark != null)
       {
         _context.Bookmarks.Remove(bookmark);
-        _context.SaveChanges();
+        SaveChangesWithValidation();
       }
     }
 
-    // --SEARCH HISTORY--
+    // -- SEARCH HISTORY --
 
-    // Method to retrieve paginated search history for a specific user
-    public IList<SearchHistory> GetSearchHistory(int userId, int pageNumber = 0, int pageSize = 10)
+    public IList<SearchHistory> GetSearchHistory(int userId, int pageNumber = 1, int pageSize = 10)
     {
-      return _context.SearchHistories
-                     .Where(sh => sh.UserId == userId)
-                     .OrderBy(sh => sh.CreatedAt)
-                     .Skip(pageNumber * pageSize)
-                     .Take(pageSize)
-                     .ToList();
+      var query = _context.SearchHistories.Where(sh => sh.UserId == userId).OrderBy(sh => sh.CreatedAt);
+      return GetPagedResults(query, pageNumber, pageSize);
     }
 
-
-    // Method to retrieve paginated search history entries for a specific user
     public IList<SearchHistory> GetSearchHistoriesByUser(int userId, int pageNumber = 1, int pageSize = 10)
     {
-      var searchHistories = _context.SearchHistories
-                                    .Where(sh => sh.UserId == userId)
-                                    .OrderBy(sh => sh.Id)
-                                    .Skip((pageNumber - 1) * pageSize)
-                                    .Take(pageSize)
-                                    .ToList();
-
-      return searchHistories;
+      var query = _context.SearchHistories.Where(sh => sh.UserId == userId).OrderByDescending(sh => sh.CreatedAt);
+      return GetPagedResults(query, pageNumber, pageSize);
     }
 
-    // Method to retrieve a specific search history entry by userId and searchId
-    public SearchHistory? GetSearchHistory(int userId, int searchId)
+    public int GetSearchHistoryCountByUser(int userId) => _context.SearchHistories.Count(sh => sh.UserId == userId);
+
+    public SearchHistory GetSearchHistory(int userId, int searchId)
     {
-      return _context.SearchHistories
-                     .FirstOrDefault(sh => sh.UserId == userId && sh.Id == searchId);
+      return _context.SearchHistories.FirstOrDefault(sh => sh.UserId == userId && sh.Id == searchId);
     }
 
-    // Method to add a new search history entry
     public SearchHistory AddSearchHistory(int userId, string searchQuery)
     {
       var searchHistory = new SearchHistory
@@ -174,54 +156,35 @@ namespace DataLayer
         CreatedAt = DateTime.UtcNow
       };
       _context.SearchHistories.Add(searchHistory);
-      _context.SaveChanges();
+      SaveChangesWithValidation();
       return searchHistory;
     }
 
-    // Method to delete a specific search history entry by userId and searchId
-    public void DeleteSearchHistory(int userId, int searchId)
+    public void DeleteSearchHistory(int searchId)
     {
-      var searchHistory = _context.SearchHistories
-                                  .FirstOrDefault(sh => sh.UserId == userId && sh.Id == searchId);
+      var searchHistory = _context.SearchHistories.Find(searchId);
       if (searchHistory != null)
       {
         _context.SearchHistories.Remove(searchHistory);
-        _context.SaveChanges();
+        SaveChangesWithValidation();
       }
     }
 
-    public int GetSearchHistoryCountByUser(int userId)
+    // -- USER RATING --
+
+    public IList<UserRating> GetUserRatings(int userId, int pageNumber = 1, int pageSize = 10)
     {
-      return _context.SearchHistories
-                     .Count(sh => sh.UserId == userId);
+      var query = _context.UserRatings.Where(ur => ur.UserId == userId).OrderBy(ur => ur.Id);
+      return GetPagedResults(query, pageNumber, pageSize);
     }
 
-    // --USER RATING--
+    public int GetUserRatingCount(int userId) => _context.UserRatings.Count(ur => ur.UserId == userId);
 
-    // Method to retrieve paginated user ratings for a specific user
-    public IList<UserRating> GetUserRatings(int userId, int pageNumber = 0, int pageSize = 10)
+    public UserRating GetUserRating(int ratingId)
     {
-
-      var userRatings = _context.UserRatings
-                                .Where(ur => ur.UserId == userId)
-                                .OrderBy(ur => ur.Id)
-                                .Skip((pageNumber - 1) * pageSize)
-                                .Take(pageSize)
-                                .ToList();
-
-      return userRatings;
+      return _context.UserRatings.FirstOrDefault(ur => ur.Id == ratingId);
     }
 
-    // Method to retrieve a specific user rating by userId and ratingId
-    public UserRating? GetUserRating(int userId, int ratingId)
-    {
-      var userRating = _context.UserRatings
-                               .FirstOrDefault(ur => ur.UserId == userId && ur.Id == ratingId);
-
-      return userRating;
-    }
-
-    // Method to add a new user rating
     public UserRating AddUserRating(int userId, string tconst, int rating)
     {
       var userRating = new UserRating
@@ -232,41 +195,29 @@ namespace DataLayer
         CreatedAt = DateTime.UtcNow
       };
       _context.UserRatings.Add(userRating);
-      _context.SaveChanges();
-      int ratingCount = GetUserRatingCount(userId);
+      SaveChangesWithValidation();
       return userRating;
     }
 
-    // Method to delete a specific user rating by userId and ratingId
-    public void DeleteUserRating(int userId, int ratingId)
-    {
-      var userRating = _context.UserRatings
-                               .FirstOrDefault(ur => ur.UserId == userId && ur.Id == ratingId);
-      if (userRating != null)
-      {
-        _context.UserRatings.Remove(userRating);
-        _context.SaveChanges();
-      }
-    }
-
-    // Method to update a specific user rating by userId and ratingId
     public void UpdateUserRating(int userId, int ratingId, int rating)
     {
-      var userRating = _context.UserRatings
-                               .FirstOrDefault(ur => ur.UserId == userId && ur.Id == ratingId);
+      var userRating = GetUserRating(ratingId);
       if (userRating != null)
       {
         userRating.Rating = rating;
         userRating.CreatedAt = DateTime.UtcNow;
-        _context.SaveChanges();
+        SaveChangesWithValidation();
       }
     }
 
-
-    public int GetUserRatingCount(int userId)
+    public void DeleteUserRating(int ratingId)
     {
-      return _context.UserRatings
-                     .Count(ur => ur.UserId == userId);
+      var userRating = _context.UserRatings.Find(ratingId);
+      if (userRating != null)
+      {
+        _context.UserRatings.Remove(userRating);
+        SaveChangesWithValidation();
+      }
     }
   }
 }

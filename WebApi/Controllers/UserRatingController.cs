@@ -44,16 +44,16 @@ namespace WebApi.Controllers
 
     // Get a specific rating by userId and ratingId
     [HttpGet("{userId}/{ratingId}", Name = nameof(GetUserRatingById))]
-    public IActionResult GetUserRatingById(int userId, int ratingId)
+    public IActionResult GetUserRatingById(int ratingId)
     {
-      var userRating = _dataService.GetUserRating(userId, ratingId);
+      var userRating = _dataService.GetUserRating(ratingId);
       if (userRating == null)
       {
         return NotFound("Rating not found.");
       }
 
       var userRatingDto = userRating.Adapt<UserRatingDto>();
-      userRatingDto.SelfLink = GetUrl(nameof(GetUserRatingById), new { userId, ratingId });
+      userRatingDto.SelfLink = GetUrl(nameof(GetUserRatingById), new { ratingId });
 
       return Ok(userRatingDto);
     }
@@ -64,7 +64,7 @@ namespace WebApi.Controllers
     {
       if (!ModelState.IsValid)
       {
-        return BadRequest(ModelState); // Return validation errors
+        return BadRequest(ModelState);
       }
 
       try
@@ -77,21 +77,21 @@ namespace WebApi.Controllers
       }
       catch (ArgumentException ex)
       {
-        return BadRequest(ex.Message); // Return a bad request with the error message
+        return BadRequest(ex.Message);
       }
     }
 
     // Delete a rating
     [HttpDelete("{userId}/{ratingId}")]
-    public IActionResult DeleteUserRating(int userId, int ratingId)
+    public IActionResult DeleteUserRating(int ratingId)
     {
-      var existingUserRating = _dataService.GetUserRating(userId, ratingId);
+      var existingUserRating = _dataService.GetUserRating(ratingId);
       if (existingUserRating == null)
       {
         return NotFound("Rating not found.");
       }
 
-      _dataService.DeleteUserRating(userId, ratingId);
+      _dataService.DeleteUserRating(ratingId);
       return NoContent();
     }
 
@@ -104,7 +104,7 @@ namespace WebApi.Controllers
         return BadRequest(ModelState); // Return validation errors
       }
 
-      var existingRating = _dataService.GetUserRating(userId, ratingId);
+      var existingRating = _dataService.GetUserRating(ratingId);
       if (existingRating == null)
       {
         return NotFound("Rating not found.");

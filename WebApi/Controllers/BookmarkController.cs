@@ -87,9 +87,9 @@ namespace WebApi.Controllers
 
     // Delete Bookmark
     [HttpDelete("{bookmarkId}")]
-    public IActionResult DeleteBookmark(int userId, int bookmarkId)
+    public IActionResult DeleteBookmark(int bookmarkId)
     {
-      _dataService.DeleteBookmark(userId, bookmarkId);
+      _dataService.DeleteBookmark(bookmarkId);
       return NoContent();
     }
   }

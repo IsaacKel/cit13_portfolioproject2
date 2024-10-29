@@ -18,7 +18,6 @@ namespace WebApi.DTOs
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Self-link to make the interface self-descriptive
     public string SelfLink { get; set; }
   }
 }

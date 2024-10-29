@@ -18,7 +18,6 @@ namespace WebApi.Controllers
     protected string? GetUrl(string linkName, object args)
     {
       var uri = _linkGenerator.GetUriByName(HttpContext, linkName, args);
-      Console.WriteLine($"Generating URL for linkName: {linkName}, args: {args}, result: {uri}");
       return uri;
     }
     protected string? GetLink(string linkName, int userId, int page, int pageSize)
@@ -35,9 +34,6 @@ namespace WebApi.Controllers
       var curPage = GetLink(linkName, userId, page, pageSize);
       var nextPage = page < numberOfPages - 1 ? GetLink(linkName, userId, page + 1, pageSize) : null;
       var prevPage = page > 0 ? GetLink(linkName, userId, page - 1, pageSize) : null;
-      Console.WriteLine($"Previous Page Link for {linkName}: {prevPage}");
-      Console.WriteLine($"Next Page Link for {linkName}: {nextPage}");
-      Console.WriteLine($"Current Page Link for {linkName}: {curPage}");
 
       var result = new
       {
