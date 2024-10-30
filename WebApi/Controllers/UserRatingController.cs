@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using DataLayer.Models;
 using DataLayer;
 using WebApi.DTOs;
 using Mapster;
@@ -19,41 +18,28 @@ namespace WebApi.Controllers
       _dataService = dataService;
     }
 
-    // Get all ratings for a user with pagination and self-links
+    // Get paginated ratings for a user
     [HttpGet("{userId}", Name = nameof(GetUserRatings))]
     public IActionResult GetUserRatings(int userId, int pageNumber = 1, int pageSize = DefaultPageSize)
     {
       var totalRatings = _dataService.GetUserRatingCount(userId);
-
-      if (totalRatings == 0)
-      {
-        return NotFound();
-      }
+      if (totalRatings == 0) return NotFound();
 
       var userRatings = _dataService.GetUserRatings(userId, pageNumber, pageSize);
-      var userRatingDtos = userRatings.Select(r =>
-      {
-        var dto = r.Adapt<UserRatingDto>();
-        dto.SelfLink = GetUrl(nameof(GetUserRatingById), new { userId = r.UserId, ratingId = r.Id });
-        return dto;
-      }).ToList();
+      var userRatingDtos = userRatings.Select(r => r.Adapt<UserRatingDto>().WithSelfLink(GetUrl(nameof(GetUserRatingById), new { userId, ratingId = r.Id }))).ToList();
+
       var paginatedResult = CreatePagingUser(nameof(GetUserRatings), userId, pageNumber, pageSize, totalRatings, userRatingDtos);
       return Ok(paginatedResult);
     }
 
     // Get a specific rating by userId and ratingId
     [HttpGet("{userId}/{ratingId}", Name = nameof(GetUserRatingById))]
-    public IActionResult GetUserRatingById(int ratingId)
+    public IActionResult GetUserRatingById(int userId, int ratingId)
     {
       var userRating = _dataService.GetUserRating(ratingId);
-      if (userRating == null)
-      {
-        return NotFound();
-      }
+      if (userRating == null) return NotFound();
 
-      var userRatingDto = userRating.Adapt<UserRatingDto>();
-      userRatingDto.SelfLink = GetUrl(nameof(GetUserRatingById), new { ratingId });
-
+      var userRatingDto = userRating.Adapt<UserRatingDto>().WithSelfLink(GetUrl(nameof(GetUserRatingById), new { userId, ratingId }));
       return Ok(userRatingDto);
     }
 
@@ -61,18 +47,14 @@ namespace WebApi.Controllers
     [HttpPost]
     public IActionResult AddUserRating([FromBody] UserRatingDto userRatingDto)
     {
-      if (!ModelState.IsValid)
-      {
-        return BadRequest(ModelState);
-      }
+      if (!ModelState.IsValid) return BadRequest(ModelState);
 
       try
       {
         var userRating = _dataService.AddUserRating(userRatingDto.UserId, userRatingDto.TConst, userRatingDto.Rating);
-        var userRatingDtoResult = userRating.Adapt<UserRatingDto>();
-        userRatingDtoResult.SelfLink = GetUrl(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id });
+        var resultDto = userRating.Adapt<UserRatingDto>().WithSelfLink(GetUrl(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id }));
 
-        return CreatedAtAction(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id }, userRatingDtoResult);
+        return CreatedAtAction(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id }, resultDto);
       }
       catch (ArgumentException ex)
       {
@@ -82,13 +64,9 @@ namespace WebApi.Controllers
 
     // Delete a rating
     [HttpDelete("{userId}/{ratingId}")]
-    public IActionResult DeleteUserRating(int ratingId)
+    public IActionResult DeleteUserRating(int userId, int ratingId)
     {
-      var existingUserRating = _dataService.GetUserRating(ratingId);
-      if (existingUserRating == null)
-      {
-        return NotFound();
-      }
+      if (_dataService.GetUserRating(ratingId) == null) return NotFound();
 
       _dataService.DeleteUserRating(ratingId);
       return NoContent();
@@ -98,19 +76,21 @@ namespace WebApi.Controllers
     [HttpPut("{userId}/{ratingId}")]
     public IActionResult UpdateUserRating(int userId, int ratingId, [FromBody] UserRatingDto userRatingDto)
     {
-      if (!ModelState.IsValid)
-      {
-        return BadRequest(ModelState); // Return validation errors
-      }
+      if (!ModelState.IsValid) return BadRequest(ModelState);
 
-      var existingRating = _dataService.GetUserRating(ratingId);
-      if (existingRating == null)
-      {
-        return NotFound();
-      }
+      if (_dataService.GetUserRating(ratingId) == null) return NotFound();
 
       _dataService.UpdateUserRating(userId, ratingId, userRatingDto.Rating);
-      return NoContent(); // 204 status code for successful update
+      return NoContent();
     }
+  }
+}
+
+public static class DtoExtensions
+{
+  public static T WithSelfLink<T>(this T dto, string selfLink) where T : class
+  {
+    if (dto is UserRatingDto ratingDto) ratingDto.SelfLink = selfLink;
+    return dto;
   }
 }

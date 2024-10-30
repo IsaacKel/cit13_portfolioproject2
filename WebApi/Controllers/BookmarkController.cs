@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs;
 using DataLayer;
+using DataLayer.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,14 +24,7 @@ namespace WebApi.Controllers
     public IActionResult AddBookmark(BookmarkDto dto)
     {
       var bookmark = _dataService.AddBookmark(dto.UserId, dto.TConst, dto.NConst, dto.Note);
-      var bookmarkDto = new BookmarkDto
-      {
-        UserId = bookmark.UserId,
-        TConst = bookmark.TConst,
-        NConst = bookmark.NConst,
-        Note = bookmark.Note,
-        SelfLink = GetUrl(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id })
-      };
+      var bookmarkDto = MapToBookmarkDto(bookmark);
       return CreatedAtAction(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id }, bookmarkDto);
     }
 
@@ -40,21 +34,12 @@ namespace WebApi.Controllers
     {
       var bookmarks = _dataService.GetBookmarks(userId, pageNumber, pageSize);
       if (bookmarks == null || !bookmarks.Any())
-      {
-        return NotFound("No bookmarks found for this user.");
-      }
+        return NotFound();
 
       var totalItems = _dataService.GetBookmarkCountByUser(userId);
-      var bookmarkDtos = bookmarks.Select(b => new BookmarkDto
-      {
-        UserId = b.UserId,
-        TConst = b.TConst,
-        NConst = b.NConst,
-        Note = b.Note,
-        SelfLink = GetUrl(nameof(GetBookmark), new { userId = b.UserId, bookmarkId = b.Id })
-      }).ToList();
-
+      var bookmarkDtos = bookmarks.Select(MapToBookmarkDto).ToList();
       var paginatedResult = CreatePagingUser(nameof(GetBookmarks), userId, pageNumber, pageSize, totalItems, bookmarkDtos);
+
       return Ok(paginatedResult);
     }
 
@@ -63,18 +48,7 @@ namespace WebApi.Controllers
     public IActionResult GetBookmark(int userId, int bookmarkId)
     {
       var bookmark = _dataService.GetBookmark(userId, bookmarkId);
-      if (bookmark == null)
-        return NotFound();
-
-      var bookmarkDto = new BookmarkDto
-      {
-        UserId = bookmark.UserId,
-        TConst = bookmark.TConst,
-        NConst = bookmark.NConst,
-        Note = bookmark.Note,
-        SelfLink = GetUrl(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id })
-      };
-      return Ok(bookmarkDto);
+      return bookmark == null ? NotFound() : Ok(MapToBookmarkDto(bookmark));
     }
 
     // Update Bookmark
@@ -91,6 +65,19 @@ namespace WebApi.Controllers
     {
       _dataService.DeleteBookmark(bookmarkId);
       return NoContent();
+    }
+
+    // Private Helper Method to Map Bookmark to BookmarkDto
+    private BookmarkDto MapToBookmarkDto(Bookmark bookmark)
+    {
+      return new BookmarkDto
+      {
+        UserId = bookmark.UserId,
+        TConst = bookmark.TConst,
+        NConst = bookmark.NConst,
+        Note = bookmark.Note,
+        SelfLink = GetUrl(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id })
+      };
     }
   }
 }
