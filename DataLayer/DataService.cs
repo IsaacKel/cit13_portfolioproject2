@@ -231,5 +231,15 @@ namespace DataLayer
       if (!Exists<User>(userId))
         throw new ArgumentException("User with specified ID does not exist.");
     }
-  }
+        // title 
+        public TitleBasic GetTitleByTConst(string tConst)
+        {
+            return _context.TitleBasics.FirstOrDefault(tb => tb.TConst == tConst);
+        }
+        // coplayers
+        public IList<CoPlayer> GetCoPlayers(string nConst)
+        {
+            return _context.CoPlayers.FromSqlInterpolated($"select * from coplayers({nConst})").ToList();
+        }
+    }
 }

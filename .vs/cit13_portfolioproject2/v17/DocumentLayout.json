@@ -1,18 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\sebas\\Documents\\GitHub\\cit13_portfolioproject2\\",
+  "WorkspaceRootPath": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6DA75D92-7845-4885-B94D-366CF7D67F5A}|WebApi\\WebApi.csproj|c:\\users\\sebas\\documents\\github\\cit13_portfolioproject2\\webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{6DA75D92-7845-4885-B94D-366CF7D67F5A}|WebApi\\WebApi.csproj|solutionrelative:webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{6DA75D92-7845-4885-B94D-366CF7D67F5A}|WebApi\\WebApi.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\webapi\\controllers\\titlecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6DA75D92-7845-4885-B94D-366CF7D67F5A}|WebApi\\WebApi.csproj|solutionrelative:webapi\\controllers\\titlecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\sebas\\documents\\github\\cit13_portfolioproject2\\datalayer\\dataservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\dataservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6DA75D92-7845-4885-B94D-366CF7D67F5A}|WebApi\\WebApi.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\webapi\\controllers\\coplayerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6DA75D92-7845-4885-B94D-366CF7D67F5A}|WebApi\\WebApi.csproj|solutionrelative:webapi\\controllers\\coplayerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6DA75D92-7845-4885-B94D-366CF7D67F5A}|WebApi\\WebApi.csproj|c:\\users\\sebas\\documents\\github\\cit13_portfolioproject2\\webapi\\webapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{6DA75D92-7845-4885-B94D-366CF7D67F5A}|WebApi\\WebApi.csproj|solutionrelative:webapi\\webapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\datalayer\\moviedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\moviedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,40 +27,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\sebas\\Documents\\GitHub\\cit13_portfolioproject2\\WebApi\\appsettings.json",
-              "RelativeDocumentMoniker": "WebApi\\appsettings.json",
-              "ToolTip": "C:\\Users\\sebas\\Documents\\GitHub\\cit13_portfolioproject2\\WebApi\\appsettings.json",
-              "RelativeToolTip": "WebApi\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-10-28T11:54:40.04Z",
+              "Title": "TitleController.cs",
+              "DocumentMoniker": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\WebApi\\Controllers\\TitleController.cs",
+              "RelativeDocumentMoniker": "WebApi\\Controllers\\TitleController.cs",
+              "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\WebApi\\Controllers\\TitleController.cs",
+              "RelativeToolTip": "WebApi\\Controllers\\TitleController.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAYwCIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-30T22:00:17.23Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "DataService.cs",
-              "DocumentMoniker": "C:\\Users\\sebas\\Documents\\GitHub\\cit13_portfolioproject2\\DataLayer\\DataService.cs",
-              "RelativeDocumentMoniker": "DataLayer\\DataService.cs",
-              "ToolTip": "C:\\Users\\sebas\\Documents\\GitHub\\cit13_portfolioproject2\\DataLayer\\DataService.cs",
-              "RelativeToolTip": "DataLayer\\DataService.cs",
-              "ViewState": "AgIAAEwAAAAAAAAAAAAMwGAAAAAJAAAAAAAAAA==",
+              "Title": "CoPlayersController.cs",
+              "DocumentMoniker": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\WebApi\\Controllers\\CoPlayersController.cs",
+              "RelativeDocumentMoniker": "WebApi\\Controllers\\CoPlayersController.cs",
+              "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\WebApi\\Controllers\\CoPlayersController.cs",
+              "RelativeToolTip": "WebApi\\Controllers\\CoPlayersController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAowCIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-28T11:54:18.708Z",
+              "WhenOpened": "2024-10-30T21:59:55.347Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "WebApi",
-              "DocumentMoniker": "C:\\Users\\sebas\\Documents\\GitHub\\cit13_portfolioproject2\\WebApi\\WebApi.csproj",
-              "RelativeDocumentMoniker": "WebApi\\WebApi.csproj",
-              "ToolTip": "C:\\Users\\sebas\\Documents\\GitHub\\cit13_portfolioproject2\\WebApi\\WebApi.csproj",
-              "RelativeToolTip": "WebApi\\WebApi.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-10-28T11:53:54.602Z",
+              "Title": "MovieDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\MovieDbContext.cs",
+              "RelativeDocumentMoniker": "DataLayer\\MovieDbContext.cs",
+              "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\MovieDbContext.cs",
+              "RelativeToolTip": "DataLayer\\MovieDbContext.cs",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAiwE4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-30T21:58:33.446Z",
               "EditorCaption": ""
             }
           ]

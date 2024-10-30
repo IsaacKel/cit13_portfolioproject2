@@ -34,7 +34,8 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [],
+    "EndpointName": "GetBookmark"
   },
   {
     "ContainingType": "WebApi.Controllers.BookmarkController",
@@ -71,11 +72,6 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
         "Name": "bookmarkId",
         "Type": "System.Int32",
         "IsRequired": true
@@ -107,7 +103,34 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [],
+    "EndpointName": "GetBookmarks"
+  },
+  {
+    "ContainingType": "WebApi.Controllers.CoPlayersController",
+    "Method": "GetCoPlayers",
+    "RelativePath": "api/CoPlayers/{nConst}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nConst",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DataLayer.Models.CoPlayer",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WebApi.Controllers.SearchHistoryController",
@@ -121,11 +144,6 @@
         "Name": "searchHistoryDto",
         "Type": "WebApi.DTOs.SearchHistoryDTO",
         "IsRequired": true
-      },
-      {
-        "Name": "createdAt",
-        "Type": "System.DateTime",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -133,7 +151,40 @@
   {
     "ContainingType": "WebApi.Controllers.SearchHistoryController",
     "Method": "GetSearchHistory",
-    "RelativePath": "api/SearchHistory/{userId}",
+    "RelativePath": "api/SearchHistory/{searchId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "searchId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [],
+    "EndpointName": "GetSearchHistory"
+  },
+  {
+    "ContainingType": "WebApi.Controllers.SearchHistoryController",
+    "Method": "DeleteSearchHistory",
+    "RelativePath": "api/SearchHistory/{searchId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "searchId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.SearchHistoryController",
+    "Method": "GetSearchHistoryByUser",
+    "RelativePath": "api/SearchHistory/user/{userId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -154,59 +205,34 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [],
+    "EndpointName": "GetSearchHistoryByUser"
   },
   {
-    "ContainingType": "WebApi.Controllers.SearchHistoryController",
-    "Method": "GetSearchHistoryById",
-    "RelativePath": "api/SearchHistory/{userId}/{searchQuery}/{createdAt}",
+    "ContainingType": "WebApi.Controllers.TitleController",
+    "Method": "GetTitleByTConst",
+    "RelativePath": "api/Title/{tConst}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "searchQuery",
+        "Name": "tConst",
         "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "createdAt",
-        "Type": "System.DateTime",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApi.Controllers.SearchHistoryController",
-    "Method": "DeleteSearchHistory",
-    "RelativePath": "api/SearchHistory/{userId}/{searchQuery}/{createdAt}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
+    "ReturnTypes": [
       {
-        "Name": "userId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "searchQuery",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "createdAt",
-        "Type": "System.DateTime",
-        "IsRequired": true
+        "Type": "DataLayer.Models.TitleBasic",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
-    ],
-    "ReturnTypes": []
+    ]
   },
   {
     "ContainingType": "WebApi.Controllers.UserController",
@@ -312,12 +338,13 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [],
+    "EndpointName": "GetUserRatings"
   },
   {
     "ContainingType": "WebApi.Controllers.UserRatingController",
-    "Method": "GetUserRating",
-    "RelativePath": "api/UserRating/{userId}/{tconst}",
+    "Method": "GetUserRatingById",
+    "RelativePath": "api/UserRating/{userId}/{ratingId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -328,17 +355,18 @@
         "IsRequired": true
       },
       {
-        "Name": "tconst",
-        "Type": "System.String",
+        "Name": "ratingId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [],
+    "EndpointName": "GetUserRatingById"
   },
   {
     "ContainingType": "WebApi.Controllers.UserRatingController",
     "Method": "DeleteUserRating",
-    "RelativePath": "api/UserRating/{userId}/{tconst}",
+    "RelativePath": "api/UserRating/{userId}/{ratingId}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -349,8 +377,34 @@
         "IsRequired": true
       },
       {
-        "Name": "tconst",
-        "Type": "System.String",
+        "Name": "ratingId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApi.Controllers.UserRatingController",
+    "Method": "UpdateUserRating",
+    "RelativePath": "api/UserRating/{userId}/{ratingId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "ratingId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "userRatingDto",
+        "Type": "WebApi.DTOs.UserRatingDto",
         "IsRequired": true
       }
     ],
