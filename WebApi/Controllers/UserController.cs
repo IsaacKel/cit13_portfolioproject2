@@ -24,7 +24,7 @@ namespace WebApi.Controllers
     {
       var user = _dataService.GetUser(userId);
       if (user == null)
-        return NotFound("User not found.");
+        return NotFound();
 
       var userDto = user.Adapt<UserDTO>();
       userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId });
@@ -38,7 +38,7 @@ namespace WebApi.Controllers
     {
       var user = _dataService.GetUser(username);
       if (user == null)
-        return NotFound("User not found.");
+        return NotFound();
 
       var userDto = user.Adapt<UserDTO>();
       userDto.SelfLink = GenerateSelfLink(nameof(GetUserByUsername), new { username });
@@ -53,6 +53,15 @@ namespace WebApi.Controllers
       if (!ModelState.IsValid)  // Validation via ModelState
         return BadRequest(ModelState);
 
+      if (string.IsNullOrWhiteSpace(dto.Username))
+        return BadRequest();
+
+      if (string.IsNullOrWhiteSpace(dto.Password))
+        return BadRequest();
+
+      if (string.IsNullOrWhiteSpace(dto.Email))
+        return BadRequest();
+
       var user = _dataService.AddUser(dto.Username, dto.Password, dto.Email);
       var userDto = user.Adapt<UserDTO>();
       userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId = user.Id });
@@ -65,7 +74,7 @@ namespace WebApi.Controllers
     public IActionResult DeleteUser(int userId)
     {
       if (_dataService.GetUser(userId) == null)
-        return NotFound("User not found.");
+        return NotFound();
 
       _dataService.DeleteUser(userId);
       return NoContent();
