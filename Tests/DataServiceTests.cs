@@ -86,21 +86,21 @@ namespace Assignment4.Tests
     [Fact]
     public void AddSearchHistory_ValidQuery_ReturnsSearchHistory()
     {
-
       var newUser = service.AddUser("historyUser", "password", "historyUser@example.com");
       Assert.True(newUser.Id > 0);
 
       var history = service.AddSearchHistory(newUser.Id, "testQuery");
       Assert.Equal("testQuery", history.SearchQuery);
 
-      var historyList = service.GetSearchHistory(newUser.Id);
+      var historyList = service.GetSearchHistoriesByUser(newUser.Id); // Use the correct method
+
       Assert.NotEmpty(historyList);
       Assert.Equal("testQuery", historyList.First().SearchQuery);
 
       // cleanup
       service.DeleteSearchHistory(history.Id);
 
-      var deletedHistory = service.GetSearchHistory(newUser.Id, history.Id);
+      var deletedHistory = service.GetSearchHistory(history.Id);
       Assert.Null(deletedHistory);
 
       service.DeleteUser(newUser.Id);
