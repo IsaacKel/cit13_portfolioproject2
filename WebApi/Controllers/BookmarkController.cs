@@ -54,7 +54,7 @@ namespace WebApi.Controllers
         SelfLink = GetUrl(nameof(GetBookmark), new { userId = b.UserId, bookmarkId = b.Id })
       }).ToList();
 
-      var paginatedResult = CreatePaging(nameof(GetBookmarks), userId, pageNumber, pageSize, totalItems, bookmarkDtos);
+      var paginatedResult = CreatePagingUser(nameof(GetBookmarks), userId, pageNumber, pageSize, totalItems, bookmarkDtos);
       return Ok(paginatedResult);
     }
 

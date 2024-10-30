@@ -20,20 +20,20 @@ namespace WebApi.Controllers
       var uri = _linkGenerator.GetUriByName(HttpContext, linkName, args);
       return uri;
     }
-    protected string? GetLink(string linkName, int userId, int page, int pageSize)
+    protected string? GetLinkUser(string linkName, int userId, int page, int pageSize)
     {
       return GetUrl(linkName, new { userId, page, pageSize });
     }
 
-    protected object CreatePaging<T>(string linkName, int userId, int page, int pageSize, int total, IEnumerable<T?> items)
+    protected object CreatePagingUser<T>(string linkName, int userId, int page, int pageSize, int total, IEnumerable<T?> items)
     {
       const int MaxPageSize = 25;
       pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
       var numberOfPages = (int)Math.Ceiling(total / (double)pageSize);
 
-      var curPage = GetLink(linkName, userId, page, pageSize);
-      var nextPage = page < numberOfPages - 1 ? GetLink(linkName, userId, page + 1, pageSize) : null;
-      var prevPage = page > 0 ? GetLink(linkName, userId, page - 1, pageSize) : null;
+      var curPage = GetLinkUser(linkName, userId, page, pageSize);
+      var nextPage = page < numberOfPages - 1 ? GetLinkUser(linkName, userId, page + 1, pageSize) : null;
+      var prevPage = page > 1 ? GetLinkUser(linkName, userId, page - 1, pageSize) : null;
 
       var result = new
       {

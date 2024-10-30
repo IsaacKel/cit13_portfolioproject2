@@ -27,7 +27,7 @@ namespace WebApi.Controllers
 
       if (totalRatings == 0)
       {
-        return NotFound("No ratings found for this user.");
+        return NotFound();
       }
 
       var userRatings = _dataService.GetUserRatings(userId, pageNumber, pageSize);
@@ -37,8 +37,7 @@ namespace WebApi.Controllers
         dto.SelfLink = GetUrl(nameof(GetUserRatingById), new { userId = r.UserId, ratingId = r.Id });
         return dto;
       }).ToList();
-      Console.WriteLine("Link Name in GetUserRatings: " + nameof(GetUserRatings));
-      var paginatedResult = CreatePaging(nameof(GetUserRatings), userId, pageNumber, pageSize, totalRatings, userRatingDtos);
+      var paginatedResult = CreatePagingUser(nameof(GetUserRatings), userId, pageNumber, pageSize, totalRatings, userRatingDtos);
       return Ok(paginatedResult);
     }
 
@@ -49,7 +48,7 @@ namespace WebApi.Controllers
       var userRating = _dataService.GetUserRating(ratingId);
       if (userRating == null)
       {
-        return NotFound("Rating not found.");
+        return NotFound();
       }
 
       var userRatingDto = userRating.Adapt<UserRatingDto>();
@@ -88,7 +87,7 @@ namespace WebApi.Controllers
       var existingUserRating = _dataService.GetUserRating(ratingId);
       if (existingUserRating == null)
       {
-        return NotFound("Rating not found.");
+        return NotFound();
       }
 
       _dataService.DeleteUserRating(ratingId);
@@ -107,7 +106,7 @@ namespace WebApi.Controllers
       var existingRating = _dataService.GetUserRating(ratingId);
       if (existingRating == null)
       {
-        return NotFound("Rating not found.");
+        return NotFound();
       }
 
       _dataService.UpdateUserRating(userId, ratingId, userRatingDto.Rating);

@@ -39,7 +39,7 @@
 //       int pageNumber = 1;
 //       int pageSize = 10;
 
-//       var (data, statusCode) = await TestHelpers.GetArray($"{SearchHistoryApi}/user/{userId}?pageNumber={pageNumber}&pageSize={pageSize}");
+//       var (data, statusCode) = await TestHelper.GetArray($"{SearchHistoryApi}/user/{userId}?pageNumber={pageNumber}&pageSize={pageSize}");
 
 //       Assert.Equal(HttpStatusCode.OK, statusCode);
 //       Assert.NotNull(data);
@@ -161,5 +161,11 @@
 //       var response = await client.DeleteAsync(url);
 //       return response.StatusCode;
 //     }
+//   }
+//   static class HelperExt
+//   {
+//     public static string? Value(this JsonNode node, string name) =>
+//         node[name]?.ToString();
+
 //   }
 // }

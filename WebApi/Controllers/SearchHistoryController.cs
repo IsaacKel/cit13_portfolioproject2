@@ -53,7 +53,7 @@ namespace WebApi.Controllers
         return dto;
       }).ToList();
 
-      var paginatedResult = CreatePaging(nameof(GetSearchHistoryByUser), userId, pageNumber, pageSize, totalItems, searchHistoryDtos);
+      var paginatedResult = CreatePagingUser(nameof(GetSearchHistoryByUser), userId, pageNumber, pageSize, totalItems, searchHistoryDtos);
       return Ok(paginatedResult);
     }
 
