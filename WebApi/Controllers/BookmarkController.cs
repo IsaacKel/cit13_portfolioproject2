@@ -23,6 +23,15 @@ namespace WebApi.Controllers
     [HttpPost]
     public IActionResult AddBookmark(BookmarkDto dto)
     {
+      // Check if a bookmark with the same TConst or NConst already exists for this user
+      var existingBookmark = _dataService.GetBookmarks(dto.UserId)
+                                         .FirstOrDefault(b => b.TConst == dto.TConst && b.NConst == dto.NConst);
+
+      // if (existingBookmark != null)
+      // {
+      //   return Conflict(new { message = "Bookmark already exists for this title and user." });
+      // }
+
       var bookmark = _dataService.AddBookmark(dto.UserId, dto.TConst, dto.NConst, dto.Note);
       var bookmarkDto = MapToBookmarkDto(bookmark);
       return CreatedAtAction(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id }, bookmarkDto);
@@ -51,18 +60,30 @@ namespace WebApi.Controllers
       return bookmark == null ? NotFound() : Ok(MapToBookmarkDto(bookmark));
     }
 
-    // Update Bookmark
+    // Update Bookmark with Existence Check
     [HttpPut("{bookmarkId}")]
     public IActionResult UpdateBookmark(int userId, int bookmarkId, BookmarkDto dto)
     {
+      // Check if bookmark exists
+      if (_dataService.GetBookmark(userId, bookmarkId) == null)
+      {
+        return NotFound();
+      }
+
       _dataService.UpdateBookmark(userId, bookmarkId, dto.TConst, dto.NConst, dto.Note);
       return NoContent();
     }
 
-    // Delete Bookmark
+    // Delete Bookmark with Existence Check
     [HttpDelete("{bookmarkId}")]
     public IActionResult DeleteBookmark(int bookmarkId)
     {
+      var existingBookmark = _dataService.GetBookmarkById(bookmarkId);
+      if (existingBookmark == null)
+      {
+        return NotFound();
+      }
+
       _dataService.DeleteBookmark(bookmarkId);
       return NoContent();
     }

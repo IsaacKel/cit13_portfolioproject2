@@ -21,46 +21,40 @@ namespace DataLayer
 
     // -- Helper Methods --
 
-    private IList<T> GetPagedResults<T>(IQueryable<T> query, int pageNumber, int pageSize) where T : class
-    {
-      return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-    }
+    private IList<T> GetPagedResults<T>(IQueryable<T> query, int pageNumber, int pageSize) where T : class =>
+        query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
 
-    private bool SaveChangesWithValidation()
-    {
-      return _context.SaveChanges() > 0;
-    }
+    private bool SaveChanges() => _context.SaveChanges() > 0;
+
+    private bool Exists<T>(int id) where T : class =>
+        _context.Set<T>().Find(id) != null;
+
+    private T FindById<T>(int id) where T : class =>
+        _context.Set<T>().Find(id);
 
     // -- USER --
 
     public User AddUser(string username, string password, string email)
     {
-      var user = new User
-      {
-        Username = username,
-        Password = password,
-        Email = email
-      };
+      var user = new User { Username = username, Password = password, Email = email };
       _context.Users.Add(user);
-      SaveChangesWithValidation();
+      SaveChanges();
       return user;
     }
 
-    public User GetUser(string username) => _context.Users.FirstOrDefault(u => u.Username == username);
+    public User GetUser(string username) =>
+        _context.Users.FirstOrDefault(u => u.Username == username);
 
-    public User GetUser(int userId)
-    {
-      var user = _context.Users.Find(userId);
-      return user;
-    }
+    public User GetUser(int userId) =>
+        FindById<User>(userId);
 
     public void DeleteUser(int userId)
     {
-      var user = _context.Users.Find(userId);
+      var user = FindById<User>(userId);
       if (user != null)
       {
         _context.Users.Remove(user);
-        SaveChangesWithValidation();
+        SaveChanges();
       }
     }
 
@@ -72,23 +66,21 @@ namespace DataLayer
       return GetPagedResults(query, pageNumber, pageSize);
     }
 
-    public int GetBookmarkCountByUser(int userId) => _context.Bookmarks.Count(b => b.UserId == userId);
+    public int GetBookmarkCountByUser(int userId) =>
+        _context.Bookmarks.Count(b => b.UserId == userId);
 
-    public Bookmark GetBookmark(int userId, int bookmarkId)
-    {
-      return _context.Bookmarks.FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
-    }
+    public Bookmark GetBookmarkById(int bookmarkId) =>
+        _context.Bookmarks.FirstOrDefault(b => b.Id == bookmarkId);
+
+    public Bookmark GetBookmark(int userId, int bookmarkId) =>
+        _context.Bookmarks.FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
 
     public Bookmark AddBookmark(int userId, string? tconst, string? nconst, string note)
     {
-      if (!_context.Users.Any(u => u.Id == userId))
-        throw new ArgumentException("User with specified ID does not exist.");
+      ValidateUserExists(userId);
 
-      // Validate that either tconst or nconst is provided, but not both
       if ((tconst == null && nconst == null) || (tconst != null && nconst != null))
-      {
-        throw new ArgumentException("Either tconst or nconst must be provided, but not both.");
-      }
+        throw new ArgumentException("Specify either tconst or nconst, not both.");
 
       var bookmark = new Bookmark
       {
@@ -99,7 +91,7 @@ namespace DataLayer
         CreatedAt = DateTime.UtcNow
       };
       _context.Bookmarks.Add(bookmark);
-      SaveChangesWithValidation();
+      SaveChanges();
       return bookmark;
     }
 
@@ -112,17 +104,17 @@ namespace DataLayer
         bookmark.NConst = nconst;
         bookmark.Note = note;
         bookmark.CreatedAt = DateTime.UtcNow;
-        SaveChangesWithValidation();
+        SaveChanges();
       }
     }
 
     public void DeleteBookmark(int bookmarkId)
     {
-      var bookmark = _context.Bookmarks.Find(bookmarkId);
+      var bookmark = FindById<Bookmark>(bookmarkId);
       if (bookmark != null)
       {
         _context.Bookmarks.Remove(bookmark);
-        SaveChangesWithValidation();
+        SaveChanges();
       }
     }
 
@@ -134,18 +126,17 @@ namespace DataLayer
       return GetPagedResults(query, pageNumber, pageSize);
     }
 
+    public SearchHistory GetSearchHistory(int searchId) =>
+        FindById<SearchHistory>(searchId);
+
     public IList<SearchHistory> GetSearchHistoriesByUser(int userId, int pageNumber = 1, int pageSize = 10)
     {
-      var query = _context.SearchHistories.Where(sh => sh.UserId == userId).OrderByDescending(sh => sh.CreatedAt);
+      var query = _context.SearchHistories.Where(sh => sh.UserId == userId).OrderBy(sh => sh.CreatedAt);
       return GetPagedResults(query, pageNumber, pageSize);
     }
 
-    public int GetSearchHistoryCountByUser(int userId) => _context.SearchHistories.Count(sh => sh.UserId == userId);
-
-    public SearchHistory GetSearchHistory(int searchId)
-    {
-      return _context.SearchHistories.FirstOrDefault(sh => sh.Id == searchId);
-    }
+    public int GetSearchHistoryCountByUser(int userId) =>
+        _context.SearchHistories.Count(sh => sh.UserId == userId);
 
     public SearchHistory AddSearchHistory(int userId, string searchQuery)
     {
@@ -156,17 +147,17 @@ namespace DataLayer
         CreatedAt = DateTime.UtcNow
       };
       _context.SearchHistories.Add(searchHistory);
-      SaveChangesWithValidation();
+      SaveChanges();
       return searchHistory;
     }
 
     public void DeleteSearchHistory(int searchId)
     {
-      var searchHistory = _context.SearchHistories.Find(searchId);
+      var searchHistory = FindById<SearchHistory>(searchId);
       if (searchHistory != null)
       {
         _context.SearchHistories.Remove(searchHistory);
-        SaveChangesWithValidation();
+        SaveChanges();
       }
     }
 
@@ -178,12 +169,14 @@ namespace DataLayer
       return GetPagedResults(query, pageNumber, pageSize);
     }
 
-    public int GetUserRatingCount(int userId) => _context.UserRatings.Count(ur => ur.UserId == userId);
+    public UserRating GetUserRating(int ratingId) =>
+        FindById<UserRating>(ratingId);
 
-    public UserRating GetUserRating(int ratingId)
-    {
-      return _context.UserRatings.FirstOrDefault(ur => ur.Id == ratingId);
-    }
+    public UserRating GetUserRatingByUserAndTConst(int userId, string tconst) =>
+        _context.UserRatings.FirstOrDefault(ur => ur.UserId == userId && ur.TConst == tconst);
+
+    public int GetUserRatingCount(int userId) =>
+        _context.UserRatings.Count(ur => ur.UserId == userId);
 
     public UserRating AddUserRating(int userId, string tconst, int rating)
     {
@@ -195,8 +188,19 @@ namespace DataLayer
         CreatedAt = DateTime.UtcNow
       };
       _context.UserRatings.Add(userRating);
-      SaveChangesWithValidation();
+      SaveChanges();
       return userRating;
+    }
+
+    public void UpdateUserRating(int ratingId, int rating)
+    {
+      var userRating = FindById<UserRating>(ratingId);
+      if (userRating != null)
+      {
+        userRating.Rating = rating;
+        userRating.CreatedAt = DateTime.UtcNow;
+        SaveChanges();
+      }
     }
 
     public void UpdateUserRating(int userId, int ratingId, int rating)
@@ -206,18 +210,26 @@ namespace DataLayer
       {
         userRating.Rating = rating;
         userRating.CreatedAt = DateTime.UtcNow;
-        SaveChangesWithValidation();
+        SaveChanges();
       }
     }
 
     public void DeleteUserRating(int ratingId)
     {
-      var userRating = _context.UserRatings.Find(ratingId);
+      var userRating = FindById<UserRating>(ratingId);
       if (userRating != null)
       {
         _context.UserRatings.Remove(userRating);
-        SaveChangesWithValidation();
+        SaveChanges();
       }
+    }
+
+    // -- Private Helper Methods --
+
+    private void ValidateUserExists(int userId)
+    {
+      if (!Exists<User>(userId))
+        throw new ArgumentException("User with specified ID does not exist.");
     }
   }
 }

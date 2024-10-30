@@ -49,6 +49,12 @@ namespace WebApi.Controllers
     {
       if (!ModelState.IsValid) return BadRequest(ModelState);
 
+      // var existingRating = _dataService.GetUserRatingByUserAndTConst(userRatingDto.UserId, userRatingDto.TConst);
+      // if (existingRating != null)
+      // {
+      //   return Conflict("User has already rated this movie.");
+      // }
+
       try
       {
         var userRating = _dataService.AddUserRating(userRatingDto.UserId, userRatingDto.TConst, userRatingDto.Rating);
@@ -76,6 +82,12 @@ namespace WebApi.Controllers
     [HttpPut("{userId}/{ratingId}")]
     public IActionResult UpdateUserRating(int userId, int ratingId, [FromBody] UserRatingDto userRatingDto)
     {
+      var existingRating = _dataService.GetUserRating(ratingId);
+      if (existingRating == null || existingRating.UserId != userId)
+      {
+        return Forbid("User does not have permission to modify this rating.");
+      }
+
       if (!ModelState.IsValid) return BadRequest(ModelState);
 
       if (_dataService.GetUserRating(ratingId) == null) return NotFound();

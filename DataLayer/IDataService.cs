@@ -14,6 +14,7 @@ namespace DataLayer
     // --BOOKMARK--
     IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10);
     Bookmark GetBookmark(int userId, int bookmarkId);
+    Bookmark GetBookmarkById(int bookmarkId);
     Bookmark AddBookmark(int userId, string tconst, string nconst, string note);
     void UpdateBookmark(int userId, int bookmarkId, string tconst, string nconst, string note);
     void DeleteBookmark(int bookmarkId);
@@ -30,6 +31,7 @@ namespace DataLayer
     // --USER RATING--
     IList<UserRating> GetUserRatings(int userId, int pageNumber = 1, int pageSize = 10);
     UserRating GetUserRating(int ratingId);
+    UserRating GetUserRatingByUserAndTConst(int userId, string tconst);
     UserRating AddUserRating(int userId, string tconst, int rating);
     void DeleteUserRating(int ratingId);
     void UpdateUserRating(int userId, int ratingId, int rating);
