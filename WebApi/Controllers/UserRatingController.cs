@@ -3,6 +3,7 @@ using DataLayer;
 using WebApi.DTOs;
 using Mapster;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace WebApi.Controllers
 {
@@ -20,32 +21,39 @@ namespace WebApi.Controllers
 
     // Get paginated ratings for a user
     [HttpGet("{userId}", Name = nameof(GetUserRatings))]
-    public IActionResult GetUserRatings(int userId, int pageNumber = 1, int pageSize = DefaultPageSize)
+    public async Task<IActionResult> GetUserRatings(int userId, int pageNumber, int pageSize)
     {
-      var totalRatings = _dataService.GetUserRatingCount(userId);
+      var totalRatings = await _dataService.GetUserRatingCountAsync(userId);
       if (totalRatings == 0) return NotFound();
 
-      var userRatings = _dataService.GetUserRatings(userId, pageNumber, pageSize);
-      var userRatingDtos = userRatings.Select(r => r.Adapt<UserRatingDto>().WithSelfLink(GetUrl(nameof(GetUserRatingById), new { userId, ratingId = r.Id }))).ToList();
+      var userRatings = await _dataService.GetUserRatingsAsync(userId, pageNumber, pageSize);
+      var userRatingDtos = new List<UserRatingDto>();
 
-      var paginatedResult = CreatePagingUser(nameof(GetUserRatings), userId, pageNumber, pageSize, totalRatings, userRatingDtos);
+      foreach (var rating in userRatings)
+      {
+        var selfLink = await GetUrlAsync(nameof(GetUserRatingById), new { userId, ratingId = rating.Id });
+        var userRatingDto = rating.Adapt<UserRatingDto>().WithSelfLink(selfLink);
+        userRatingDtos.Add(userRatingDto);
+      }
+
+      var paginatedResult = CreatePagingUserAsync(nameof(GetUserRatings), userId, pageNumber, pageSize, totalRatings, userRatingDtos);
       return Ok(paginatedResult);
     }
 
     // Get a specific rating by userId and ratingId
     [HttpGet("{userId}/{ratingId}", Name = nameof(GetUserRatingById))]
-    public IActionResult GetUserRatingById(int userId, int ratingId)
+    public async Task<IActionResult> GetUserRatingById(int userId, int ratingId)
     {
-      var userRating = _dataService.GetUserRating(ratingId);
+      var userRating = await _dataService.GetUserRatingAsync(ratingId);
       if (userRating == null) return NotFound();
 
-      var userRatingDto = userRating.Adapt<UserRatingDto>().WithSelfLink(GetUrl(nameof(GetUserRatingById), new { userId, ratingId }));
+      var userRatingDto = userRating.Adapt<UserRatingDto>().WithSelfLink(await GetUrlAsync(nameof(GetUserRatingById), new { userId, ratingId }));
       return Ok(userRatingDto);
     }
 
     // Add a new rating
     [HttpPost]
-    public IActionResult AddUserRating([FromBody] UserRatingDto userRatingDto)
+    public async Task<IActionResult> AddUserRating([FromBody] UserRatingDto userRatingDto)
     {
       if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -57,8 +65,8 @@ namespace WebApi.Controllers
 
       try
       {
-        var userRating = _dataService.AddUserRating(userRatingDto.UserId, userRatingDto.TConst, userRatingDto.Rating);
-        var resultDto = userRating.Adapt<UserRatingDto>().WithSelfLink(GetUrl(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id }));
+        var userRating = await _dataService.AddUserRatingAsync(userRatingDto.UserId, userRatingDto.TConst, userRatingDto.Rating);
+        var resultDto = userRating.Adapt<UserRatingDto>().WithSelfLink(await GetUrlAsync(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id }));
 
         return CreatedAtAction(nameof(GetUserRatingById), new { userId = userRatingDto.UserId, ratingId = userRating.Id }, resultDto);
       }
@@ -70,19 +78,19 @@ namespace WebApi.Controllers
 
     // Delete a rating
     [HttpDelete("{userId}/{ratingId}")]
-    public IActionResult DeleteUserRating(int userId, int ratingId)
+    public async Task<IActionResult> DeleteUserRating(int userId, int ratingId)
     {
-      if (_dataService.GetUserRating(ratingId) == null) return NotFound();
+      if (await _dataService.GetUserRatingAsync(ratingId) == null) return NotFound();
 
-      _dataService.DeleteUserRating(ratingId);
+      await _dataService.DeleteUserRatingAsync(ratingId);
       return NoContent();
     }
 
     // Update a rating by ratingId
     [HttpPut("{userId}/{ratingId}")]
-    public IActionResult UpdateUserRating(int userId, int ratingId, [FromBody] UserRatingDto userRatingDto)
+    public async Task<IActionResult> UpdateUserRating(int userId, int ratingId, [FromBody] UserRatingDto userRatingDto)
     {
-      var existingRating = _dataService.GetUserRating(ratingId);
+      var existingRating = await _dataService.GetUserRatingAsync(ratingId);
       if (existingRating == null || existingRating.UserId != userId)
       {
         return Forbid("User does not have permission to modify this rating.");
@@ -90,9 +98,7 @@ namespace WebApi.Controllers
 
       if (!ModelState.IsValid) return BadRequest(ModelState);
 
-      if (_dataService.GetUserRating(ratingId) == null) return NotFound();
-
-      _dataService.UpdateUserRating(userId, ratingId, userRatingDto.Rating);
+      await _dataService.UpdateUserRatingAsync(userId, ratingId, userRatingDto.Rating);
       return NoContent();
     }
   }

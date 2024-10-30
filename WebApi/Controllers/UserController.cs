@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs;
 using DataLayer;
 using Mapster;
+using System.Threading.Tasks;
 
 namespace WebApi.Controllers
 {
@@ -19,33 +20,33 @@ namespace WebApi.Controllers
 
     // -- GET USER by ID --
     [HttpGet("{userId}")]
-    public IActionResult GetUser(int userId)
+    public async Task<IActionResult> GetUser(int userId)
     {
-      var user = _dataService.GetUser(userId);
+      var user = await _dataService.GetUserAsync(userId);
       if (user == null) return NotFound();
 
       var userDto = user.Adapt<UserDTO>();
-      userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId });
+      userDto.SelfLink = await GenerateSelfLinkAsync(nameof(GetUser), new { userId });
 
       return Ok(userDto);
     }
 
     // -- GET USER by USERNAME --
     [HttpGet("username/{username}")]
-    public IActionResult GetUserByUsername(string username)
+    public async Task<IActionResult> GetUserByUsername(string username)
     {
-      var user = _dataService.GetUser(username);
+      var user = await _dataService.GetUserAsync(username);
       if (user == null) return NotFound();
 
       var userDto = user.Adapt<UserDTO>();
-      userDto.SelfLink = GenerateSelfLink(nameof(GetUserByUsername), new { username });
+      userDto.SelfLink = await GenerateSelfLinkAsync(nameof(GetUserByUsername), new { username });
 
       return Ok(userDto);
     }
 
     // -- REGISTER USER (Create) --
     [HttpPost("register")]
-    public IActionResult RegisterUser([FromBody] UserRegisterDTO dto)
+    public async Task<IActionResult> RegisterUser([FromBody] UserRegisterDTO dto)
     {
       if (!ModelState.IsValid ||
           string.IsNullOrWhiteSpace(dto.Username) ||
@@ -55,20 +56,20 @@ namespace WebApi.Controllers
         return BadRequest(ModelState);
       }
 
-      var user = _dataService.AddUser(dto.Username, dto.Password, dto.Email);
+      var user = await _dataService.AddUserAsync(dto.Username, dto.Password, dto.Email);
       var userDto = user.Adapt<UserDTO>();
-      userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId = user.Id });
+      userDto.SelfLink = await GenerateSelfLinkAsync(nameof(GetUser), new { userId = user.Id });
 
       return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, userDto);
     }
 
     // -- DELETE USER --
     [HttpDelete("{userId}")]
-    public IActionResult DeleteUser(int userId)
+    public async Task<IActionResult> DeleteUser(int userId)
     {
-      if (_dataService.GetUser(userId) == null) return NotFound();
+      if (await _dataService.GetUserAsync(userId) == null) return NotFound();
 
-      _dataService.DeleteUser(userId);
+      await _dataService.DeleteUserAsync(userId);
       return NoContent();
     }
   }

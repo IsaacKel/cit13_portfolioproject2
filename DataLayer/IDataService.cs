@@ -1,40 +1,41 @@
 using DataLayer.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DataLayer
 {
   public interface IDataService
   {
     // --USER--
-    User AddUser(string username, string password, string email);
-    User GetUser(string username);
-    User GetUser(int userId);
-    void DeleteUser(int userId);
+    Task<User> AddUserAsync(string username, string password, string email);
+    Task<User> GetUserAsync(string username);
+    Task<User> GetUserAsync(int userId);
+    Task DeleteUserAsync(int userId);
 
     // --BOOKMARK--
-    IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10);
-    Bookmark GetBookmark(int userId, int bookmarkId);
-    Bookmark GetBookmarkById(int bookmarkId);
-    Bookmark AddBookmark(int userId, string tconst, string nconst, string note);
-    void UpdateBookmark(int userId, int bookmarkId, string tconst, string nconst, string note);
-    void DeleteBookmark(int bookmarkId);
-    int GetBookmarkCountByUser(int userId);
+    Task<IList<Bookmark>> GetBookmarksAsync(int userId, int pageNumber = 1, int pageSize = 10);
+    Task<Bookmark> GetBookmarkAsync(int userId, int bookmarkId);
+    Task<Bookmark> GetBookmarkByIdAsync(int bookmarkId);
+    Task<Bookmark> AddBookmarkAsync(int userId, string tconst, string nconst, string note);
+    Task UpdateBookmarkAsync(int userId, int bookmarkId, string tconst, string nconst, string note);
+    Task DeleteBookmarkAsync(int bookmarkId);
+    Task<int> GetBookmarkCountByUserAsync(int userId);
 
     // --SEARCH HISTORY--
-    IList<SearchHistory> GetSearchHistory(int userId, int pageNumber = 1, int pageSize = 10);
-    IList<SearchHistory> GetSearchHistoriesByUser(int userId, int pageNumber = 1, int pageSize = 10);
-    SearchHistory GetSearchHistory(int searchId);
-    SearchHistory AddSearchHistory(int userId, string searchQuery);
-    void DeleteSearchHistory(int searchId);
-    int GetSearchHistoryCountByUser(int userId);
+    Task<IList<SearchHistory>> GetSearchHistoryAsync(int userId, int pageNumber = 1, int pageSize = 10);
+    Task<IList<SearchHistory>> GetSearchHistoriesByUserAsync(int userId, int pageNumber = 1, int pageSize = 10);
+    Task<SearchHistory> GetSearchHistoryAsync(int searchId);
+    Task<SearchHistory> AddSearchHistoryAsync(int userId, string searchQuery);
+    Task DeleteSearchHistoryAsync(int searchId);
+    Task<int> GetSearchHistoryCountByUserAsync(int userId);
 
     // --USER RATING--
-    IList<UserRating> GetUserRatings(int userId, int pageNumber = 1, int pageSize = 10);
-    UserRating GetUserRating(int ratingId);
-    UserRating GetUserRatingByUserAndTConst(int userId, string tconst);
-    UserRating AddUserRating(int userId, string tconst, int rating);
-    void DeleteUserRating(int ratingId);
-    void UpdateUserRating(int userId, int ratingId, int rating);
-    int GetUserRatingCount(int userId);
+    Task<IList<UserRating>> GetUserRatingsAsync(int userId, int pageNumber = 1, int pageSize = 10);
+    Task<UserRating> GetUserRatingAsync(int ratingId);
+    Task<UserRating> GetUserRatingByUserAndTConstAsync(int userId, string tconst);
+    Task<UserRating> AddUserRatingAsync(int userId, string tconst, int rating);
+    Task DeleteUserRatingAsync(int ratingId);
+    Task UpdateUserRatingAsync(int userId, int ratingId, int rating);
+    Task<int> GetUserRatingCountAsync(int userId);
   }
 }

@@ -77,7 +77,9 @@ namespace cit13_portfolioproject2.Tests
     /// Sends a DELETE request and returns the status code.
     public static async Task<HttpStatusCode> DeleteData(string url)
     {
+      Console.WriteLine($"Sending DELETE request to URL: {url}");
       var response = await client.DeleteAsync(url);
+      Console.WriteLine($"Received response with status code: {response.StatusCode}");
       return response.StatusCode;
     }
 

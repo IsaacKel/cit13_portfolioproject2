@@ -3,6 +3,7 @@ using DataLayer.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Assignment4.Tests
@@ -29,119 +30,118 @@ namespace Assignment4.Tests
     /* User Tests */
 
     [Fact]
-    public void AddUser_ValidData_ReturnsCreatedUser()
+    public async Task AddUser_ValidData_ReturnsCreatedUser()
     {
-      var newUser = service.AddUser("newUser", "password", "newUser@example.com");
+      var newUser = await service.AddUserAsync("newUser", "password", "newUser@example.com");
       Assert.True(newUser.Id > 0);
       Assert.Equal("newUser", newUser.Username);
 
-      var user = service.GetUser(newUser.Id);
+      var user = await service.GetUserAsync(newUser.Id);
       Assert.NotNull(user);
       Assert.Equal(newUser.Username, user.Username);
       Assert.Equal(newUser.Id, user.Id);
 
       // cleanup
-      service.DeleteUser(newUser.Id);
+      await service.DeleteUserAsync(newUser.Id);
 
-      var deletedUser = service.GetUser(newUser.Id);
+      var deletedUser = await service.GetUserAsync(newUser.Id);
       Assert.Null(deletedUser);
     }
 
     [Fact]
-    public void GetUser_InvalidId_ReturnsNull()
+    public async Task GetUser_InvalidId_ReturnsNull()
     {
-      var user = service.GetUser(-1);
+      var user = await service.GetUserAsync(-1);
       Assert.Null(user);
     }
 
     /* UserRating Tests */
 
     [Fact]
-    public void AddUserRating_ValidData_ReturnsCreatedRating()
+    public async Task AddUserRating_ValidData_ReturnsCreatedRating()
     {
       // Ensure the user exists
-      var newUser = service.AddUser("ratingUser", "password", "ratingUser@example.com");
+      var newUser = await service.AddUserAsync("ratingUser", "password", "ratingUser@example.com");
       Assert.True(newUser.Id > 0);
 
       // Add rating for the newly created user
-      var rating = service.AddUserRating(newUser.Id, "tt26919084", 5);
+      var rating = await service.AddUserRatingAsync(newUser.Id, "tt26919084", 5);
       Assert.Equal(5, rating.Rating);
 
-      var ratings = service.GetUserRatings(newUser.Id);
+      var ratings = await service.GetUserRatingsAsync(newUser.Id);
       Assert.NotEmpty(ratings);
       Assert.Equal(5, ratings.First().Rating);
 
       // Cleanup
-      service.DeleteUserRating(rating.Id);
-      service.DeleteUser(newUser.Id);
+      await service.DeleteUserRatingAsync(rating.Id);
+      await service.DeleteUserAsync(newUser.Id);
 
-      var deletedRating = service.GetUserRating(rating.Id);
+      var deletedRating = await service.GetUserRatingAsync(rating.Id);
       Assert.Null(deletedRating);
 
-      service.DeleteUser(newUser.Id);
+      await service.DeleteUserAsync(newUser.Id);
     }
 
     /* SearchHistory Tests */
 
     [Fact]
-    public void AddSearchHistory_ValidQuery_ReturnsSearchHistory()
+    public async Task AddSearchHistory_ValidQuery_ReturnsSearchHistory()
     {
-      var newUser = service.AddUser("historyUser", "password", "historyUser@example.com");
+      var newUser = await service.AddUserAsync("historyUser", "password", "historyUser@example.com");
       Assert.True(newUser.Id > 0);
 
-      var history = service.AddSearchHistory(newUser.Id, "testQuery");
+      var history = await service.AddSearchHistoryAsync(newUser.Id, "testQuery");
       Assert.Equal("testQuery", history.SearchQuery);
 
-      var historyList = service.GetSearchHistoriesByUser(newUser.Id);
+      var historyList = await service.GetSearchHistoriesByUserAsync(newUser.Id);
 
       Assert.NotEmpty(historyList);
       Assert.Equal("testQuery", historyList.First().SearchQuery);
 
       // cleanup
-      service.DeleteSearchHistory(history.Id);
+      await service.DeleteSearchHistoryAsync(history.Id);
 
-      var deletedHistory = service.GetSearchHistory(history.Id);
+      var deletedHistory = await service.GetSearchHistoryAsync(history.Id);
       Assert.Null(deletedHistory);
 
-      service.DeleteUser(newUser.Id);
+      await service.DeleteUserAsync(newUser.Id);
     }
 
     /* UserBookmark Tests */
 
     [Fact]
-    public void AddUserBookmark_ValidData_CreatesAndReturnsBookmark()
+    public async Task AddUserBookmark_ValidData_CreatesAndReturnsBookmark()
     {
-
-      var newUser = service.AddUser("bookmarkUser", "password", "bookmarkUser@example.com");
+      var newUser = await service.AddUserAsync("bookmarkUser", "password", "bookmarkUser@example.com");
       Assert.True(newUser.Id > 0);
 
-      var bookmark = service.AddBookmark(newUser.Id, "tt26919084", null, "Test note");
+      var bookmark = await service.AddBookmarkAsync(newUser.Id, "tt26919084", null, "Test note");
       Assert.True(bookmark.Id > 0);
       Assert.Equal("Test note", bookmark.Note);
 
-      var retrievedBookmark = service.GetBookmark(newUser.Id, bookmark.Id);
+      var retrievedBookmark = await service.GetBookmarkAsync(newUser.Id, bookmark.Id);
       Assert.Equal(bookmark.Id, retrievedBookmark.Id);
       Assert.Equal("Test note", retrievedBookmark.Note);
 
       // Cleanup
-      service.DeleteBookmark(bookmark.Id);
+      await service.DeleteBookmarkAsync(bookmark.Id);
 
-      var deletedBookmark = service.GetBookmark(newUser.Id, bookmark.Id);
+      var deletedBookmark = await service.GetBookmarkAsync(newUser.Id, bookmark.Id);
       Assert.Null(deletedBookmark);
 
-      var bookmark1 = service.AddBookmark(newUser.Id, null, "nm0000045", "Note 1");
-      var bookmark2 = service.AddBookmark(newUser.Id, "tt26919084", null, "Note 2");
+      var bookmark1 = await service.AddBookmarkAsync(newUser.Id, null, "nm0000045", "Note 1");
+      var bookmark2 = await service.AddBookmarkAsync(newUser.Id, "tt26919084", null, "Note 2");
 
-      var bookmarks = service.GetBookmarks(newUser.Id);
+      var bookmarks = await service.GetBookmarksAsync(newUser.Id);
 
       Assert.Contains(bookmarks, b => b.Note == "Note 1");
       Assert.Contains(bookmarks, b => b.Note == "Note 2");
 
       // Cleanup
-      service.DeleteBookmark(bookmark1.Id);
-      service.DeleteBookmark(bookmark2.Id);
+      await service.DeleteBookmarkAsync(bookmark1.Id);
+      await service.DeleteBookmarkAsync(bookmark2.Id);
 
-      service.DeleteUser(newUser.Id);
+      await service.DeleteUserAsync(newUser.Id);
     }
   }
 }

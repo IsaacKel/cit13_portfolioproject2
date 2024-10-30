@@ -26,7 +26,9 @@ else
 }
 
 builder.Services.AddDbContext<MovieDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql("Host=localhost;Database=imdb;Username=postgres;Password=kelsall"));
+
+//builder.Services.AddScoped<IDataService, DataService>();
 
 // Register IDataService and the DataService implementation
 builder.Services.AddSingleton<IDataService, DataService>();

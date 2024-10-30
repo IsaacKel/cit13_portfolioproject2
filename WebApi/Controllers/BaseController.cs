@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using System.Threading.Tasks;
 
 namespace WebApi.Controllers
 {
@@ -15,25 +16,26 @@ namespace WebApi.Controllers
       _linkGenerator = linkGenerator;
     }
 
-    protected string? GetUrl(string linkName, object args)
+    protected async Task<string?> GetUrlAsync(string linkName, object args)
     {
-      var uri = _linkGenerator.GetUriByName(HttpContext, linkName, args);
+      var uri = await Task.Run(() => _linkGenerator.GetUriByName(HttpContext, linkName, args));
       return uri;
     }
-    protected string? GetLinkUser(string linkName, int userId, int page, int pageSize)
+
+    protected async Task<string?> GetLinkUserAsync(string linkName, int userId, int page, int pageSize)
     {
-      return GetUrl(linkName, new { userId, page, pageSize });
+      return await GetUrlAsync(linkName, new { userId, page, pageSize });
     }
 
-    protected object CreatePagingUser<T>(string linkName, int userId, int page, int pageSize, int total, IEnumerable<T?> items)
+    protected async Task<object> CreatePagingUserAsync<T>(string linkName, int userId, int page, int pageSize, int total, IEnumerable<T?> items)
     {
       const int MaxPageSize = 25;
       pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
       var numberOfPages = (int)Math.Ceiling(total / (double)pageSize);
 
-      var curPage = GetLinkUser(linkName, userId, page, pageSize);
-      var nextPage = page < numberOfPages - 1 ? GetLinkUser(linkName, userId, page + 1, pageSize) : null;
-      var prevPage = page > 1 ? GetLinkUser(linkName, userId, page - 1, pageSize) : null;
+      var curPage = await GetLinkUserAsync(linkName, userId, page, pageSize);
+      var nextPage = page < numberOfPages - 1 ? await GetLinkUserAsync(linkName, userId, page + 1, pageSize) : null;
+      var prevPage = page > 1 ? await GetLinkUserAsync(linkName, userId, page - 1, pageSize) : null;
 
       var result = new
       {
@@ -48,9 +50,9 @@ namespace WebApi.Controllers
       return result;
     }
 
-    protected string? GenerateSelfLink(string actionName, object routeValues)
+    protected async Task<string?> GenerateSelfLinkAsync(string actionName, object routeValues)
     {
-      return Url.Action(actionName, routeValues);
+      return await Task.Run(() => Url.Action(actionName, routeValues));
     }
   }
 }

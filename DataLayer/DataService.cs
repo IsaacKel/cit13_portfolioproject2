@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using DataLayer.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataLayer
 {
@@ -19,65 +20,71 @@ namespace DataLayer
       _context = new MovieDbContext(options);
     }
 
+    // public DataService(MovieDbContext context)
+    // {
+    //   _context = context;
+    // }
+
+
     // -- Helper Methods --
 
-    private IList<T> GetPagedResults<T>(IQueryable<T> query, int pageNumber, int pageSize) where T : class =>
-        query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+    private async Task<IList<T>> GetPagedResultsAsync<T>(IQueryable<T> query, int pageNumber, int pageSize) where T : class =>
+        await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
-    private bool SaveChanges() => _context.SaveChanges() > 0;
+    private async Task<bool> SaveChangesAsync() => await _context.SaveChangesAsync() > 0;
 
-    private bool Exists<T>(int id) where T : class =>
-        _context.Set<T>().Find(id) != null;
+    private async Task<bool> ExistsAsync<T>(int id) where T : class =>
+        await _context.Set<T>().FindAsync(id) != null;
 
-    private T FindById<T>(int id) where T : class =>
-        _context.Set<T>().Find(id);
+    private async Task<T> FindByIdAsync<T>(int id) where T : class =>
+        await _context.Set<T>().FindAsync(id);
 
     // -- USER --
 
-    public User AddUser(string username, string password, string email)
+    public async Task<User> AddUserAsync(string username, string password, string email)
     {
       var user = new User { Username = username, Password = password, Email = email };
       _context.Users.Add(user);
-      SaveChanges();
+      await SaveChangesAsync();
       return user;
     }
 
-    public User GetUser(string username) =>
-        _context.Users.FirstOrDefault(u => u.Username == username);
+    public async Task<User> GetUserAsync(string username) =>
+        await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
 
-    public User GetUser(int userId) =>
-        FindById<User>(userId);
+    public async Task<User> GetUserAsync(int userId) =>
+        await FindByIdAsync<User>(userId);
 
-    public void DeleteUser(int userId)
+    public async Task DeleteUserAsync(int userId)
     {
-      var user = FindById<User>(userId);
+      var user = await FindByIdAsync<User>(userId);
       if (user != null)
       {
         _context.Users.Remove(user);
-        SaveChanges();
+        await SaveChangesAsync();
       }
     }
 
     // -- BOOKMARK --
 
-    public IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10)
+    public async Task<IList<Bookmark>> GetBookmarksAsync(int userId, int pageNumber = 1, int pageSize = 10)
     {
       var query = _context.Bookmarks.Where(b => b.UserId == userId).OrderBy(b => b.Id);
-      return GetPagedResults(query, pageNumber, pageSize);
+      return await GetPagedResultsAsync(query, pageNumber, pageSize);
     }
 
-    public int GetBookmarkCountByUser(int userId) =>
-        _context.Bookmarks.Count(b => b.UserId == userId);
+    public async Task<int> GetBookmarkCountByUserAsync(int userId) =>
+        await _context.Bookmarks.CountAsync(b => b.UserId == userId);
 
-    public Bookmark GetBookmarkById(int bookmarkId) =>
-        _context.Bookmarks.FirstOrDefault(b => b.Id == bookmarkId);
+    public async Task<Bookmark> GetBookmarkByIdAsync(int bookmarkId) =>
+        await _context.Bookmarks.FirstOrDefaultAsync(b => b.Id == bookmarkId);
 
-    public Bookmark GetBookmark(int userId, int bookmarkId) =>
-        _context.Bookmarks.FirstOrDefault(b => b.UserId == userId && b.Id == bookmarkId);
+    public async Task<Bookmark> GetBookmarkAsync(int userId, int bookmarkId) =>
+        await _context.Bookmarks.FirstOrDefaultAsync(b => b.UserId == userId && b.Id == bookmarkId);
 
-    public Bookmark AddBookmark(int userId, string? tconst, string? nconst, string note)
+    public async Task<Bookmark> AddBookmarkAsync(int userId, string? tconst, string? nconst, string note)
     {
-      ValidateUserExists(userId);
+      await ValidateUserExistsAsync(userId);
 
       if ((tconst == null && nconst == null) || (tconst != null && nconst != null))
         throw new ArgumentException("Specify either tconst or nconst, not both.");
@@ -91,54 +98,54 @@ namespace DataLayer
         CreatedAt = DateTime.UtcNow
       };
       _context.Bookmarks.Add(bookmark);
-      SaveChanges();
+      await SaveChangesAsync();
       return bookmark;
     }
 
-    public void UpdateBookmark(int userId, int bookmarkId, string tconst, string nconst, string note)
+    public async Task UpdateBookmarkAsync(int userId, int bookmarkId, string tconst, string nconst, string note)
     {
-      var bookmark = GetBookmark(userId, bookmarkId);
+      var bookmark = await GetBookmarkAsync(userId, bookmarkId);
       if (bookmark != null)
       {
         bookmark.TConst = tconst;
         bookmark.NConst = nconst;
         bookmark.Note = note;
         bookmark.CreatedAt = DateTime.UtcNow;
-        SaveChanges();
+        await SaveChangesAsync();
       }
     }
 
-    public void DeleteBookmark(int bookmarkId)
+    public async Task DeleteBookmarkAsync(int bookmarkId)
     {
-      var bookmark = FindById<Bookmark>(bookmarkId);
+      var bookmark = await FindByIdAsync<Bookmark>(bookmarkId);
       if (bookmark != null)
       {
         _context.Bookmarks.Remove(bookmark);
-        SaveChanges();
+        await SaveChangesAsync();
       }
     }
 
     // -- SEARCH HISTORY --
 
-    public IList<SearchHistory> GetSearchHistory(int userId, int pageNumber = 1, int pageSize = 10)
+    public async Task<IList<SearchHistory>> GetSearchHistoryAsync(int userId, int pageNumber = 1, int pageSize = 10)
     {
       var query = _context.SearchHistories.Where(sh => sh.UserId == userId).OrderBy(sh => sh.CreatedAt);
-      return GetPagedResults(query, pageNumber, pageSize);
+      return await GetPagedResultsAsync(query, pageNumber, pageSize);
     }
 
-    public SearchHistory GetSearchHistory(int searchId) =>
-        FindById<SearchHistory>(searchId);
+    public async Task<SearchHistory> GetSearchHistoryAsync(int searchId) =>
+        await FindByIdAsync<SearchHistory>(searchId);
 
-    public IList<SearchHistory> GetSearchHistoriesByUser(int userId, int pageNumber = 1, int pageSize = 10)
+    public async Task<IList<SearchHistory>> GetSearchHistoriesByUserAsync(int userId, int pageNumber = 1, int pageSize = 10)
     {
       var query = _context.SearchHistories.Where(sh => sh.UserId == userId).OrderBy(sh => sh.CreatedAt);
-      return GetPagedResults(query, pageNumber, pageSize);
+      return await GetPagedResultsAsync(query, pageNumber, pageSize);
     }
 
-    public int GetSearchHistoryCountByUser(int userId) =>
-        _context.SearchHistories.Count(sh => sh.UserId == userId);
+    public async Task<int> GetSearchHistoryCountByUserAsync(int userId) =>
+        await _context.SearchHistories.CountAsync(sh => sh.UserId == userId);
 
-    public SearchHistory AddSearchHistory(int userId, string searchQuery)
+    public async Task<SearchHistory> AddSearchHistoryAsync(int userId, string searchQuery)
     {
       var searchHistory = new SearchHistory
       {
@@ -147,38 +154,38 @@ namespace DataLayer
         CreatedAt = DateTime.UtcNow
       };
       _context.SearchHistories.Add(searchHistory);
-      SaveChanges();
+      await SaveChangesAsync();
       return searchHistory;
     }
 
-    public void DeleteSearchHistory(int searchId)
+    public async Task DeleteSearchHistoryAsync(int searchId)
     {
-      var searchHistory = FindById<SearchHistory>(searchId);
+      var searchHistory = await FindByIdAsync<SearchHistory>(searchId);
       if (searchHistory != null)
       {
         _context.SearchHistories.Remove(searchHistory);
-        SaveChanges();
+        await SaveChangesAsync();
       }
     }
 
     // -- USER RATING --
 
-    public IList<UserRating> GetUserRatings(int userId, int pageNumber = 1, int pageSize = 10)
+    public async Task<IList<UserRating>> GetUserRatingsAsync(int userId, int pageNumber = 1, int pageSize = 10)
     {
       var query = _context.UserRatings.Where(ur => ur.UserId == userId).OrderBy(ur => ur.Id);
-      return GetPagedResults(query, pageNumber, pageSize);
+      return await GetPagedResultsAsync(query, pageNumber, pageSize);
     }
 
-    public UserRating GetUserRating(int ratingId) =>
-        FindById<UserRating>(ratingId);
+    public async Task<UserRating> GetUserRatingAsync(int ratingId) =>
+        await FindByIdAsync<UserRating>(ratingId);
 
-    public UserRating GetUserRatingByUserAndTConst(int userId, string tconst) =>
-        _context.UserRatings.FirstOrDefault(ur => ur.UserId == userId && ur.TConst == tconst);
+    public async Task<UserRating> GetUserRatingByUserAndTConstAsync(int userId, string tconst) =>
+        await _context.UserRatings.FirstOrDefaultAsync(ur => ur.UserId == userId && ur.TConst == tconst);
 
-    public int GetUserRatingCount(int userId) =>
-        _context.UserRatings.Count(ur => ur.UserId == userId);
+    public async Task<int> GetUserRatingCountAsync(int userId) =>
+        await _context.UserRatings.CountAsync(ur => ur.UserId == userId);
 
-    public UserRating AddUserRating(int userId, string tconst, int rating)
+    public async Task<UserRating> AddUserRatingAsync(int userId, string tconst, int rating)
     {
       var userRating = new UserRating
       {
@@ -188,47 +195,47 @@ namespace DataLayer
         CreatedAt = DateTime.UtcNow
       };
       _context.UserRatings.Add(userRating);
-      SaveChanges();
+      await SaveChangesAsync();
       return userRating;
     }
 
-    public void UpdateUserRating(int ratingId, int rating)
+    public async Task UpdateUserRatingAsync(int ratingId, int rating)
     {
-      var userRating = FindById<UserRating>(ratingId);
+      var userRating = await FindByIdAsync<UserRating>(ratingId);
       if (userRating != null)
       {
         userRating.Rating = rating;
         userRating.CreatedAt = DateTime.UtcNow;
-        SaveChanges();
+        await SaveChangesAsync();
       }
     }
 
-    public void UpdateUserRating(int userId, int ratingId, int rating)
+    public async Task UpdateUserRatingAsync(int userId, int ratingId, int rating)
     {
-      var userRating = GetUserRating(ratingId);
+      var userRating = await GetUserRatingAsync(ratingId);
       if (userRating != null)
       {
         userRating.Rating = rating;
         userRating.CreatedAt = DateTime.UtcNow;
-        SaveChanges();
+        await SaveChangesAsync();
       }
     }
 
-    public void DeleteUserRating(int ratingId)
+    public async Task DeleteUserRatingAsync(int ratingId)
     {
-      var userRating = FindById<UserRating>(ratingId);
+      var userRating = await FindByIdAsync<UserRating>(ratingId);
       if (userRating != null)
       {
         _context.UserRatings.Remove(userRating);
-        SaveChanges();
+        await SaveChangesAsync();
       }
     }
 
     // -- Private Helper Methods --
 
-    private void ValidateUserExists(int userId)
+    private async Task ValidateUserExistsAsync(int userId)
     {
-      if (!Exists<User>(userId))
+      if (!await ExistsAsync<User>(userId))
         throw new ArgumentException("User with specified ID does not exist.");
     }
   }

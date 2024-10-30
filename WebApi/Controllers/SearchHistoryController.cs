@@ -3,6 +3,8 @@ using DataLayer.Models;
 using DataLayer;
 using WebApi.DTOs;
 using Mapster;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace WebApi.Controllers
 {
@@ -20,51 +22,55 @@ namespace WebApi.Controllers
 
     // Get search history by searchId
     [HttpGet("{searchId}", Name = nameof(GetSearchHistory))]
-    public IActionResult GetSearchHistory(int searchId)
+    public async Task<IActionResult> GetSearchHistory(int searchId)
     {
-      var searchHistory = _dataService.GetSearchHistory(searchId);
+      var searchHistory = await _dataService.GetSearchHistoryAsync(searchId);
       if (searchHistory == null) return NotFound();
 
       var dto = searchHistory.Adapt<SearchHistoryDTO>();
-      dto.SelfLink = GetUrl(nameof(GetSearchHistory), new { searchId });
+      dto.SelfLink = await GetUrlAsync(nameof(GetSearchHistory), new { searchId });
 
       return Ok(dto);
     }
 
     // Get paginated search history entries for a user
     [HttpGet("user/{userId}", Name = nameof(GetSearchHistoryByUser))]
-    public IActionResult GetSearchHistoryByUser(int userId, int pageNumber = 1, int pageSize = 10)
+    public async Task<IActionResult> GetSearchHistoryByUser(int userId, int pageNumber = 1, int pageSize = 10)
     {
-      var searchHistories = _dataService.GetSearchHistoriesByUser(userId, pageNumber, pageSize);
+      var searchHistories = await _dataService.GetSearchHistoriesByUserAsync(userId, pageNumber, pageSize);
       if (searchHistories == null || !searchHistories.Any()) return NotFound(new { message = "Search history not found." });
 
-      var totalItems = _dataService.GetSearchHistoryCountByUser(userId);
+      var totalItems = await _dataService.GetSearchHistoryCountByUserAsync(userId);
       var searchHistoryDtos = searchHistories.Select(sh => sh.Adapt<SearchHistoryDTO>()).ToList();
-      searchHistoryDtos.ForEach(dto => dto.SelfLink = GetUrl(nameof(GetSearchHistory), new { searchId = dto.Id }));
+      foreach (var dto in searchHistoryDtos)
+      {
+        dto.SelfLink = await GetUrlAsync(nameof(GetSearchHistory), new { searchId = dto.Id });
+      }
 
-      return Ok(CreatePagingUser(nameof(GetSearchHistoryByUser), userId, pageNumber, pageSize, totalItems, searchHistoryDtos));
+      var pagingResult = await CreatePagingUserAsync(nameof(GetSearchHistoryByUser), userId, pageNumber, pageSize, totalItems, searchHistoryDtos);
+      return Ok(pagingResult);
     }
 
     // Add a new search history entry
     [HttpPost]
-    public IActionResult AddSearchHistory([FromBody] SearchHistoryDTO searchHistoryDto)
+    public async Task<IActionResult> AddSearchHistory([FromBody] SearchHistoryDTO searchHistoryDto)
     {
       if (!ModelState.IsValid) return BadRequest(ModelState);
 
-      var searchHistory = _dataService.AddSearchHistory(searchHistoryDto.UserId, searchHistoryDto.SearchQuery);
+      var searchHistory = await _dataService.AddSearchHistoryAsync(searchHistoryDto.UserId, searchHistoryDto.SearchQuery);
       var dto = searchHistory.Adapt<SearchHistoryDTO>();
-      dto.SelfLink = GetUrl(nameof(GetSearchHistory), new { searchId = searchHistory.Id });
+      dto.SelfLink = await GetUrlAsync(nameof(GetSearchHistory), new { searchId = searchHistory.Id });
 
       return CreatedAtAction(nameof(GetSearchHistory), new { searchId = searchHistory.Id }, dto);
     }
 
     // Delete a search history entry by searchId
     [HttpDelete("{searchId}")]
-    public IActionResult DeleteSearchHistory(int searchId)
+    public async Task<IActionResult> DeleteSearchHistory(int searchId)
     {
-      if (_dataService.GetSearchHistory(searchId) == null) return NotFound("Search history not found.");
+      if (await _dataService.GetSearchHistoryAsync(searchId) == null) return NotFound("Search history not found.");
 
-      _dataService.DeleteSearchHistory(searchId);
+      await _dataService.DeleteSearchHistoryAsync(searchId);
       return NoContent();
     }
   }
