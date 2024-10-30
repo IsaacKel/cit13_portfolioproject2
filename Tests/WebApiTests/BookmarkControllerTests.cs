@@ -3,6 +3,7 @@
 // using System.Text.Json;
 // using System.Text.Json.Nodes;
 // using Xunit;
+// using cit13_portfolioproject2.Tests;
 
 // namespace cit13_portfolioproject2.WebApiTests
 // {
@@ -16,7 +17,7 @@
 //     public async Task ApiBookmarks_GetWithValidUserId_OkAndAllBookmarks()
 //     {
 //       int userId = 1;
-//       var (data, statusCode) = await GetArray($"{BookmarksApi}/user/{userId}");
+//       var (data, statusCode) = await HelperTest.GetArray($"{BookmarksApi}/user/{userId}");
 
 //       Assert.Equal(HttpStatusCode.OK, statusCode);
 //       Assert.NotNull(data);
@@ -27,7 +28,7 @@
 //     public async Task ApiBookmarks_GetWithInvalidUserId_NotFound()
 //     {
 //       int userId = 999;
-//       var (_, statusCode) = await GetArray($"{BookmarksApi}/user/{userId}");
+//       var (_, statusCode) = await HelperTest.GetArray($"{BookmarksApi}/user/{userId}");
 
 //       Assert.Equal(HttpStatusCode.NotFound, statusCode);
 //     }
@@ -37,7 +38,7 @@
 //     {
 //       int userId = 1;
 //       int bookmarkId = 1;
-//       var (bookmark, statusCode) = await GetObject($"{BookmarksApi}/{bookmarkId}?userId={userId}");
+//       var (bookmark, statusCode) = await HelperTest.GetObject($"{BookmarksApi}/{bookmarkId}?userId={userId}");
 
 //       Assert.Equal(HttpStatusCode.OK, statusCode);
 //       Assert.Equal(userId, int.Parse(bookmark?.Value("userId")?.ToString() ?? "0"));
@@ -47,7 +48,7 @@
 //     public async Task ApiBookmarks_GetWithInvalidBookmarkId_NotFound()
 //     {
 //       int userId = 1;
-//       var (_, statusCode) = await GetObject($"{BookmarksApi}/999?userId={userId}");
+//       var (_, statusCode) = await HelperTest.GetObject($"{BookmarksApi}/999?userId={userId}");
 
 //       Assert.Equal(HttpStatusCode.NotFound, statusCode);
 //     }
@@ -62,7 +63,7 @@
 //         NConst = (string?)null,
 //         Note = "Test Bookmark"
 //       };
-//       var (bookmark, statusCode) = await PostData(BookmarksApi, newBookmark);
+//       var (bookmark, statusCode) = await HelperTest.PostData(BookmarksApi, newBookmark);
 
 //       Assert.Equal(HttpStatusCode.Created, statusCode);
 //       Assert.NotNull(bookmark);
@@ -73,7 +74,7 @@
 //       string? id = bookmark?["id"]?.ToString();
 //       if (id != null)
 //       {
-//         await DeleteData($"{BookmarksApi}/{id}");
+//         await HelperTest.DeleteData($"{BookmarksApi}/{id}");
 //       }
 //     }
 
@@ -87,7 +88,7 @@
 //         NConst = (string?)null,
 //         Note = "Initial Note"
 //       };
-//       var (bookmark, _) = await PostData(BookmarksApi, initialBookmark);
+//       var (bookmark, _) = await HelperTest.PostData(BookmarksApi, initialBookmark);
 
 //       // Use the selfLink directly as the putUrl
 //       string? putUrl = bookmark?["selfLink"]?.ToString();
@@ -100,14 +101,14 @@
 //         Note = "Updated Note"
 //       };
 
-//       var statusCode = await PutData(putUrl, update);
+//       var statusCode = await HelperTest.PutData(putUrl, update);
 //       Assert.Equal(HttpStatusCode.NoContent, statusCode);
 
 //       // Verify update
-//       var (updatedBookmark, _) = await GetObject(putUrl);
+//       var (updatedBookmark, _) = await HelperTest.GetObject(putUrl);
 
 //       // Clean up after test
-//       await DeleteData(putUrl);
+//       await HelperTest.DeleteData(putUrl);
 //     }
 
 //     [Fact]
@@ -120,94 +121,14 @@
 //         NConst = (string?)null,
 //         Note = "Test Bookmark"
 //       };
-//       var (bookmark, _) = await PostData(BookmarksApi, newBookmark);
+//       var (bookmark, _) = await HelperTest.PostData(BookmarksApi, newBookmark);
 
 //       // Extract selfLink from the bookmark
 //       string? deleteUrl = bookmark?["selfLink"]?.ToString();
 
-//       var statusCode = await DeleteData(deleteUrl);
+//       var statusCode = await HelperTest.DeleteData(deleteUrl);
 
 //       Assert.Equal(HttpStatusCode.NoContent, statusCode);
-//     }
-
-//     // Helpers
-
-//     async Task<(JsonArray?, HttpStatusCode)> GetArray(string url)
-//     {
-//       var client = new HttpClient();
-//       var response = await client.GetAsync(url);
-//       var data = await response.Content.ReadAsStringAsync();
-
-//       if (response.StatusCode == HttpStatusCode.NotFound)
-//       {
-//         return (new JsonArray(), HttpStatusCode.NotFound);
-//       }
-
-//       try
-//       {
-//         // Try to deserialize as a JsonArray first
-//         var jsonArray = JsonSerializer.Deserialize<JsonArray>(data);
-//         return (jsonArray, response.StatusCode);
-//       }
-//       catch (JsonException)
-//       {
-//         // If deserialization as an array fails, try parsing as a JsonObject instead
-//         var jsonObject = JsonSerializer.Deserialize<JsonObject>(data);
-//         if (jsonObject != null)
-//         {
-//           var wrappedArray = new JsonArray { jsonObject };
-//           return (wrappedArray, response.StatusCode);
-//         }
-//         throw; // rethrow if it's neither array nor object
-//       }
-//     }
-
-//     async Task<(JsonObject?, HttpStatusCode)> GetObject(string url)
-//     {
-//       var client = new HttpClient();
-//       var response = await client.GetAsync(url);
-//       var data = await response.Content.ReadAsStringAsync();
-//       return (JsonSerializer.Deserialize<JsonObject>(data), response.StatusCode);
-//     }
-
-//     async Task<(JsonObject?, HttpStatusCode)> PostData(string url, object content)
-//     {
-//       var client = new HttpClient();
-//       var requestContent = new StringContent(
-//           JsonSerializer.Serialize(content),
-//           Encoding.UTF8,
-//           "application/json");
-//       var response = await client.PostAsync(url, requestContent);
-//       var data = await response.Content.ReadAsStringAsync();
-//       return (JsonSerializer.Deserialize<JsonObject>(data), response.StatusCode);
-//     }
-
-//     async Task<HttpStatusCode> PutData(string url, object content)
-//     {
-//       var client = new HttpClient();
-//       var response = await client.PutAsync(
-//           url,
-//           new StringContent(
-//               JsonSerializer.Serialize(content),
-//               Encoding.UTF8,
-//               "application/json"));
-//       return response.StatusCode;
-//     }
-
-//     async Task<HttpStatusCode> DeleteData(string url)
-//     {
-//       var client = new HttpClient();
-//       var response = await client.DeleteAsync(url);
-//       return response.StatusCode;
-//     }
-//   }
-
-//   static class HelperExt
-//   {
-//     public static string? Value(this JsonNode node, string name)
-//     {
-//       var value = node[name];
-//       return value?.ToString();
 //     }
 //   }
 // }

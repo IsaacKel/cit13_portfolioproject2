@@ -92,7 +92,7 @@ namespace Assignment4.Tests
       var history = service.AddSearchHistory(newUser.Id, "testQuery");
       Assert.Equal("testQuery", history.SearchQuery);
 
-      var historyList = service.GetSearchHistoriesByUser(newUser.Id); // Use the correct method
+      var historyList = service.GetSearchHistoriesByUser(newUser.Id);
 
       Assert.NotEmpty(historyList);
       Assert.Equal("testQuery", historyList.First().SearchQuery);

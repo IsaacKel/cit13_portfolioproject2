@@ -1,218 +1,178 @@
-// using System.Net;
-// using System.Text;
-// using System.Text.Json;
-// using System.Text.Json.Nodes;
-// using Xunit;
+using System.Net;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using Xunit;
+using cit13_portfolioproject2.Tests;
 
-// namespace cit13_portfolioproject2.WebApiTests.UserRatingControllerTests
-// {
-//   public class UserRatingControllerTests
-//   {
-//     private const string UserRatingsApi = "http://localhost:5002/api/userrating";
-//     private static readonly HttpClient client = new HttpClient();
 
-//     [Fact]
-//     public async Task ApiUserRatings_GetUserRatingsWithValidUserId_OkAndRatings()
-//     {
-//       int userId = 1;
-//       var (ratings, statusCode) = await GetObject($"{UserRatingsApi}/{userId}");
+namespace cit13_portfolioproject2.WebApiTests.UserRatingControllerTests
+{
+  public class UserRatingControllerTests
+  {
+    private const string UserRatingsApi = "http://localhost:5002/api/userrating";
+    private static readonly HttpClient client = new HttpClient();
 
-//       Assert.Equal(HttpStatusCode.OK, statusCode);
-//       Assert.NotNull(ratings);
-//     }
+    [Fact]
+    public async Task ApiUserRatings_GetUserRatingsWithValidUserId_OkAndRatings()
+    {
+      int userId = 1;
+      var (ratings, statusCode) = await HelperTest.GetObject($"{UserRatingsApi}/{userId}");
 
-//     [Fact]
-//     public async Task ApiUserRatings_GetUserRatingsWithInvalidUserId_NotFound()
-//     {
-//       int userId = 999;
-//       var (_, statusCode) = await GetObject($"{UserRatingsApi}/{userId}");
+      Assert.Equal(HttpStatusCode.OK, statusCode);
+      Assert.NotNull(ratings);
+    }
 
-//       Assert.Equal(HttpStatusCode.NotFound, statusCode);
-//     }
+    [Fact]
+    public async Task ApiUserRatings_GetUserRatingsWithInvalidUserId_NotFound()
+    {
+      int userId = 999;
+      var (_, statusCode) = await HelperTest.GetObject($"{UserRatingsApi}/{userId}");
 
-//     [Fact]
-//     public async Task ApiUserRatings_GetUserRatingByIdWithValidIds_OkAndRating()
-//     {
-//       int userId = 1;
-//       int ratingId = 1;
-//       var (rating, statusCode) = await GetObject($"{UserRatingsApi}/{userId}/{ratingId}");
+      Assert.Equal(HttpStatusCode.NotFound, statusCode);
+    }
 
-//       Assert.Equal(HttpStatusCode.OK, statusCode);
-//       Assert.NotNull(rating);
-//     }
+    [Fact]
+    public async Task ApiUserRatings_GetUserRatingByIdWithValidIds_OkAndRating()
+    {
+      int userId = 1;
+      int ratingId = 1;
+      var (rating, statusCode) = await HelperTest.GetObject($"{UserRatingsApi}/{userId}/{ratingId}");
 
-//     [Fact]
-//     public async Task ApiUserRatings_GetUserRatingByIdWithInvalidIds_NotFound()
-//     {
-//       int userId = 1;
-//       int ratingId = 999;
-//       var (_, statusCode) = await GetObject($"{UserRatingsApi}/{userId}/{ratingId}");
+      Assert.Equal(HttpStatusCode.OK, statusCode);
+      Assert.NotNull(rating);
+    }
 
-//       Assert.Equal(HttpStatusCode.NotFound, statusCode);
-//     }
+    [Fact]
+    public async Task ApiUserRatings_GetUserRatingByIdWithInvalidIds_NotFound()
+    {
+      int userId = 1;
+      int ratingId = 999;
+      var (_, statusCode) = await HelperTest.GetObject($"{UserRatingsApi}/{userId}/{ratingId}");
 
-//     [Fact]
-//     public async Task ApiUserRatings_AddUserRating_ValidData_Created()
-//     {
-//       var newRating = new
-//       {
-//         UserId = 1,
-//         TConst = "tt16120138",
-//         Rating = 8,
-//       };
-//       var (rating, statusCode) = await PostData($"{UserRatingsApi}", newRating);
+      Assert.Equal(HttpStatusCode.NotFound, statusCode);
+    }
 
-//       Console.WriteLine(rating);
-//       Console.WriteLine(statusCode);
-//       Console.WriteLine("newratintg" + newRating);
+    [Fact]
+    public async Task ApiUserRatings_AddUserRating_ValidData_Created()
+    {
+      var newRating = new
+      {
+        UserId = 1,
+        TConst = "tt16120138",
+        Rating = 8,
+      };
+      var (rating, statusCode) = await HelperTest.PostData($"{UserRatingsApi}", newRating);
 
-//       Assert.Equal(HttpStatusCode.Created, statusCode);
-//       Assert.NotNull(rating);
-//       Assert.Equal(newRating.UserId, rating?.ValueInt("userId"));
-//       Assert.Equal(newRating.TConst, rating?.Value("tConst"));
-//       Assert.Equal(newRating.Rating, rating?.ValueInt("rating"));
+      Console.WriteLine(rating);
+      Console.WriteLine(statusCode);
+      Console.WriteLine("newratintg" + newRating);
 
-//       // Clean up after test
-//       string? id = rating?["id"]?.ToString();
-//       if (id != null)
-//       {
-//         await DeleteData($"{UserRatingsApi}/{newRating.UserId}/{id}");
-//       }
-//     }
+      Assert.Equal(HttpStatusCode.Created, statusCode);
+      Assert.NotNull(rating);
+      Assert.Equal(newRating.UserId, rating?.ValueInt("userId"));
+      Assert.Equal(newRating.TConst, rating?.Value("tConst"));
+      Assert.Equal(newRating.Rating, rating?.ValueInt("rating"));
 
-//     [Fact]
-//     public async Task ApiUserRatings_AddUserRating_InvalidData_BadRequest()
-//     {
-//       var invalidRating = new
-//       {
-//         UserId = 1,
-//         TConst = "",
-//         Rating = 11
-//       };
-//       var (_, statusCode) = await PostData($"{UserRatingsApi}", invalidRating);
+      // Clean up after test
+      string? id = rating?["id"]?.ToString();
+      if (id != null)
+      {
+        await HelperTest.DeleteData($"{UserRatingsApi}/{newRating.UserId}/{id}");
+      }
+    }
 
-//       Assert.Equal(HttpStatusCode.BadRequest, statusCode);
-//     }
+    [Fact]
+    public async Task ApiUserRatings_AddUserRating_InvalidData_BadRequest()
+    {
+      var invalidRating = new
+      {
+        UserId = 1,
+        TConst = "",
+        Rating = 11
+      };
+      var (_, statusCode) = await HelperTest.PostData($"{UserRatingsApi}", invalidRating);
 
-//     [Fact]
-//     public async Task ApiUserRatings_DeleteUserRatingWithValidIds_NoContent()
-//     {
-//       var newRating = new
-//       {
-//         UserId = 1,
-//         TConst = "tt16120138",
-//         Rating = 8
-//       };
-//       var (rating, _) = await PostData($"{UserRatingsApi}", newRating);
+      Assert.Equal(HttpStatusCode.BadRequest, statusCode);
+    }
 
-//       string? deleteUrl = $"{UserRatingsApi}/{newRating.UserId}/{rating?["id"]?.ToString()}";
-//       var statusCode = await DeleteData(deleteUrl);
+    [Fact]
+    public async Task ApiUserRatings_DeleteUserRatingWithValidIds_NoContent()
+    {
+      var newRating = new
+      {
+        UserId = 1,
+        TConst = "tt16120138",
+        Rating = 8
+      };
+      var (rating, _) = await HelperTest.PostData($"{UserRatingsApi}", newRating);
 
-//       Assert.Equal(HttpStatusCode.NoContent, statusCode);
-//     }
+      string? deleteUrl = $"{UserRatingsApi}/{newRating.UserId}/{rating?["id"]?.ToString()}";
+      var statusCode = await HelperTest.DeleteData(deleteUrl);
 
-//     [Fact]
-//     public async Task ApiUserRatings_DeleteUserRatingWithInvalidIds_NotFound()
-//     {
-//       var statusCode = await DeleteData($"{UserRatingsApi}/1/999");
+      Assert.Equal(HttpStatusCode.NoContent, statusCode);
+    }
 
-//       Assert.Equal(HttpStatusCode.NotFound, statusCode);
-//     }
+    [Fact]
+    public async Task ApiUserRatings_DeleteUserRatingWithInvalidIds_NotFound()
+    {
+      var statusCode = await HelperTest.DeleteData($"{UserRatingsApi}/1/999");
 
-//     // [Fact]
-//     // public async Task ApiUserRatings_UpdateUserRating_ValidData_NoContent()
-//     // {
-//     //   var newRating = new
-//     //   {
-//     //     UserId = 1,
-//     //     TConst = "tt16120138",
-//     //     Rating = 8
-//     //   };
-//     //   var (rating, _) = await PostData($"{UserRatingsApi}", newRating);
+      Assert.Equal(HttpStatusCode.NotFound, statusCode);
+    }
 
-//     //   var updatedRating = new
-//     //   {
-//     //     UserId = 1,
-//     //     TConst = "tt16120138",
-//     //     Rating = 9
-//     //   };
-//     //   string? updateUrl = $"{UserRatingsApi}/{newRating.UserId}/{rating?["id"]?.ToString()}";
-//     //   var statusCode = await PutData(updateUrl, updatedRating);
+    // [Fact]
+    // public async Task ApiUserRatings_UpdateUserRating_ValidData_NoContent()
+    // {
+    //   var newRating = new
+    //   {
+    //     UserId = 1,
+    //     TConst = "tt16120138",
+    //     Rating = 8
+    //   };
+    //   var (rating, _) = await HelperTest.PostData($"{UserRatingsApi}", newRating);
 
-//     //   Assert.Equal(HttpStatusCode.NoContent, statusCode);
+    //   var updatedRating = new
+    //   {
+    //     UserId = 1,
+    //     TConst = "tt16120138",
+    //     Rating = 9
+    //   };
+    //   string? updateUrl = $"{UserRatingsApi}/{newRating.UserId}/{rating?["id"]?.ToString()}";
+    //   var statusCode = await HelperTest.PutData(updateUrl, updatedRating);
 
-//     //   // Clean up after test
-//     //   await DeleteData(updateUrl);
-//     // }
+    //   Assert.Equal(HttpStatusCode.NoContent, statusCode);
 
-//     [Fact]
-//     public async Task ApiUserRatings_UpdateUserRating_InvalidData_BadRequest()
-//     {
-//       var newRating = new
-//       {
-//         UserId = 1,
-//         TConst = "tt16120138",
-//         Rating = 8,
-//       };
-//       var (rating, _) = await PostData($"{UserRatingsApi}", newRating);
+    //   // Clean up after test
+    //   await HelperTest.DeleteData(updateUrl);
+    // }
 
-//       var invalidRating = new
-//       {
-//         UserId = 1,
-//         TConst = "tt16120138",
-//         Rating = 11,
-//       };
+    // [Fact]
+    // public async Task ApiUserRatings_UpdateUserRating_InvalidData_BadRequest()
+    // {
+    //   var newRating = new
+    //   {
+    //     UserId = 1,
+    //     TConst = "tt16120138",
+    //     Rating = 8,
+    //   };
+    //   var (rating, _) = await HelperTest.PostData($"{UserRatingsApi}", newRating);
 
-//       string? updateUrl = $"{UserRatingsApi}/{newRating.UserId}/{rating?["id"]?.ToString()}";
-//       var (_, statusCode) = await PutData(updateUrl, invalidRating);
+    //   var invalidRating = new
+    //   {
+    //     UserId = 1,
+    //     TConst = "tt16120138",
+    //     Rating = 11,
+    //   };
 
-//       Assert.Equal(HttpStatusCode.BadRequest, statusCode);
+    //   string? updateUrl = $"{UserRatingsApi}/{newRating.UserId}/{rating?["id"]?.ToString()}";
+    //   var response = await HelperTest.PutData(updateUrl, invalidRating);
 
-//       // Clean up after test
-//       await DeleteData(updateUrl);
-//     }
+    //   // Assuming response is of type HttpResponseMessage
+    //   Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-//     // Helpers
-
-//     private async Task<T?> DeserializeData<T>(HttpResponseMessage response) where T : class
-//     {
-//       var data = await response.Content.ReadAsStringAsync();
-//       return JsonSerializer.Deserialize<T>(data);
-//     }
-
-//     private StringContent CreateJsonContent(object content) =>
-//         new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
-//     private async Task<(JsonObject?, HttpStatusCode)> GetObject(string url)
-//     {
-//       var response = await client.GetAsync(url);
-//       return (await DeserializeData<JsonObject>(response), response.StatusCode);
-//     }
-
-//     private async Task<(JsonObject?, HttpStatusCode)> PostData(string url, object content)
-//     {
-//       var response = await client.PostAsync(url, CreateJsonContent(content));
-//       return (await DeserializeData<JsonObject>(response), response.StatusCode);
-//     }
-
-//     private async Task<HttpStatusCode> DeleteData(string url)
-//     {
-//       var response = await client.DeleteAsync(url);
-//       return response.StatusCode;
-//     }
-
-//     private async Task<(JsonObject?, HttpStatusCode)> PutData(string url, object content)
-//     {
-//       var response = await client.PutAsync(url, CreateJsonContent(content));
-//       return (await DeserializeData<JsonObject>(response), response.StatusCode);
-//     }
-//   }
-
-// static class HelperExt
-// {
-//   public static string? Value(this JsonNode node, string name) =>
-//       node[name]?.ToString();
-
-//   public static int? ValueInt(this JsonNode node, string name) =>
-//       int.TryParse(node[name]?.ToString(), out var result) ? result : null;
-// }
-// }
+    //   // Clean up after test
+    //   await HelperTest.DeleteData(updateUrl);
+    // }
+  }
+}
