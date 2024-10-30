@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Xunit;
 
-namespace cit13_portfolioproject2.Tests
+namespace cit13_portfolioproject2.WebApiTests
 {
   public class BookmarkControllerTests
   {

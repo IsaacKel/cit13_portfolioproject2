@@ -142,9 +142,9 @@ namespace DataLayer
 
     public int GetSearchHistoryCountByUser(int userId) => _context.SearchHistories.Count(sh => sh.UserId == userId);
 
-    public SearchHistory GetSearchHistory(int userId, int searchId)
+    public SearchHistory GetSearchHistory(int searchId)
     {
-      return _context.SearchHistories.FirstOrDefault(sh => sh.UserId == userId && sh.Id == searchId);
+      return _context.SearchHistories.FirstOrDefault(sh => sh.Id == searchId);
     }
 
     public SearchHistory AddSearchHistory(int userId, string searchQuery)

@@ -22,7 +22,7 @@ namespace DataLayer
     // --SEARCH HISTORY--
     IList<SearchHistory> GetSearchHistory(int userId, int pageNumber = 1, int pageSize = 10);
     IList<SearchHistory> GetSearchHistoriesByUser(int userId, int pageNumber = 1, int pageSize = 10);
-    SearchHistory GetSearchHistory(int userId, int searchId);
+    SearchHistory GetSearchHistory(int searchId);
     SearchHistory AddSearchHistory(int userId, string searchQuery);
     void DeleteSearchHistory(int searchId);
     int GetSearchHistoryCountByUser(int userId);

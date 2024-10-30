@@ -26,7 +26,7 @@ namespace WebApi.Controllers
       var searchHistory = _dataService.GetSearchHistory(searchId);
       if (searchHistory == null)
       {
-        return NotFound("Search history not found.");
+        return NotFound();
       }
 
       var searchHistoryDto = searchHistory.Adapt<SearchHistoryDTO>();
@@ -42,7 +42,7 @@ namespace WebApi.Controllers
       var searchHistories = _dataService.GetSearchHistoriesByUser(userId, pageNumber, pageSize);
       if (searchHistories == null || !searchHistories.Any())
       {
-        return NotFound("No search history found for this user.");
+        return NotFound(new { message = "Search history not found." });
       }
 
       var totalItems = _dataService.GetSearchHistoryCountByUser(userId);
