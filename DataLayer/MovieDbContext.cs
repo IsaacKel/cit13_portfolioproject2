@@ -20,6 +20,7 @@ public class MovieDbContext : DbContext
   public DbSet<SearchHistory> SearchHistories { get; set; }
     public DbSet<TitleBasic> TitleBasics { get; set; }
     public DbSet<CoPlayer> CoPlayers { get; set; }
+    public DbSet<RatingActor> RatingActors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -29,6 +30,7 @@ public class MovieDbContext : DbContext
     MapSearchHistories(modelBuilder);
     MapTitleBasic(modelBuilder);
     MapCoPlayer(modelBuilder);
+    MapRatingActor(modelBuilder);
     }
   //User Table Mapping
   private static void MapUsers(ModelBuilder modelBuilder)
@@ -102,6 +104,12 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<CoPlayer>().Property(c => c.NConst).HasColumnName("nconst");
         modelBuilder.Entity<CoPlayer>().Property(c => c.PrimaryName).HasColumnName("primaryname");
         modelBuilder.Entity<CoPlayer>().Property(c => c.Frequency).HasColumnName("frequency");
+    }
+    private static void MapRatingActor(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RatingActor>().HasNoKey();
+        modelBuilder.Entity<RatingActor>().Property(c => c.NConst).HasColumnName("nconst");
+        modelBuilder.Entity<RatingActor>().Property(c => c.NRating).HasColumnName("nrating");
     }
 }
 

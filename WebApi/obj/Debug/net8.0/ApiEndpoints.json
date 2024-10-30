@@ -133,6 +133,32 @@
     ]
   },
   {
+    "ContainingType": "WebApi.Controllers.RatingActorsController",
+    "Method": "GetRatingActors",
+    "RelativePath": "api/RatingActors/{tConst}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tConst",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DataLayer.Models.RatingActor",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "WebApi.Controllers.SearchHistoryController",
     "Method": "AddSearchHistory",
     "RelativePath": "api/SearchHistory",

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using DataLayer.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace DataLayer
 {
@@ -240,6 +241,11 @@ namespace DataLayer
         public IList<CoPlayer> GetCoPlayers(string nConst)
         {
             return _context.CoPlayers.FromSqlInterpolated($"select * from coplayers({nConst})").ToList();
+        }
+
+        public IList<RatingActor> GetRatingActors(string tConst)
+        {
+            return _context.RatingActors.FromSqlInterpolated($"select * from ratingactors({tConst})").ToList();
         }
     }
 }
