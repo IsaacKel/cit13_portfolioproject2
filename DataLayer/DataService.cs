@@ -58,6 +58,9 @@ namespace DataLayer
       }
     }
 
+    public bool UserExists(int userId) =>
+        Exists<User>(userId);
+
     // -- BOOKMARK --
 
     public IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10)

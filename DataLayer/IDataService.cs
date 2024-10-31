@@ -10,6 +10,7 @@ namespace DataLayer
     User GetUser(string username);
     User GetUser(int userId);
     void DeleteUser(int userId);
+    bool UserExists(int userId);
 
     // --BOOKMARK--
     IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10);

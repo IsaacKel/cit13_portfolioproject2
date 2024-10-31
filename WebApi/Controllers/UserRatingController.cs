@@ -54,7 +54,11 @@ namespace WebApi.Controllers
       {
         return Conflict("User has already rated this title.");
       }
-
+      if (!_dataService.UserExists(userRatingDto.UserId))
+      {
+        return NotFound(new { message = "User does not exist." });
+      }
+      //Add a check to ensure title exists in database here too
       try
       {
         var userRating = _dataService.AddUserRating(userRatingDto.UserId, userRatingDto.TConst, userRatingDto.Rating);
