@@ -27,10 +27,10 @@ namespace WebApi.Controllers
       var existingBookmark = _dataService.GetBookmarks(dto.UserId)
                                          .FirstOrDefault(b => b.TConst == dto.TConst && b.NConst == dto.NConst);
 
-      // if (existingBookmark != null)
-      // {
-      //   return Conflict(new { message = "Bookmark already exists for this title and user." });
-      // }
+      if (existingBookmark != null)
+      {
+        return Conflict(new { message = "Bookmark already exists for this title and user." });
+      }
 
       var bookmark = _dataService.AddBookmark(dto.UserId, dto.TConst, dto.NConst, dto.Note);
       var bookmarkDto = MapToBookmarkDto(bookmark);

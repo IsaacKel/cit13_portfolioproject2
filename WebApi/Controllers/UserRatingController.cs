@@ -49,11 +49,11 @@ namespace WebApi.Controllers
     {
       if (!ModelState.IsValid) return BadRequest(ModelState);
 
-      // var existingRating = _dataService.GetUserRatingByUserAndTConst(userRatingDto.UserId, userRatingDto.TConst);
-      // if (existingRating != null)
-      // {
-      //   return Conflict("User has already rated this title.");
-      // }
+      var existingRating = _dataService.GetUserRatingByUserAndTConst(userRatingDto.UserId, userRatingDto.TConst);
+      if (existingRating != null)
+      {
+        return Conflict("User has already rated this title.");
+      }
 
       try
       {
