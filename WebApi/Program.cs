@@ -31,6 +31,8 @@ builder.Services.AddDbContext<MovieDbContext>(options =>
 // Register IDataService and the DataService implementation
 builder.Services.AddSingleton<IDataService, DataService>();
 
+builder.Services.AddScoped<IDataService, DataService>();
+
 // Mapster configuration
 builder.Services.AddMapster();
 

@@ -52,7 +52,7 @@ namespace WebApi.Controllers
       // var existingRating = _dataService.GetUserRatingByUserAndTConst(userRatingDto.UserId, userRatingDto.TConst);
       // if (existingRating != null)
       // {
-      //   return Conflict("User has already rated this movie.");
+      //   return Conflict("User has already rated this title.");
       // }
 
       try
