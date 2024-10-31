@@ -32,6 +32,11 @@ namespace WebApi.Controllers
         return Conflict(new { message = "Bookmark already exists for this title and user." });
       }
 
+      if (!_dataService.UserExists(dto.UserId))
+      {
+        return NotFound(new { message = "User does not exist." });
+      }
+
       var bookmark = _dataService.AddBookmark(dto.UserId, dto.TConst, dto.NConst, dto.Note);
       var bookmarkDto = MapToBookmarkDto(bookmark);
       return CreatedAtAction(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id }, bookmarkDto);

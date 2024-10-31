@@ -51,6 +51,11 @@ namespace WebApi.Controllers
     {
       if (!ModelState.IsValid) return BadRequest(ModelState);
 
+      if (!_dataService.UserExists(searchHistoryDto.UserId))
+      {
+        return NotFound(new { message = "User does not exist." });
+      }
+
       var searchHistory = _dataService.AddSearchHistory(searchHistoryDto.UserId, searchHistoryDto.SearchQuery);
       var dto = searchHistory.Adapt<SearchHistoryDTO>();
       dto.SelfLink = GetUrl(nameof(GetSearchHistory), new { searchId = searchHistory.Id });
