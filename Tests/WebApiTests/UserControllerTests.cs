@@ -59,7 +59,7 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
     {
       var newUser = new
       {
-        Username = "newuser",
+        Username = "newusertest",
         Password = "password123",
         Email = "newuser@example.com"
       };
@@ -103,10 +103,17 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
       };
       var (user, _) = await HelperTest.PostData($"{UsersApi}/register", newUser);
 
-      string? deleteUrl = $"{UsersApi}/{user?["id"]?.ToString()}";
-      var statusCode = await HelperTest.DeleteData(deleteUrl);
+      // string? deleteUrl = $"{UsersApi}/{user?["id"]?.ToString()}";
+      // var statusCode = await HelperTest.DeleteData(deleteUrl);
 
-      Assert.Equal(HttpStatusCode.NoContent, statusCode);
+      // delete user
+      string? id = user?["id"]?.ToString();
+      if (id != null)
+      {
+        var statusCode = await HelperTest.DeleteData($"{UsersApi}/{id}");
+        Assert.Equal(HttpStatusCode.NoContent, statusCode);
+      }
+
     }
 
     [Fact]

@@ -70,14 +70,9 @@ namespace cit13_portfolioproject2.WebApiTests
       Assert.Equal(newBookmark.UserId, int.Parse(bookmark?.Value("userId")?.ToString() ?? "0"));
       Assert.Equal(newBookmark.TConst, bookmark?.Value("tConst"));
 
-      // Clean up after test
-      string? id = bookmark?["id"]?.ToString();
-      if (id != null)
-      {
-        await HelperTest.DeleteData($"{BookmarksApi}/{id}");
-      }
+      string? deleteUrl = bookmark?["selfLink"]?.ToString();
+      await HelperTest.DeleteData(deleteUrl);
     }
-
     [Fact]
     public async Task ApiBookmarks_PutWithValidBookmark_Ok()
     {
@@ -88,10 +83,15 @@ namespace cit13_portfolioproject2.WebApiTests
         NConst = (string?)null,
         Note = "Initial Note"
       };
-      var (bookmark, _) = await HelperTest.PostData(BookmarksApi, initialBookmark);
+
+      var (bookmark, statusCode) = await HelperTest.PostData(BookmarksApi, initialBookmark);
+      // Verify initial post
+      Assert.NotNull(bookmark);
+      Assert.Equal("Initial Note", bookmark?["note"]?.ToString());
 
       // Use the selfLink directly as the putUrl
       string? putUrl = bookmark?["selfLink"]?.ToString();
+      Assert.NotNull(putUrl);
 
       var update = new
       {
@@ -101,14 +101,21 @@ namespace cit13_portfolioproject2.WebApiTests
         Note = "Updated Note"
       };
 
-      var statusCode = await HelperTest.PutData(putUrl, update);
+      statusCode = await HelperTest.PutData(putUrl, update);
       Assert.Equal(HttpStatusCode.NoContent, statusCode);
 
       // Verify update
       var (updatedBookmark, _) = await HelperTest.GetObject(putUrl);
+      Assert.NotNull(updatedBookmark);
+      Assert.Equal("Updated Note", updatedBookmark?["note"]?.ToString());
 
       // Clean up after test
-      await HelperTest.DeleteData(putUrl);
+      // Extract selfLink from the bookmark
+      string? deleteUrl = bookmark?["selfLink"]?.ToString();
+      await HelperTest.DeleteData(deleteUrl);
+
+      // Verify deletion
+      var (deletedBookmark, _) = await HelperTest.GetObject(putUrl);
     }
 
     [Fact]
@@ -125,7 +132,6 @@ namespace cit13_portfolioproject2.WebApiTests
 
       // Extract selfLink from the bookmark
       string? deleteUrl = bookmark?["selfLink"]?.ToString();
-
       var statusCode = await HelperTest.DeleteData(deleteUrl);
 
       Assert.Equal(HttpStatusCode.NoContent, statusCode);
