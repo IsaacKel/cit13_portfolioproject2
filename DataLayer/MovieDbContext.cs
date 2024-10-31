@@ -21,6 +21,9 @@ public class MovieDbContext : DbContext
     public DbSet<TitleBasic> TitleBasics { get; set; }
     public DbSet<CoPlayer> CoPlayers { get; set; }
     public DbSet<RatingActor> RatingActors { get; set; }
+    public DbSet<RatingCoPlayer> RatingCoPlayers { get; set; }
+    public DbSet<RatingCrew> _RatingCrew { get; set; }
+    public DbSet<SimilarMovie> SimilarMovies { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -31,6 +34,9 @@ public class MovieDbContext : DbContext
     MapTitleBasic(modelBuilder);
     MapCoPlayer(modelBuilder);
     MapRatingActor(modelBuilder);
+    MapRatingCoPlayers(modelBuilder);
+    MapRatingCrew(modelBuilder);
+    MapSimilarMovies(modelBuilder);
     }
   //User Table Mapping
   private static void MapUsers(ModelBuilder modelBuilder)
@@ -110,6 +116,26 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<RatingActor>().HasNoKey();
         modelBuilder.Entity<RatingActor>().Property(c => c.NConst).HasColumnName("nconst");
         modelBuilder.Entity<RatingActor>().Property(c => c.NRating).HasColumnName("nrating");
+    }
+    private static void MapRatingCoPlayers(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RatingCoPlayer>().HasNoKey();
+        modelBuilder.Entity<RatingCoPlayer>().Property(c => c.NConst).HasColumnName("nconst");
+        modelBuilder.Entity<RatingCoPlayer>().Property(c => c.PrimaryName).HasColumnName("primaryname");
+        modelBuilder.Entity<RatingCoPlayer>().Property(c => c.NRating).HasColumnName("nrating");
+    }
+    private static void MapRatingCrew(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RatingCrew>().HasNoKey();
+        modelBuilder.Entity<RatingCrew>().Property(c => c.NConst).HasColumnName("nconst");
+        modelBuilder.Entity<RatingCrew>().Property(c => c.NRating).HasColumnName("nrating");
+    }
+    private static void MapSimilarMovies(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<SimilarMovie>().HasNoKey();
+        modelBuilder.Entity<SimilarMovie>().Property(c => c.TConst).HasColumnName("tconst");
+        modelBuilder.Entity<SimilarMovie>().Property(c => c.PrimaryTitle).HasColumnName("primarytitle");
+        modelBuilder.Entity<SimilarMovie>().Property(c => c.NumVotes).HasColumnName("numvotes");
     }
 }
 

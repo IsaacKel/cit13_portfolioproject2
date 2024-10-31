@@ -247,5 +247,17 @@ namespace DataLayer
         {
             return _context.RatingActors.FromSqlInterpolated($"select * from ratingactors({tConst})").ToList();
         }
+        public IList<RatingCoPlayer> GetRatingCoPlayers(string nConst)
+        {
+            return _context.RatingCoPlayers.FromSqlInterpolated($"select * from ratingcoplayers({nConst})").ToList();
+        }
+        public IList<RatingCrew> GetRatingCrew(string tConst)
+        {
+            return _context._RatingCrew.FromSqlInterpolated($"select * from ratingcrew({tConst})").ToList();
+        }
+        public IList<SimilarMovie> GetSimilarMovies(string tConst)
+        {
+            return _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
+        }
     }
 }

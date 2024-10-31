@@ -3,28 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6DA75D92-7845-4885-B94D-366CF7D67F5A}|WebApi\\WebApi.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\webapi\\controllers\\ratingactorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6DA75D92-7845-4885-B94D-366CF7D67F5A}|WebApi\\WebApi.csproj|solutionrelative:webapi\\controllers\\ratingactorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\datalayer\\idataservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\idataservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\datalayer\\models\\ratingactor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\models\\ratingactor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\datalayer\\moviedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\moviedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\datalayer\\models\\coplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\models\\coplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\datalayer\\dataservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\dataservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\datalayer\\models\\ratingactor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\models\\ratingactor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\datalayer\\moviedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\moviedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\datalayer\\models\\titlebasic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\models\\titlebasic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|c:\\users\\matth\\source\\repos\\cit13_portfolioproject2\\datalayer\\models\\searchhistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BAB31CA-6C2C-4725-956F-DCADB118CAF0}|DataLayer\\DataLayer.csproj|solutionrelative:datalayer\\models\\searchhistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,32 +30,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "RatingActorsController.cs",
-              "DocumentMoniker": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\WebApi\\Controllers\\RatingActorsController.cs",
-              "RelativeDocumentMoniker": "WebApi\\Controllers\\RatingActorsController.cs",
-              "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\WebApi\\Controllers\\RatingActorsController.cs",
-              "RelativeToolTip": "WebApi\\Controllers\\RatingActorsController.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAIwB0AAAAiAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "TitleBasic.cs",
+              "DocumentMoniker": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\Models\\TitleBasic.cs",
+              "RelativeDocumentMoniker": "DataLayer\\Models\\TitleBasic.cs",
+              "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\Models\\TitleBasic.cs",
+              "RelativeToolTip": "DataLayer\\Models\\TitleBasic.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAcwBAAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-30T22:18:23.057Z",
+              "WhenOpened": "2024-10-31T01:41:05.946Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
+              "Title": "SearchHistory.cs",
+              "DocumentMoniker": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\Models\\SearchHistory.cs",
+              "RelativeDocumentMoniker": "DataLayer\\Models\\SearchHistory.cs",
+              "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\Models\\SearchHistory.cs",
+              "RelativeToolTip": "DataLayer\\Models\\SearchHistory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-31T01:40:59.144Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "CoPlayer.cs",
               "DocumentMoniker": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\Models\\CoPlayer.cs",
               "RelativeDocumentMoniker": "DataLayer\\Models\\CoPlayer.cs",
               "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\Models\\CoPlayer.cs",
               "RelativeToolTip": "DataLayer\\Models\\CoPlayer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-30T22:17:39.098Z",
+              "WhenOpened": "2024-10-31T01:38:42.902Z",
               "EditorCaption": ""
             },
             {
@@ -70,48 +79,22 @@
               "RelativeDocumentMoniker": "DataLayer\\Models\\RatingActor.cs",
               "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\Models\\RatingActor.cs",
               "RelativeToolTip": "DataLayer\\Models\\RatingActor.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-30T22:17:33.903Z",
+              "WhenOpened": "2024-10-31T01:38:37.661Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IDataService.cs",
-              "DocumentMoniker": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\IDataService.cs",
-              "RelativeDocumentMoniker": "DataLayer\\IDataService.cs",
-              "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\IDataService.cs",
-              "RelativeToolTip": "DataLayer\\IDataService.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAwwCwAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-30T22:13:29.983Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "DataService.cs",
-              "DocumentMoniker": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\DataService.cs",
-              "RelativeDocumentMoniker": "DataLayer\\DataService.cs",
-              "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\DataService.cs",
-              "RelativeToolTip": "DataLayer\\DataService.cs",
-              "ViewState": "AgIAAOoAAAAAAAAAAAAmwPUAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-30T22:11:24.948Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 0,
               "Title": "MovieDbContext.cs",
               "DocumentMoniker": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\MovieDbContext.cs",
               "RelativeDocumentMoniker": "DataLayer\\MovieDbContext.cs",
               "ToolTip": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\MovieDbContext.cs",
               "RelativeToolTip": "DataLayer\\MovieDbContext.cs",
-              "ViewState": "AgIAAF8AAAAAAAAAAAAmwBYAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAuwBoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-30T21:58:33.446Z",
+              "WhenOpened": "2024-10-31T01:27:06.553Z",
               "EditorCaption": ""
             }
           ]

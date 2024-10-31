@@ -9,11 +9,11 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RatingActorsController : BaseController
+    public class RatingCrewController : BaseController
     {
         private readonly IDataService _dataService;
 
-        public RatingActorsController(IDataService dataService, LinkGenerator linkGenerator)
+        public RatingCrewController(IDataService dataService, LinkGenerator linkGenerator)
           : base(linkGenerator)
         {
             _dataService = dataService;
@@ -22,14 +22,14 @@ namespace WebApi.Controllers
 
         // --  --
         [HttpGet("{tConst}")]
-        public ActionResult<RatingActor> GetRatingActors(string tConst)
+        public ActionResult<RatingCrew> GetRatingCrew(string tConst)
         {
-            var ratingActors = _dataService.GetRatingActors(tConst);
-            if (ratingActors == null)
+            var ratingCrew = _dataService.GetRatingCrew(tConst);
+            if (ratingCrew == null)
             {
                 return NotFound();
             }
-            return Ok(ratingActors);
+            return Ok(ratingCrew);
         }
     }
 }

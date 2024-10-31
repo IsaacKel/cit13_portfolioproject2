@@ -43,5 +43,8 @@ namespace DataLayer
         // --COPLAYYERS--
         IList<CoPlayer> GetCoPlayers(string nConst);
         IList<RatingActor> GetRatingActors(string tConst);
+        IList<RatingCoPlayer> GetRatingCoPlayers(string nConst);
+        IList<RatingCrew> GetRatingCrew(string tConst);
+        IList<SimilarMovie> GetSimilarMovies(string tConst);
     }
 }

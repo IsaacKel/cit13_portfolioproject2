@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Models
 {
-    public class RatingActor
+    public class RatingCrew
     {
         public string NConst { get; set; }
         public double? NRating { get; set; }

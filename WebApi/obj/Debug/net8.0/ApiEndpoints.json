@@ -159,6 +159,58 @@
     ]
   },
   {
+    "ContainingType": "WebApi.Controllers.RatingCoPlayersController",
+    "Method": "GetRatingCoPlayers",
+    "RelativePath": "api/RatingCoPlayers/{nConst}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nConst",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DataLayer.Models.RatingCoPlayer",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebApi.Controllers.RatingCrewController",
+    "Method": "GetRatingCrew",
+    "RelativePath": "api/RatingCrew/{tConst}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tConst",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DataLayer.Models.RatingCrew",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "WebApi.Controllers.SearchHistoryController",
     "Method": "AddSearchHistory",
     "RelativePath": "api/SearchHistory",
@@ -233,6 +285,32 @@
     ],
     "ReturnTypes": [],
     "EndpointName": "GetSearchHistoryByUser"
+  },
+  {
+    "ContainingType": "WebApi.Controllers.SimilarMoviesController",
+    "Method": "GetSimilarMovies",
+    "RelativePath": "api/SimilarMovies/{tConst}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tConst",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DataLayer.Models.SimilarMovie",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "WebApi.Controllers.TitleController",
