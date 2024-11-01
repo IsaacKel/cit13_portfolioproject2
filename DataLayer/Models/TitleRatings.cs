@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Models
 {
-  class TitleRatings
+  public class TitleRating
   {
     public string TConst { get; set; }
     public double AverageRating { get; set; }

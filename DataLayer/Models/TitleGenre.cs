@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Models
 {
-  class TitleGenre
+  public class TitleGenre
   {
     public string TConst { get; set; }
     public string Genre { get; set; }
