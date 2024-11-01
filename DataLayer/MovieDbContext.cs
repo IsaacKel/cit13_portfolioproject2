@@ -33,6 +33,7 @@ public class MovieDbContext : DbContext
   public DbSet<TitleGenre> TitleGenres { get; set; }
   public DbSet<TitleRating> TitleRatings { get; set; }
   public DbSet<TitleLanguage> TitleLanguages { get; set; }
+  public DbSet<TitleAka> TitleAkas { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -56,6 +57,7 @@ public class MovieDbContext : DbContext
     MapTitleGenres(modelBuilder);
     MapTitleRating(modelBuilder);
     MapTitleLanguages(modelBuilder);
+    MapTitleAkas(modelBuilder);
   }
   //User Table Mapping
   private static void MapUsers(ModelBuilder modelBuilder)
@@ -263,6 +265,20 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<TitleLanguage>().HasKey(tl => new { tl.TConst, tl.Language });
     modelBuilder.Entity<TitleLanguage>().Property(tl => tl.TConst).HasColumnName("tconst");
     modelBuilder.Entity<TitleLanguage>().Property(tl => tl.Language).HasColumnName("language");
+  }
+
+  private static void MapTitleAkas(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<TitleAka>().ToTable("titleakas");
+    modelBuilder.Entity<TitleAka>().HasKey(ta => new { ta.TConst, ta.Ordering });
+    modelBuilder.Entity<TitleAka>().Property(ta => ta.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<TitleAka>().Property(ta => ta.Ordering).HasColumnName("ordering");
+    modelBuilder.Entity<TitleAka>().Property(ta => ta.Title).HasColumnName("title");
+    modelBuilder.Entity<TitleAka>().Property(ta => ta.Region).HasColumnName("region");
+    modelBuilder.Entity<TitleAka>().Property(ta => ta.Language).HasColumnName("language");
+    modelBuilder.Entity<TitleAka>().Property(ta => ta.Types).HasColumnName("types");
+    modelBuilder.Entity<TitleAka>().Property(ta => ta.Attributes).HasColumnName("attributes");
+    modelBuilder.Entity<TitleAka>().Property(ta => ta.IsOriginalTitle).HasColumnName("isoriginaltitle");
   }
 }
 
