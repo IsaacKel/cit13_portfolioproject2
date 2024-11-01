@@ -1,3 +1,13 @@
+datalayer/bin/
+datalayer/obj/
+webapi/bin/
+webapi/obj/
+tests/bin/
+tests/obj/
+appsettings.json
+appsettings.development.json
+launchsettings.json
+
 # Visual Studio
 .vs/
 *.user
