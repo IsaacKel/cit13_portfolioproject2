@@ -103,9 +103,6 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
       };
       var (user, _) = await HelperTest.PostData($"{UsersApi}/register", newUser);
 
-      // string? deleteUrl = $"{UsersApi}/{user?["id"]?.ToString()}";
-      // var statusCode = await HelperTest.DeleteData(deleteUrl);
-
       // delete user
       string? id = user?["id"]?.ToString();
       if (id != null)
