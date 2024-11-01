@@ -18,14 +18,26 @@ public class MovieDbContext : DbContext
   public DbSet<Bookmark> Bookmarks { get; set; }
   public DbSet<UserRating> UserRatings { get; set; }
   public DbSet<SearchHistory> SearchHistories { get; set; }
+    public DbSet<TitleBasic> TitleBasics { get; set; }
+    public DbSet<CoPlayer> CoPlayers { get; set; }
+    public DbSet<RatingActor> RatingActors { get; set; }
+    public DbSet<RatingCoPlayer> RatingCoPlayers { get; set; }
+    public DbSet<RatingCrew> _RatingCrew { get; set; }
+    public DbSet<SimilarMovie> SimilarMovies { get; set; }
 
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     MapUsers(modelBuilder);
     MapBookmarks(modelBuilder);
     MapUserRatings(modelBuilder);
     MapSearchHistories(modelBuilder);
-  }
+    MapTitleBasic(modelBuilder);
+    MapCoPlayer(modelBuilder);
+    MapRatingActor(modelBuilder);
+    MapRatingCoPlayers(modelBuilder);
+    MapRatingCrew(modelBuilder);
+    MapSimilarMovies(modelBuilder);
+    }
   //User Table Mapping
   private static void MapUsers(ModelBuilder modelBuilder)
   {
@@ -72,5 +84,58 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<SearchHistory>().Property(s => s.SearchQuery).HasColumnName("searchquery");
     modelBuilder.Entity<SearchHistory>().Property(s => s.CreatedAt).HasColumnName("searchdate");
   }
+
+    private static void MapTitleBasic(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<TitleBasic>().ToTable("titlebasic");
+        modelBuilder.Entity<TitleBasic>().HasKey(tb => tb.TConst);
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.TConst).HasColumnName("tconst");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.TitleType).HasColumnName("titletype");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.PrimaryTitle).HasColumnName("primarytitle");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.OriginalTitle).HasColumnName("originaltitle");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.StartYear).HasColumnName("startyear");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.EndYear).HasColumnName("endyear");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.RunTimeMinutes).HasColumnName("runtimeminutes");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.Awards).HasColumnName("awards");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.Plot).HasColumnName("plot");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.Rated).HasColumnName("rated");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.ReleaseDate).HasColumnName("releasedate");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.ProductionCompany).HasColumnName("productioncompany");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.Poster).HasColumnName("poster");
+        modelBuilder.Entity<TitleBasic>().Property(tb => tb.BoxOffice).HasColumnName("boxoffice");
+    }
+    private static void MapCoPlayer(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<CoPlayer>().HasNoKey();
+        modelBuilder.Entity<CoPlayer>().Property(c => c.NConst).HasColumnName("nconst");
+        modelBuilder.Entity<CoPlayer>().Property(c => c.PrimaryName).HasColumnName("primaryname");
+        modelBuilder.Entity<CoPlayer>().Property(c => c.Frequency).HasColumnName("frequency");
+    }
+    private static void MapRatingActor(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RatingActor>().HasNoKey();
+        modelBuilder.Entity<RatingActor>().Property(c => c.NConst).HasColumnName("nconst");
+        modelBuilder.Entity<RatingActor>().Property(c => c.NRating).HasColumnName("nrating");
+    }
+    private static void MapRatingCoPlayers(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RatingCoPlayer>().HasNoKey();
+        modelBuilder.Entity<RatingCoPlayer>().Property(c => c.NConst).HasColumnName("nconst");
+        modelBuilder.Entity<RatingCoPlayer>().Property(c => c.PrimaryName).HasColumnName("primaryname");
+        modelBuilder.Entity<RatingCoPlayer>().Property(c => c.NRating).HasColumnName("nrating");
+    }
+    private static void MapRatingCrew(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RatingCrew>().HasNoKey();
+        modelBuilder.Entity<RatingCrew>().Property(c => c.NConst).HasColumnName("nconst");
+        modelBuilder.Entity<RatingCrew>().Property(c => c.NRating).HasColumnName("nrating");
+    }
+    private static void MapSimilarMovies(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<SimilarMovie>().HasNoKey();
+        modelBuilder.Entity<SimilarMovie>().Property(c => c.TConst).HasColumnName("tconst");
+        modelBuilder.Entity<SimilarMovie>().Property(c => c.PrimaryTitle).HasColumnName("primarytitle");
+        modelBuilder.Entity<SimilarMovie>().Property(c => c.NumVotes).HasColumnName("numvotes");
+    }
 }
 

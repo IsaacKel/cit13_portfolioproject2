@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using DataLayer.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace DataLayer
 {
@@ -234,5 +235,32 @@ namespace DataLayer
       if (!Exists<User>(userId))
         throw new ArgumentException("User with specified ID does not exist.");
     }
-  }
+        // title 
+        public TitleBasic GetTitleByTConst(string tConst)
+        {
+            return _context.TitleBasics.FirstOrDefault(tb => tb.TConst == tConst);
+        }
+        // coplayers
+        public IList<CoPlayer> GetCoPlayers(string nConst)
+        {
+            return _context.CoPlayers.FromSqlInterpolated($"select * from coplayers({nConst})").ToList();
+        }
+
+        public IList<RatingActor> GetRatingActors(string tConst)
+        {
+            return _context.RatingActors.FromSqlInterpolated($"select * from ratingactors({tConst})").ToList();
+        }
+        public IList<RatingCoPlayer> GetRatingCoPlayers(string nConst)
+        {
+            return _context.RatingCoPlayers.FromSqlInterpolated($"select * from ratingcoplayers({nConst})").ToList();
+        }
+        public IList<RatingCrew> GetRatingCrew(string tConst)
+        {
+            return _context._RatingCrew.FromSqlInterpolated($"select * from ratingcrew({tConst})").ToList();
+        }
+        public IList<SimilarMovie> GetSimilarMovies(string tConst)
+        {
+            return _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
+        }
+    }
 }

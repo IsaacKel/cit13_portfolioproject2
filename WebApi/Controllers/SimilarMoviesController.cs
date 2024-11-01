@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs;
 using DataLayer;
 using Mapster;
@@ -9,27 +9,27 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TitleController : BaseController
+    public class SimilarMoviesController : BaseController
     {
         private readonly IDataService _dataService;
 
-        public TitleController(IDataService dataService, LinkGenerator linkGenerator)
+        public SimilarMoviesController(IDataService dataService, LinkGenerator linkGenerator)
           : base(linkGenerator)
         {
             _dataService = dataService;
         }
 
 
-        // -- GET USER by ID --
+        // --  --
         [HttpGet("{tConst}")]
-        public ActionResult<TitleBasic> GetTitleByTConst(string tConst)
+        public ActionResult<SimilarMovie> GetSimilarMovies(string tConst)
         {
-            var titleBasic = _dataService.GetTitleByTConst(tConst);
-            if (titleBasic == null)
+            var similarMovies = _dataService.GetSimilarMovies(tConst);
+            if (similarMovies == null)
             {
                 return NotFound();
             }
-            return Ok(titleBasic);
+            return Ok(similarMovies);
         }
     }
 }

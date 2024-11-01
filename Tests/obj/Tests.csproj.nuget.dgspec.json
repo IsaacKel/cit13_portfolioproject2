@@ -1,25 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/Tests/Tests.csproj": {}
+    "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\Tests\\Tests.csproj": {}
   },
   "projects": {
-    "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/DataLayer.csproj": {
+    "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\DataLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/DataLayer.csproj",
+        "projectUniqueName": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\DataLayer.csproj",
         "projectName": "DataLayer",
-        "projectPath": "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/DataLayer.csproj",
-        "packagesPath": "/Users/isaackelsall/.nuget/packages/",
-        "outputPath": "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/",
+        "projectPath": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\DataLayer.csproj",
+        "packagesPath": "C:\\Users\\matth\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/isaackelsall/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\matth\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -32,6 +35,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -63,34 +71,37 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.8_1/libexec/sdk/8.0.108/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/Tests/Tests.csproj": {
+    "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\Tests\\Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/Tests/Tests.csproj",
+        "projectUniqueName": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\Tests\\Tests.csproj",
         "projectName": "Tests",
-        "projectPath": "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/Tests/Tests.csproj",
-        "packagesPath": "/Users/isaackelsall/.nuget/packages/",
-        "outputPath": "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/Tests/obj/",
+        "projectPath": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\Tests\\Tests.csproj",
+        "packagesPath": "C:\\Users\\matth\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/isaackelsall/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\matth\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/DataLayer.csproj": {
-                "projectPath": "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/DataLayer.csproj"
+              "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\DataLayer.csproj": {
+                "projectPath": "C:\\Users\\matth\\source\\repos\\cit13_portfolioproject2\\DataLayer\\DataLayer.csproj"
               }
             }
           }
@@ -99,6 +110,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -154,7 +170,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.8_1/libexec/sdk/8.0.108/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
