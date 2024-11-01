@@ -59,7 +59,6 @@ namespace WebApi.Controllers
                 NConst = tc.NConst,
                 TConst = tc.TConst,
                 Character = tc.Character,
-                Ordering = tc.Ordering,
                 PrimaryTitle = tc.TitleBasic?.PrimaryTitle,
                 Poster = tc.TitleBasic?.Poster
             }).ToList();
