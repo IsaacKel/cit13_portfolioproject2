@@ -56,25 +56,18 @@ namespace WebApi.Controllers
         [HttpGet("{nconst}", Name = "GetTitleCharactersByPerson")]
         public ActionResult<IList<TitleCharacterDto>> GetTitleCharactersByPerson(string nconst, int page = 1, int pageSize = DefaultPageSize)
         {
-            Console.WriteLine($"Received request for nconst: {nconst} on Page: {page} with Page Size: {pageSize}");
-
             var titleCharacters = _dataService.GetTitleCharactersByPerson(nconst);
-            var totalItems = titleCharacters.Count;
 
-            var pagedTitleCharacters = titleCharacters
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .Select(tc => new TitleCharacterDto
-                {
-                    Character = tc.Character,
-                    PrimaryTitle = tc.TitleBasic?.PrimaryTitle,
-                    Poster = tc.TitleBasic?.Poster
-                }).ToList();
+            var titleCharacterDtos = titleCharacters.Select(tc => new TitleCharacterDto
+            {
+                NConst = tc.NConst,
+                TConst = tc.TConst,
+                Character = tc.Character,
+                PrimaryTitle = tc.TitleBasic?.PrimaryTitle,
+                Poster = tc.TitleBasic?.Poster
+            }).ToList();
 
-            Console.WriteLine($"Paged Character Count: {pagedTitleCharacters.Count}, Total Items: {totalItems}");
-
-            // Use the current nconst in pagination links
-            var result = CreatePaging("GetTitleCharactersByPerson", page, pageSize, totalItems, pagedTitleCharacters);
+            var result = CreatePagingNConst("GetTitleCharactersByPerson", nconst, page, pageSize, titleCharacterDtos.Count, titleCharacterDtos.Skip((page - 1) * pageSize).Take(pageSize));
             return Ok(result);
         }
     }

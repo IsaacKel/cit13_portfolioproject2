@@ -25,9 +25,9 @@ namespace WebApi.Controllers
       return GetUrl(linkName, new { userId, page, pageSize });
     }
 
-    protected string? GetLinkNConst(string linkName, int nConst, int page, int pageSize)
+    protected string? GetLinkNConst(string linkName, string nconst, int page, int pageSize)
     {
-      return GetUrl(linkName, new { nConst, page, pageSize });
+      return GetUrl(linkName, new { nconst, page, pageSize });
     }
 
     protected object CreatePagingUser<T>(string linkName, int userId, int page, int pageSize, int total, IEnumerable<T?> items)
@@ -53,25 +53,20 @@ namespace WebApi.Controllers
       return result;
     }
 
-    protected object CreatePaging<T>(string linkName, int page, int pageSize, int total, IEnumerable<T> items)
+    protected object CreatePagingNConst<T>(string linkName, string nconst, int page, int pageSize, int total, IEnumerable<T?> items)
     {
       pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
       var numberOfPages = (int)Math.Ceiling(total / (double)pageSize);
 
-      Console.WriteLine($"Link Name: {linkName}");
-      Console.WriteLine($"Page: {page}, Page Size: {pageSize}, Total Items: {total}, Number of Pages: {numberOfPages}");
+      // Current page link
+      var curPage = GetLinkNConst(linkName, nconst, page, pageSize);
 
-      // Generate links with nconst as a required route parameter
-      var curPage = GetUrl(linkName, new { nconst = "<YOUR_NCONST>", page, pageSize });
-      Console.WriteLine($"CurPage URL: {curPage}");
+      // Next page link (only if there is a next page)
+      var nextPage = page < numberOfPages ? GetLinkNConst(linkName, nconst, page + 1, pageSize) : null;
 
-      var nextPage = page < numberOfPages ? GetUrl(linkName, new { nconst = "<YOUR_NCONST>", page = page + 1, pageSize }) : null;
-      Console.WriteLine($"NextPage URL: {nextPage}");
+      // Previous page link (only if there is a previous page)
+      var prevPage = page > 1 ? GetLinkNConst(linkName, nconst, page - 1, pageSize) : null;
 
-      var prevPage = page > 1 ? GetUrl(linkName, new { nconst = "<YOUR_NCONST>", page = page - 1, pageSize }) : null;
-      Console.WriteLine($"PrevPage URL: {prevPage}");
-
-      // Return result with pagination details
       var result = new
       {
         CurPage = curPage,
@@ -84,7 +79,6 @@ namespace WebApi.Controllers
 
       return result;
     }
-
     protected string? GenerateSelfLink(string actionName, object routeValues)
     {
       return Url.Action(actionName, routeValues);
