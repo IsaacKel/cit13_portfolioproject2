@@ -36,5 +36,21 @@ namespace DataLayer
     void DeleteUserRating(int ratingId);
     void UpdateUserRating(int userId, int ratingId, int rating);
     int GetUserRatingCount(int userId);
-  }
+
+        // --PERSON--
+        Person GetPersonByNConst(string nconst);
+        IList<Person> GetAllPersons();
+
+
+        IList<KnownForTitle> GetKnownForTitlesByPerson(string nconst);
+
+
+        // --TITLE CHARACTERS--
+        IList<TitleCharacter> GetTitleCharactersByPerson(string nconst);
+
+
+        // --TITLE PRINCIPALS--
+        IList<TitlePrincipal> GetTitlePrincipalsByTitle(string tconst);
+
+    }
 }

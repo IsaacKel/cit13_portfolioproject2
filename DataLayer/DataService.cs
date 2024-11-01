@@ -231,5 +231,45 @@ namespace DataLayer
       if (!Exists<User>(userId))
         throw new ArgumentException("User with specified ID does not exist.");
     }
-  }
+
+        // --PERSON-- (Actors, Directors, Writers)
+        public Person GetPersonByNConst(string nconst)
+        {
+            return _context.Persons.FirstOrDefault(p => p.NConst == nconst);
+        }
+
+        public IList<Person> GetAllPersons()
+        {
+            return _context.Persons.ToList();
+        }
+
+
+        public IList<TitleCharacter> GetTitleCharactersByPerson(string nconst)
+        {
+            return _context.TitleCharacters
+                           .Include(tc => tc.TitleBasic) // This will include the related TitleBasic entity
+                           .Where(tc => tc.NConst == nconst)
+                           .ToList();
+        }
+
+
+        // --TITLE PRINCIPALS--
+        public IList<TitlePrincipal> GetTitlePrincipalsByTitle(string tconst)
+        {
+            return _context.TitlePrincipals
+                           .Where(tp => tp.TConst == tconst)
+                           .ToList();
+        }
+
+
+
+        // --KNOWN FOR TITLES--
+        public IList<KnownForTitle> GetKnownForTitlesByPerson(string nconst)
+        {
+            return _context.KnownForTitles
+                           .Where(k => k.NConst == nconst)
+                           .ToList();
+        }
+
+    }
 }
