@@ -28,6 +28,7 @@ public class MovieDbContext : DbContext
   public DbSet<TitleCharacter> TitleCharacters { get; set; }
   public DbSet<TitlePrincipal> TitlePrincipals { get; set; }
   public DbSet<TitleBasic> TitleBasics { get; set; }
+  public DbSet<TitleCountry> TitleCountries { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -211,6 +212,14 @@ public class MovieDbContext : DbContext
   // modelBuilder.Entity<TitleBasic>().Property(tb => tb.PrimaryTitle).HasColumnName("primarytitle");
   // modelBuilder.Entity<TitleBasic>().Property(tb => tb.TitleType).HasColumnName("titletype");
   // modelBuilder.Entity<TitleBasic>().Property(tb => tb.StartYear).HasColumnName("startyear");
+
+  private static void MapTitleCountries(modelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<TitleCountry>().ToTable("titlecountries");
+    modelBuilder.Entity<TitleCountry>().HasKey(tc => new { tc.TConst, tc.Country });
+    modelBuilder.Entity<TitleCountry>().Property(tc => tc.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<TitleCountry>().Property(tc => tc.Country).HasColumnName("country");
+  }
 
 }
 
