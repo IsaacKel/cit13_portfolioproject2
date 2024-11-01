@@ -38,14 +38,29 @@ namespace DataLayer
     void UpdateUserRating(int userId, int ratingId, int rating);
     int GetUserRatingCount(int userId);
 
-        // --TITLE BASIC--
-        TitleBasic GetTitleByTConst(string tConst);
+    // --TITLE BASIC--
+    TitleBasic GetTitleByTConst(string tConst);
 
-        // --COPLAYYERS--
-        IList<CoPlayer> GetCoPlayers(string nConst);
-        IList<RatingActor> GetRatingActors(string tConst);
-        IList<RatingCoPlayer> GetRatingCoPlayers(string nConst);
-        IList<RatingCrew> GetRatingCrew(string tConst);
-        IList<SimilarMovie> GetSimilarMovies(string tConst);
-    }
+    // --COPLAYYERS--
+    IList<CoPlayer> GetCoPlayers(string nConst);
+    IList<RatingActor> GetRatingActors(string tConst);
+    IList<RatingCoPlayer> GetRatingCoPlayers(string nConst);
+    IList<RatingCrew> GetRatingCrew(string tConst);
+    IList<SimilarMovie> GetSimilarMovies(string tConst);
+    // --PERSON--
+    Person GetPersonByNConst(string nconst);
+    IList<Person> GetAllPersons();
+
+
+    IList<KnownForTitle> GetKnownForTitlesByPerson(string nconst);
+
+
+    // --TITLE CHARACTERS--
+    IList<TitleCharacter> GetTitleCharactersByPerson(string nconst);
+
+
+    // --TITLE PRINCIPALS--
+    IList<TitlePrincipal> GetTitlePrincipalsByTitle(string tconst);
+
+  }
 }

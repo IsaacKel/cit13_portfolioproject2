@@ -235,32 +235,72 @@ namespace DataLayer
       if (!Exists<User>(userId))
         throw new ArgumentException("User with specified ID does not exist.");
     }
-        // title 
-        public TitleBasic GetTitleByTConst(string tConst)
-        {
-            return _context.TitleBasics.FirstOrDefault(tb => tb.TConst == tConst);
-        }
-        // coplayers
-        public IList<CoPlayer> GetCoPlayers(string nConst)
-        {
-            return _context.CoPlayers.FromSqlInterpolated($"select * from coplayers({nConst})").ToList();
-        }
-
-        public IList<RatingActor> GetRatingActors(string tConst)
-        {
-            return _context.RatingActors.FromSqlInterpolated($"select * from ratingactors({tConst})").ToList();
-        }
-        public IList<RatingCoPlayer> GetRatingCoPlayers(string nConst)
-        {
-            return _context.RatingCoPlayers.FromSqlInterpolated($"select * from ratingcoplayers({nConst})").ToList();
-        }
-        public IList<RatingCrew> GetRatingCrew(string tConst)
-        {
-            return _context._RatingCrew.FromSqlInterpolated($"select * from ratingcrew({tConst})").ToList();
-        }
-        public IList<SimilarMovie> GetSimilarMovies(string tConst)
-        {
-            return _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
-        }
+    // title 
+    public TitleBasic GetTitleByTConst(string tConst)
+    {
+      return _context.TitleBasics.FirstOrDefault(tb => tb.TConst == tConst);
     }
+    // coplayers
+    public IList<CoPlayer> GetCoPlayers(string nConst)
+    {
+      return _context.CoPlayers.FromSqlInterpolated($"select * from coplayers({nConst})").ToList();
+    }
+
+    public IList<RatingActor> GetRatingActors(string tConst)
+    {
+      return _context.RatingActors.FromSqlInterpolated($"select * from ratingactors({tConst})").ToList();
+    }
+    public IList<RatingCoPlayer> GetRatingCoPlayers(string nConst)
+    {
+      return _context.RatingCoPlayers.FromSqlInterpolated($"select * from ratingcoplayers({nConst})").ToList();
+    }
+    public IList<RatingCrew> GetRatingCrew(string tConst)
+    {
+      return _context._RatingCrew.FromSqlInterpolated($"select * from ratingcrew({tConst})").ToList();
+    }
+    public IList<SimilarMovie> GetSimilarMovies(string tConst)
+    {
+      return _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
+    }
+
+    // --PERSON-- (Actors, Directors, Writers)
+    public Person GetPersonByNConst(string nconst)
+    {
+      return _context.Persons.FirstOrDefault(p => p.NConst == nconst);
+    }
+
+    public IList<Person> GetAllPersons()
+    {
+      return _context.Persons.ToList();
+    }
+
+
+    public IList<TitleCharacter> GetTitleCharactersByPerson(string nconst)
+    {
+      return _context.TitleCharacters
+                     .Include(tc => tc.TitleBasic) // This will include the related TitleBasic entity
+                     .Where(tc => tc.NConst == nconst)
+                     .ToList();
+    }
+
+
+    // --TITLE PRINCIPALS--
+    public IList<TitlePrincipal> GetTitlePrincipalsByTitle(string tconst)
+    {
+      return _context.TitlePrincipals
+                     .Where(tp => tp.TConst == tconst)
+                     .ToList();
+    }
+
+
+
+    // --KNOWN FOR TITLES--
+    public IList<KnownForTitle> GetKnownForTitlesByPerson(string nconst)
+    {
+      return _context.KnownForTitles
+                     .Where(k => k.NConst == nconst)
+                     .ToList();
+    }
+
+  }
 }
