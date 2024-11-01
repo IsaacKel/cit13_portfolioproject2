@@ -18,7 +18,6 @@ public class MovieDbContext : DbContext
   public DbSet<Bookmark> Bookmarks { get; set; }
   public DbSet<UserRating> UserRatings { get; set; }
   public DbSet<SearchHistory> SearchHistories { get; set; }
-  public DbSet<TitleBasic> TitleBasics { get; set; }
   public DbSet<CoPlayer> CoPlayers { get; set; }
   public DbSet<RatingActor> RatingActors { get; set; }
   public DbSet<RatingCoPlayer> RatingCoPlayers { get; set; }
@@ -209,9 +208,9 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<SimilarMovie>().Property(c => c.PrimaryTitle).HasColumnName("primarytitle");
     modelBuilder.Entity<SimilarMovie>().Property(c => c.NumVotes).HasColumnName("numvotes");
   }
-  modelBuilder.Entity<TitleBasic>().Property(tb => tb.PrimaryTitle).HasColumnName("primarytitle");
-  modelBuilder.Entity<TitleBasic>().Property(tb => tb.TitleType).HasColumnName("titletype");
-  modelBuilder.Entity<TitleBasic>().Property(tb => tb.StartYear).HasColumnName("startyear");
+  // modelBuilder.Entity<TitleBasic>().Property(tb => tb.PrimaryTitle).HasColumnName("primarytitle");
+  // modelBuilder.Entity<TitleBasic>().Property(tb => tb.TitleType).HasColumnName("titletype");
+  // modelBuilder.Entity<TitleBasic>().Property(tb => tb.StartYear).HasColumnName("startyear");
 
 }
 

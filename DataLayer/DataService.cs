@@ -285,10 +285,10 @@ namespace DataLayer
 
 
     // --TITLE PRINCIPALS--
-    public IList<TitlePrincipal> GetTitlePrincipalsByTitle(string tconst)
+    public IList<TitlePrincipal> GetTitlePrincipalsByTitle(string nconst)
     {
       return _context.TitlePrincipals
-                     .Where(tp => tp.TConst == tconst)
+                     .Where(tp => tp.NConst == nconst)
                      .ToList();
     }
 

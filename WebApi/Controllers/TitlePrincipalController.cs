@@ -16,11 +16,11 @@ namespace WebApi.Controllers
             _dataService = dataService;
         }
 
-        // GET: api/TitlePrincipal/{tconst}
-        [HttpGet("{tconst}")]
-        public ActionResult<IList<TitlePrincipal>> GetTitlePrincipalsByTitle(string tconst)
+        // GET: api/TitlePrincipal/{nconst}
+        [HttpGet("{nconst}")]
+        public ActionResult<IList<TitlePrincipal>> GetTitlePrincipalsByTitle(string nconst)
         {
-            return Ok(_dataService.GetTitlePrincipalsByTitle(tconst));
+            return Ok(_dataService.GetTitlePrincipalsByTitle(nconst));
         }
 
     }
