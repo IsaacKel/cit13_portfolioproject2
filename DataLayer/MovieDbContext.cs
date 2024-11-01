@@ -29,6 +29,10 @@ public class MovieDbContext : DbContext
   public DbSet<TitlePrincipal> TitlePrincipals { get; set; }
   public DbSet<TitleBasic> TitleBasics { get; set; }
   public DbSet<TitleCountry> TitleCountries { get; set; }
+  public DbSet<TitleEpisode> TitleEpisodes { get; set; }
+  public DbSet<TitleGenre> TitleGenres { get; set; }
+  public DbSet<TitleRating> TitleRatings { get; set; }
+  public DbSet<TitleLanguage> TitleLanguages { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -47,6 +51,11 @@ public class MovieDbContext : DbContext
     MapTitleCharacters(modelBuilder);
     MapTitlePrincipals(modelBuilder);
     MapTitleBasic(modelBuilder);
+    MapTitleCountries(modelBuilder);
+    MapTitleEpisodes(modelBuilder);
+    MapTitleGenres(modelBuilder);
+    MapTitleRating(modelBuilder);
+    MapTitleLanguages(modelBuilder);
   }
   //User Table Mapping
   private static void MapUsers(ModelBuilder modelBuilder)
@@ -213,7 +222,7 @@ public class MovieDbContext : DbContext
   // modelBuilder.Entity<TitleBasic>().Property(tb => tb.TitleType).HasColumnName("titletype");
   // modelBuilder.Entity<TitleBasic>().Property(tb => tb.StartYear).HasColumnName("startyear");
 
-  private static void MapTitleCountries(modelBuilder modelBuilder)
+  private static void MapTitleCountries(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<TitleCountry>().ToTable("titlecountries");
     modelBuilder.Entity<TitleCountry>().HasKey(tc => new { tc.TConst, tc.Country });
@@ -221,6 +230,40 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<TitleCountry>().Property(tc => tc.Country).HasColumnName("country");
   }
 
+  private static void MapTitleEpisodes(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<TitleEpisode>().ToTable("titleepisodes");
+    modelBuilder.Entity<TitleEpisode>().HasKey(te => new { te.TConst, te.ParentTConst });
+    modelBuilder.Entity<TitleEpisode>().Property(te => te.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<TitleEpisode>().Property(te => te.ParentTConst).HasColumnName("parenttconst");
+    modelBuilder.Entity<TitleEpisode>().Property(te => te.SeasonNumber).HasColumnName("seasonnumber");
+    modelBuilder.Entity<TitleEpisode>().Property(te => te.EpisodeNumber).HasColumnName("episodenumber");
+  }
+
+  private static void MapTitleGenres(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<TitleGenre>().ToTable("titlegenres");
+    modelBuilder.Entity<TitleGenre>().HasKey(tg => new { tg.TConst, tg.Genre });
+    modelBuilder.Entity<TitleGenre>().Property(tg => tg.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<TitleGenre>().Property(tg => tg.Genre).HasColumnName("genre");
+  }
+
+  private static void MapTitleRating(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<TitleRating>().ToTable("titleratings");
+    modelBuilder.Entity<TitleRating>().HasKey(tr => tr.TConst);
+    modelBuilder.Entity<TitleRating>().Property(tr => tr.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<TitleRating>().Property(tr => tr.AverageRating).HasColumnName("averagerating");
+    modelBuilder.Entity<TitleRating>().Property(tr => tr.NumVotes).HasColumnName("numvotes");
+  }
+
+  private static void MapTitleLanguages(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<TitleLanguage>().ToTable("titlelanguages");
+    modelBuilder.Entity<TitleLanguage>().HasKey(tl => new { tl.TConst, tl.Language });
+    modelBuilder.Entity<TitleLanguage>().Property(tl => tl.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<TitleLanguage>().Property(tl => tl.Language).HasColumnName("language");
+  }
 }
 
 
