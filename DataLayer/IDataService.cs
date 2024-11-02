@@ -60,7 +60,8 @@ namespace DataLayer
 
 
     // --TITLE PRINCIPALS--
-    IList<TitlePrincipal> GetTitlePrincipalsByTitle(string nconst);
+    IList<TitlePrincipal> GetTitlePrincipalsByName(string nconst);
+    IList<TitlePrincipal> GetTitlePrincipalsByTitle(string tconst);
 
-  }
+    }
 }
