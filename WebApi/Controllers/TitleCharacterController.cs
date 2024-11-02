@@ -43,11 +43,7 @@ namespace WebApi.Controllers
     {
         private readonly IDataService _dataService;
 
-        // public TitleCharacterController(IDataService dataService)
-        // {
-        //     _dataService = dataService;
-        // }
-
+    
         public TitleCharacterController(IDataService dataService, LinkGenerator linkGenerator)
         : base(linkGenerator)
         {
@@ -63,8 +59,7 @@ namespace WebApi.Controllers
                 NConst = tc.NConst,
                 TConst = tc.TConst,
                 Character = tc.Character,
-                PrimaryTitle = tc.TitleBasic?.PrimaryTitle,
-                Poster = tc.TitleBasic?.Poster
+               
             }).ToList();
 
             var result = CreatePagingNConst("GetTitleCharactersByPerson", nconst, page, pageSize, titleCharacterDtos.Count, titleCharacterDtos.Skip((page - 1) * pageSize).Take(pageSize));

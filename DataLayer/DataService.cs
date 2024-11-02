@@ -278,7 +278,6 @@ namespace DataLayer
     public IList<TitleCharacter> GetTitleCharactersByPerson(string nconst)
     {
       return _context.TitleCharacters
-                     .Include(tc => tc.TitleBasic) // This will include the related TitleBasic entity
                      .Where(tc => tc.NConst == nconst)
                      .ToList();
     }

@@ -126,18 +126,6 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<TitleCharacter>().Property(tc => tc.Character).HasColumnName("character");
     modelBuilder.Entity<TitleCharacter>().Property(tc => tc.Ordering).HasColumnName("ordering");
 
-
-    modelBuilder.Entity<TitleCharacter>()
-        .HasOne(tc => tc.TitleBasic)
-        .WithMany()
-        .HasForeignKey(tc => tc.TConst)
-        .HasPrincipalKey(tb => tb.TConst);
-
-    modelBuilder.Entity<TitleCharacter>()
-         .HasOne(tc => tc.Person)
-         .WithMany()
-         .HasForeignKey(tc => tc.NConst)
-         .HasPrincipalKey(p => p.NConst);
   }
 
   // MapKnownForTitles method
@@ -148,12 +136,6 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<KnownForTitle>().Property(k => k.NConst).HasColumnName("nconst");
     modelBuilder.Entity<KnownForTitle>().Property(k => k.KnownForTitles).HasColumnName("knownfortitles");
 
-    // Define the relationship between KnownForTitle and Person
-    modelBuilder.Entity<KnownForTitle>()
-        .HasOne(k => k.Person)
-        .WithMany()
-        .HasForeignKey(k => k.NConst)
-        .HasPrincipalKey(p => p.NConst);
   }
   // MapTitlePrincipals method
   private static void MapTitlePrincipals(ModelBuilder modelBuilder)

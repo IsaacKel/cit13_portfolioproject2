@@ -12,7 +12,5 @@ namespace DataLayer.Models
         public string? Character { get; set; }
 
         public int Ordering { get; set; }
-        public Person Person { get; set; }
-        public TitleBasic TitleBasic { get; set; }
     }
 }
