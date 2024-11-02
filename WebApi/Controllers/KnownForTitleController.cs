@@ -18,9 +18,9 @@ namespace WebApi.Controllers
 
         // GET: api/KnownForTitle/{nconst}
         [HttpGet("{nconst}")]
-        public ActionResult<IList<KnownForTitle>> GetKnownForTitlesByPerson(string nconst)
+        public ActionResult<IList<KnownForTitle>> GetKnownForTitlesByName(string nconst)
         {
-            return Ok(_dataService.GetKnownForTitlesByPerson(nconst));
+            return Ok(_dataService.GetKnownForTitlesByName(nconst));
         }
 
     }

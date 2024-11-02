@@ -263,19 +263,19 @@ namespace DataLayer
       return _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
     }
 
-    // --PERSON-- (Actors, Directors, Writers)
-    public Person GetPersonByNConst(string nconst)
+    // --Name-- (Actors, Directors, Writers)
+    public NameBasic GetNameByNConst(string nconst)
     {
-      return _context.Persons.FirstOrDefault(p => p.NConst == nconst);
+      return _context.NameBasics.FirstOrDefault(p => p.NConst == nconst);
     }
 
-    public IList<Person> GetAllPersons()
+    public IList<NameBasic> GetAllNames()
     {
-      return _context.Persons.ToList();
+      return _context.NameBasics.ToList();
     }
 
 
-    public IList<TitleCharacter> GetTitleCharactersByPerson(string nconst)
+    public IList<TitleCharacter> GetTitleCharactersByName(string nconst)
     {
       return _context.TitleCharacters
                      .Where(tc => tc.NConst == nconst)
@@ -299,7 +299,7 @@ namespace DataLayer
 
 
     // --KNOWN FOR TITLES--
-    public IList<KnownForTitle> GetKnownForTitlesByPerson(string nconst)
+    public IList<KnownForTitle> GetKnownForTitlesByName(string nconst)
     {
       return _context.KnownForTitles
                      .Where(k => k.NConst == nconst)

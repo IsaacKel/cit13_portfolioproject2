@@ -18,9 +18,9 @@ namespace WebApi.Controllers
 
         // GET: api/NameBasic/{nconst}
         [HttpGet("{nconst}")]
-        public ActionResult<Person> GetNameBasicByNConst(string nconst)
+        public ActionResult<NameBasic> GetNameBasicByNConst(string nconst)
         {
-            var nameBasic = _dataService.GetPersonByNConst(nconst);
+            var nameBasic = _dataService.GetNameByNConst(nconst);
             if (nameBasic == null)
             {
                 return NotFound();
@@ -30,9 +30,9 @@ namespace WebApi.Controllers
 
         // GET: api/NameBasic
         [HttpGet]
-        public ActionResult<IList<Person>> GetAllNameBasics()
+        public ActionResult<IList<NameBasic>> GetAllNameBasics()
         {
-            return Ok(_dataService.GetAllPersons());  // Assuming this retrieves all NameBasic entries
+            return Ok(_dataService.GetAllNames());  // Assuming this retrieves all NameBasic entries
         }
     }
 }

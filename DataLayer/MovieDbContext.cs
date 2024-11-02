@@ -23,7 +23,7 @@ public class MovieDbContext : DbContext
   public DbSet<RatingCoPlayer> RatingCoPlayers { get; set; }
   public DbSet<RatingCrew> _RatingCrew { get; set; }
   public DbSet<SimilarMovie> SimilarMovies { get; set; }
-  public DbSet<Person> Persons { get; set; }
+  public DbSet<NameBasic> NameBasics { get; set; }
   public DbSet<KnownForTitle> KnownForTitles { get; set; }
   public DbSet<TitleCharacter> TitleCharacters { get; set; }
   public DbSet<TitlePrincipal> TitlePrincipals { get; set; }
@@ -106,14 +106,14 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<SearchHistory>().Property(s => s.CreatedAt).HasColumnName("searchdate");
   }
 
-  // Person Table Mapping
+  // Name Table Mapping
   private static void MapNameBasic(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<Person>().ToTable("namebasic");
-    modelBuilder.Entity<Person>().Property(p => p.NConst).HasColumnName("nconst");
-    modelBuilder.Entity<Person>().Property(p => p.BirthYear).HasColumnName("birthyear");
-    modelBuilder.Entity<Person>().Property(p => p.DeathYear).HasColumnName("deathyear");
-    modelBuilder.Entity<Person>().Property(p => p.ActualName).HasColumnName("primaryname");
+    modelBuilder.Entity<NameBasic>().ToTable("namebasic");
+    modelBuilder.Entity<NameBasic>().Property(p => p.NConst).HasColumnName("nconst");
+    modelBuilder.Entity<NameBasic>().Property(p => p.BirthYear).HasColumnName("birthyear");
+    modelBuilder.Entity<NameBasic>().Property(p => p.DeathYear).HasColumnName("deathyear");
+    modelBuilder.Entity<NameBasic>().Property(p => p.ActualName).HasColumnName("primaryname");
   }
 
   // MapTitleCharacters method

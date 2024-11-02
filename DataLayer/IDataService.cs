@@ -47,16 +47,16 @@ namespace DataLayer
     IList<RatingCoPlayer> GetRatingCoPlayers(string nConst);
     IList<RatingCrew> GetRatingCrew(string tConst);
     IList<SimilarMovie> GetSimilarMovies(string tConst);
-    // --PERSON--
-    Person GetPersonByNConst(string nconst);
-    IList<Person> GetAllPersons();
+        // --Name--
+    NameBasic GetNameByNConst(string nconst);
+    IList<NameBasic> GetAllNames();
 
 
-    IList<KnownForTitle> GetKnownForTitlesByPerson(string nconst);
+    IList<KnownForTitle> GetKnownForTitlesByName(string nconst);
 
 
     // --TITLE CHARACTERS--
-    IList<TitleCharacter> GetTitleCharactersByPerson(string nconst);
+    IList<TitleCharacter> GetTitleCharactersByName(string nconst);
 
 
     // --TITLE PRINCIPALS--

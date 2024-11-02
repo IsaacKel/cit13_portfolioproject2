@@ -18,9 +18,9 @@
 
 //         // GET: api/TitleCharacter/{nconst}
 // [HttpGet("{nconst}")]
-// public ActionResult<IList<TitleCharacter>> GetTitleCharactersByPerson(string nconst)
+// public ActionResult<IList<TitleCharacter>> GetTitleCharactersByName(string nconst)
 // {
-//     return Ok(_dataService.GetTitleCharactersByPerson(nconst));
+//     return Ok(_dataService.GetTitleCharactersByName(nconst));
 // }
 
 
@@ -49,10 +49,10 @@ namespace WebApi.Controllers
         {
             _dataService = dataService;
         }
-        [HttpGet("{nconst}", Name = "GetTitleCharactersByPerson")]
-        public ActionResult<IList<TitleCharacterDto>> GetTitleCharactersByPerson(string nconst, int page = 1, int pageSize = DefaultPageSize)
+        [HttpGet("{nconst}", Name = "GetTitleCharactersByName")]
+        public ActionResult<IList<TitleCharacterDto>> GetTitleCharactersByName(string nconst, int page = 1, int pageSize = DefaultPageSize)
         {
-            var titleCharacters = _dataService.GetTitleCharactersByPerson(nconst);
+            var titleCharacters = _dataService.GetTitleCharactersByName(nconst);
 
             var titleCharacterDtos = titleCharacters.Select(tc => new TitleCharacterDto
             {
@@ -62,7 +62,7 @@ namespace WebApi.Controllers
                
             }).ToList();
 
-            var result = CreatePagingNConst("GetTitleCharactersByPerson", nconst, page, pageSize, titleCharacterDtos.Count, titleCharacterDtos.Skip((page - 1) * pageSize).Take(pageSize));
+            var result = CreatePagingNConst("GetTitleCharactersByName", nconst, page, pageSize, titleCharacterDtos.Count, titleCharacterDtos.Skip((page - 1) * pageSize).Take(pageSize));
             return Ok(result);
         }
     }
