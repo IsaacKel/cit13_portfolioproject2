@@ -165,11 +165,7 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.Ordering).HasColumnName("ordering");
     modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.Category).HasColumnName("category");
     modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.Job).HasColumnName("job");
-        modelBuilder.Entity<TitlePrincipal>()
-       .HasOne(k => k.Person)
-       .WithMany()
-       .HasForeignKey(k => k.NConst)
-       .HasPrincipalKey(p => p.NConst);
+ 
     }
 
   // MapTitleBasic method
