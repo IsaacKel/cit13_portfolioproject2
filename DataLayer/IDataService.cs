@@ -48,8 +48,8 @@ namespace DataLayer
     IList<RatingCrew> GetRatingCrew(string tConst);
     IList<SimilarMovie> GetSimilarMovies(string tConst);
         // --Name--
-    NameBasic GetNameByNConst(string nconst);
-    IList<NameBasic> GetAllNames();
+    NameBasic GetNameByNConst(int userId, string nconst);
+    IList<NameBasic> GetAllNames(int userId);
 
 
     IList<KnownForTitle> GetKnownForTitlesByName(string nconst);

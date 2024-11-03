@@ -263,15 +263,23 @@ namespace DataLayer
       return _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
     }
 
+        // FAKE list 
+        private readonly List<User> _users = new List<User>         {
+            new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
+
     // --Name-- (Actors, Directors, Writers)
-    public NameBasic GetNameByNConst(string nconst)
+    public NameBasic GetNameByNConst(int userId, string nconst)
     {
-      return _context.NameBasics.FirstOrDefault(p => p.NConst == nconst);
+        if (_users.FirstOrDefault(x => x.Id ==userId) == null) 
+                throw new ArgumentException("User not found.");
+            return _context.NameBasics.FirstOrDefault(p => p.NConst == nconst);
     }
 
-    public IList<NameBasic> GetAllNames()
+    public IList<NameBasic> GetAllNames(int userId)
     {
-      return _context.NameBasics.ToList();
+         if (_users.FirstOrDefault(x => x.Id == userId) == null)
+                throw new ArgumentException("User not found.");
+            return _context.NameBasics.ToList();
     }
 
 
