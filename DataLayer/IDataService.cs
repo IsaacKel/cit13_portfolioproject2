@@ -1,5 +1,6 @@
 using DataLayer.Models;
 using System.Collections.Generic;
+using System.Security.Principal;
 
 namespace DataLayer
 {
@@ -12,8 +13,12 @@ namespace DataLayer
     void DeleteUser(int userId);
     bool UserExists(int userId);
 
-    // --BOOKMARK--
-    IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10);
+
+    // --USERS for authetication
+   User CreateUser(string name, string username, string password, string email, string role, string salt);
+
+        // --BOOKMARK--
+        IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10);
     Bookmark GetBookmark(int userId, int bookmarkId);
     Bookmark GetBookmarkById(int bookmarkId);
     Bookmark AddBookmark(int userId, string tconst, string nconst, string note);
@@ -38,8 +43,9 @@ namespace DataLayer
     void UpdateUserRating(int userId, int ratingId, int rating);
     int GetUserRatingCount(int userId);
 
-    // --TITLE BASIC--
-    TitleBasic GetTitleByTConst(string tConst);
+
+        // --TITLE BASIC--
+        TitleBasic GetTitleByTConst(string tConst);
 
     // --COPLAYYERS--
     IList<CoPlayer> GetCoPlayers(string nConst);

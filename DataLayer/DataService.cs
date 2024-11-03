@@ -32,11 +32,32 @@ namespace DataLayer
 
     private T FindById<T>(int id) where T : class =>
         _context.Set<T>().Find(id);
+        
 
+   //Create user for authentication part
+   public User CreateUser(string name, string username,
+       string? password = null, string? email = null,
+       string? salt = null,
+       string? role = "user")
+        {
+            var user = new User
+            {
+                Id = _users.Max(x => x.Id) + 1,
+                Name = name,
+                Username = username,
+                Password = password,
+                Salt = salt,
+                Role = role,
+            };
+            _users.Add(user);
+            return user;
+        }
     // -- USER --
 
     public User AddUser(string username, string password, string email)
     {
+
+
       var user = new User { Username = username, Password = password, Email = email };
       _context.Users.Add(user);
       SaveChanges();
