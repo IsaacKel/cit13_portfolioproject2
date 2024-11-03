@@ -16,7 +16,7 @@ namespace Assignment4.Tests
     {
       var inMemorySettings = new Dictionary<string, string?>
             {
-                {"ConnectionStrings:imdbDatabase", "Host=localhost;Database=imdb;Username=postgres;Password=kelsall"}
+                {"ConnectionStrings:imdbDatabase", "Host=localhost;Database=imdb;Username=postgres;Password=Golu@1998"}
             };
 
       configuration = new ConfigurationBuilder()
@@ -143,5 +143,17 @@ namespace Assignment4.Tests
 
       service.DeleteUser(newUser.Id);
     }
-  }
+    /* NameBasic Tests */
+
+    [Fact]
+    public void GetName_ValidID()
+    {
+        var name = service.GetNameByNConst("nm0000138");
+        Assert.NotNull(name);
+        Assert.Equal("Leonardo DiCaprio", name.ActualName);
+
+
+    }
+
+}
 }
