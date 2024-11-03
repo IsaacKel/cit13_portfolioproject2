@@ -20,19 +20,33 @@ namespace WebApi.Controllers
         [HttpGet("{nconst}")]
         public ActionResult<NameBasic> GetNameBasicByNConst(string nconst)
         {
-            var nameBasic = _dataService.GetNameByNConst(nconst);
-            if (nameBasic == null)
-            {
+            try
+            { 
+              var nameBasic = _dataService.GetNameByNConst(1,nconst);
+              if (nameBasic == null)
+                {
                 return NotFound();
+                }
+                return Ok(nameBasic);
             }
-            return Ok(nameBasic);
+            catch
+            {
+                return Unauthorized();
+            }
         }
 
         // GET: api/NameBasic
         [HttpGet]
         public ActionResult<IList<NameBasic>> GetAllNameBasics()
         {
-            return Ok(_dataService.GetAllNames());  // Assuming this retrieves all NameBasic entries
-        }
-    }
+            try
+            {
+                return Ok(_dataService.GetAllNames(1));  // Assuming this retrieves all NameBasic entries
+            }
+            catch
+            {
+                return Unauthorized();
+            }
+       }
+}
 }

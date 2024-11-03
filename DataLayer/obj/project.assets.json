@@ -716,24 +716,27 @@
     ]
   },
   "packageFolders": {
-    "/Users/isaackelsall/.nuget/packages/": {}
+    "C:\\Users\\sebas\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/DataLayer.csproj",
+      "projectUniqueName": "C:\\Users\\sebas\\Documents\\GitHub\\cit13_portfolioproject2\\DataLayer\\DataLayer.csproj",
       "projectName": "DataLayer",
-      "projectPath": "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/DataLayer.csproj",
-      "packagesPath": "/Users/isaackelsall/.nuget/packages/",
-      "outputPath": "/Users/isaackelsall/Documents/GitHub/cit13_portfolioproject2/DataLayer/obj/",
+      "projectPath": "C:\\Users\\sebas\\Documents\\GitHub\\cit13_portfolioproject2\\DataLayer\\DataLayer.csproj",
+      "packagesPath": "C:\\Users\\sebas\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\sebas\\Documents\\GitHub\\cit13_portfolioproject2\\DataLayer\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/isaackelsall/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\sebas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -746,6 +749,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -777,7 +785,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.8_1/libexec/sdk/8.0.108/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

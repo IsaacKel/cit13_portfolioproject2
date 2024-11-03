@@ -5,4 +5,4 @@ Accept: application/json
 
 ###
 
-GET {{WebApi_HostAddress}}/api/NameBasic/nm0000138
+GET {{WebApi_HostAddress}}/api/NameBasic/nm0000138 

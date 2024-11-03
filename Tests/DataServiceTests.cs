@@ -148,7 +148,7 @@ namespace Assignment4.Tests
     [Fact]
     public void GetName_ValidID()
     {
-        var name = service.GetNameByNConst("nm0000138");
+        var name = service.GetNameByNConst(1,"nm0000138");
         Assert.NotNull(name);
         Assert.Equal("Leonardo DiCaprio", name.ActualName);
 
@@ -157,7 +157,7 @@ namespace Assignment4.Tests
         [Fact]
         public void GetName_List_Valid()
         {
-            var names = service.GetAllNames();
+            var names = service.GetAllNames(1);
             Assert.NotEmpty(names);
         }
         /* TitleCharacter Tests*/

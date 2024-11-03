@@ -133,6 +133,78 @@
     ]
   },
   {
+    "ContainingType": "WebApi.Controllers.KnownForTitleController",
+    "Method": "GetKnownForTitlesByName",
+    "RelativePath": "api/KnownForTitle/{nconst}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nconst",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IList\u00601[[DataLayer.Models.KnownForTitle, DataLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebApi.Controllers.NameBasicController",
+    "Method": "GetAllNameBasics",
+    "RelativePath": "api/NameBasic",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IList\u00601[[DataLayer.Models.NameBasic, DataLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebApi.Controllers.NameBasicController",
+    "Method": "GetNameBasicByNConst",
+    "RelativePath": "api/NameBasic/{nconst}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nconst",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DataLayer.Models.NameBasic",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "WebApi.Controllers.RatingActorsController",
     "Method": "GetRatingActors",
     "RelativePath": "api/RatingActors/{tConst}",
@@ -329,6 +401,95 @@
     "ReturnTypes": [
       {
         "Type": "DataLayer.Models.TitleBasic",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebApi.Controllers.TitleCharacterController",
+    "Method": "GetTitleCharactersByName",
+    "RelativePath": "api/TitleCharacter/{nconst}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nconst",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IList\u00601[[WebApi.DTOs.TitleCharacterDto, WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetTitleCharactersByName"
+  },
+  {
+    "ContainingType": "WebApi.Controllers.TitlePrincipalController",
+    "Method": "GetTitlePrincipalsByName",
+    "RelativePath": "api/TitlePrincipal/by-name/{nconst}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nconst",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IList\u00601[[DataLayer.Models.TitlePrincipal, DataLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebApi.Controllers.TitlePrincipalController",
+    "Method": "GetTitlePrincipalsByTitle",
+    "RelativePath": "api/TitlePrincipal/by-title/{tconst}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tconst",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IList\u00601[[DataLayer.Models.TitlePrincipal, DataLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

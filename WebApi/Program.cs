@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mapster;
+using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,8 @@ builder.Services.AddDbContext<MovieDbContext>(options =>
 
 // Register IDataService and the DataService implementation
 builder.Services.AddSingleton<IDataService, DataService>();
+
+builder.Services.AddSingleton(new Hashing());
 
 builder.Services.AddScoped<IDataService, DataService>();
 
