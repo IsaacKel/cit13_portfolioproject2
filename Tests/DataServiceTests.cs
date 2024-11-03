@@ -154,6 +154,11 @@ namespace Assignment4.Tests
 
 
     }
-
-}
+        [Fact]
+        public void GetName_List_Valid()
+        {
+            var names = service.GetAllNames();
+            Assert.NotEmpty(names);
+        }
+    }
 }
