@@ -68,7 +68,10 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<User>().Property(u => u.Username).HasColumnName("username");
     modelBuilder.Entity<User>().Property(u => u.Email).HasColumnName("email");
     modelBuilder.Entity<User>().Property(u => u.Password).HasColumnName("password");
-  }
+    modelBuilder.Entity<User>().Property(u => u.Salt).HasColumnName("salt");
+    modelBuilder.Entity<User>().Property(u => u.Role).HasColumnName("role");
+    modelBuilder.Entity<User>().Property(u => u.Name).HasColumnName("name");
+    }
 
   //Bookmark Table Mapping
   private static void MapBookmarks(ModelBuilder modelBuilder)

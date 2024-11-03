@@ -63,7 +63,7 @@ namespace WebApi.Controllers
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
-            var secret = "asdajodaoijfiwåafjiæpølåøåløåløl";
+            var secret = "asdajodaoijfiwåafjiæpølåøåløålølDSADSADWADWADWADJKfhaiufwhuihfuwihuiapwkaepoaeopwaeopwapek212";
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
