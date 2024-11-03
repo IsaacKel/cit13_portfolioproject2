@@ -174,5 +174,12 @@ namespace Assignment4.Tests
             var principals = service.GetTitlePrincipalsByName("nm0000138");
             Assert.NotEmpty(principals);
         }
+        /* KnownForTitle Tests */
+    [Fact]
+        public void GetKownForTitle_ValidID()
+        {
+            var knownForTitles = service.GetKnownForTitlesByName("nm0000138");
+            Assert.NotEmpty(knownForTitles);
+        }
     }
 }
