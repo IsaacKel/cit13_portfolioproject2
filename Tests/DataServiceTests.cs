@@ -160,5 +160,12 @@ namespace Assignment4.Tests
             var names = service.GetAllNames();
             Assert.NotEmpty(names);
         }
+        /* TitleCharacter Tests*/
+    [Fact]
+    public void GetTitleCharacter_ValidID()
+    {
+        var characters = service.GetTitleCharactersByName("nm0000138");
+        Assert.NotEmpty(characters);
+    }
     }
 }
