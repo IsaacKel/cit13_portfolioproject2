@@ -166,6 +166,13 @@ namespace Assignment4.Tests
     {
         var characters = service.GetTitleCharactersByName("nm0000138");
         Assert.NotEmpty(characters);
-    }
+        }
+        /* TitlePrincipal Tests*/
+    [Fact]
+        public void GetPrincipal_ValidID()
+        {
+            var principals = service.GetTitlePrincipalsByName("nm0000138");
+            Assert.NotEmpty(principals);
+        }
     }
 }
