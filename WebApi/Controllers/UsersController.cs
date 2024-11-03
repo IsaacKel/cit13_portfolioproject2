@@ -1,5 +1,7 @@
 ﻿using DataLayer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -63,6 +65,18 @@ namespace WebApi.Controllers
 
             var secret = "asdajodaoijfiwåafjiæpølåøåløåløl";
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddSeconds(45),
+                signingCredentials: creds
+                );
+
+            var Jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Ok(new { username = user.Username, token = Jwt });
         }
 
     }
