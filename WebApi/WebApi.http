@@ -5,8 +5,8 @@ POST {{WebApi_HostAddress}}/api/v3/users
 Accept: application/json
 Content-Type: application/json
 {
-  "name" : "John Johnson",
-  "userName" : "JohnJ",
+  "name" : "John Obe",
+  "userName" : "JohnO",
   "email" : "John@Hotmail.com",
   "password" : "Johnson"
 }
@@ -19,7 +19,8 @@ Content-Type: application/json
 {
   "name" : "1",
   "userName" : "user1",
-  "password" : "password1"
+  "password" : "password1",
+   "email" : "Some@Hotmail.com"
 }
 
 ###

@@ -35,6 +35,10 @@ namespace WebApi.Controllers
             {
                 return BadRequest("No password");
             }
+            if (string.IsNullOrEmpty(model.Email))
+            {
+                return BadRequest("No email");
+            }
 
             (var hashedPwd, var salt) =_hashing.Hash(model.Password);
 
