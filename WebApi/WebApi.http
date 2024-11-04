@@ -1,26 +1,28 @@
 @WebApi_HostAddress = https://localhost:5003
 
-
+//Create a user. Encryption is done on the password before it is stored in the database.
 POST {{WebApi_HostAddress}}/api/v3/users
 Accept: application/json
 Content-Type: application/json
 {
-  "name" : "John Obe",
-  "userName" : "JohnO",
+  "name" : "Sebastian",
+  "userName" : "Seb",
   "email" : "John@Hotmail.com",
   "password" : "Johnson"
 }
 
 ###
 
+//Login to a user. The password is encrypted and compared to the encrypted password in the database.
+//Also returns a token that is used to authenticate the user.
 PUT {{WebApi_HostAddress}}/api/v3/users
 Accept: application/json
 Content-Type: application/json
 {
-  "name" : "1",
-  "userName" : "user1",
-  "password" : "password1",
-   "email" : "Some@Hotmail.com"
+  "name" : "Sebastian",
+  "userName" : "Seb",
+  "email" : "Some@Hotmail.com",
+  "password" : "Johnson"
 }
 
 ###

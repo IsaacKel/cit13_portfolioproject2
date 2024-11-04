@@ -47,7 +47,7 @@ namespace WebApi.Controllers
             return Ok("Created User");
 
         }
-           [HttpPut] // Could update password
+           [HttpPut] // Login
             public IActionResult Login(LoginUserModel model)
             {
                var user = _dataService.GetUser(model.UserName);
