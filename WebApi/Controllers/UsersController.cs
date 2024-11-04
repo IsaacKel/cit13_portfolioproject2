@@ -54,7 +54,7 @@ namespace WebApi.Controllers
 
             if (user == null)
             {
-                return BadRequest("Is null");
+                return BadRequest("Can't login. Password or Username is wrong Is wrong");
             }
 
             if(!_hashing.Verify(model.Password, user.Password, user.Salt))
@@ -73,8 +73,10 @@ namespace WebApi.Controllers
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
+            // Token generated
             var token = new JwtSecurityToken(
                 claims: claims,
+                //Life time on token
                 expires: DateTime.Now.AddSeconds(45),
                 signingCredentials: creds
                 );
@@ -86,16 +88,4 @@ namespace WebApi.Controllers
 
     }
 
-
-
-
-    //try
-    //{
-    //    var user = _dataService.CreateUser(model.Name,model.UserName, model.Password, model.Email, "user","salt");
-    //    return Ok(CreateUserDto(user));
-    //}
-    //catch
-    //{
-    //    return Unauthorized();
-    //}
 }

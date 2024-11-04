@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mapster;
 using WebApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +34,26 @@ builder.Services.AddDbContext<MovieDbContext>(options =>
 
 // Register IDataService and the DataService implementation
 builder.Services.AddSingleton<IDataService, DataService>();
-
 builder.Services.AddSingleton(new Hashing());
+
+var secret = "asdajodaoijfiwåafjiæpølåøåløålølDSADSADWADWADWADJKfhaiufwhuihfuwihuiapwkaepoaeopwaeopwapek212";
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opt =>
+    opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+        ClockSkew = TimeSpan.Zero
+    }
+    );
+
+
+
+
+
 
 builder.Services.AddScoped<IDataService, DataService>();
 
