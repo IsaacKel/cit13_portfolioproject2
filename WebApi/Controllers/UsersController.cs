@@ -16,9 +16,11 @@ namespace WebApi.Controllers
     {
         private readonly IDataService _dataService;
         private readonly Hashing _hashing;
+        private readonly IConfiguration _configuration;
 
-        public UsersController(IDataService dataService, LinkGenerator linkGenerator,Hashing hashing) : base(linkGenerator)
+        public UsersController(IDataService dataService, IConfiguration configuration, LinkGenerator linkGenerator,Hashing hashing) : base(linkGenerator)
         {
+            _configuration = configuration;
             _dataService = dataService;
             _hashing = hashing;
         }
@@ -68,7 +70,8 @@ namespace WebApi.Controllers
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
-            var secret = "asdajodaoijfiwåafjiæpølåøåløålølDSADSADWADWADWADJKfhaiufwhuihfuwihuiapwkaepoaeopwaeopwapek212";
+            var secret = _configuration.GetSection("Auth:Secret").Value;
+         
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

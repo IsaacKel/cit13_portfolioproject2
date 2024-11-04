@@ -1,5 +1,6 @@
 ﻿using DataLayer;
 using DataLayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -7,6 +8,7 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class NameBasicController : ControllerBase
     {
         private readonly IDataService _dataService;
@@ -18,6 +20,7 @@ namespace WebApi.Controllers
 
         // GET: api/NameBasic/{nconst}
         [HttpGet("{nconst}")]
+        [Authorize]
         public ActionResult<NameBasic> GetNameBasicByNConst(string nconst)
         {
             try
@@ -37,6 +40,8 @@ namespace WebApi.Controllers
 
         // GET: api/NameBasic
         [HttpGet]
+        [Authorize]
+
         public ActionResult<IList<NameBasic>> GetAllNameBasics()
         {
             try

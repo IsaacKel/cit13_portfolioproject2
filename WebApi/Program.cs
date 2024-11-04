@@ -36,11 +36,12 @@ builder.Services.AddDbContext<MovieDbContext>(options =>
 builder.Services.AddSingleton<IDataService, DataService>();
 builder.Services.AddSingleton(new Hashing());
 
-var secret = "asdajodaoijfiwåafjiæpølåøåløålølDSADSADWADWADWADJKfhaiufwhuihfuwihuiapwkaepoaeopwaeopwapek212";
+//(Stored in appsettings.json)
+var secret = builder.Configuration.GetSection("Auth:Secret").Value;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
-    opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    opt.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = false,
         ValidateAudience = false,
@@ -78,7 +79,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
