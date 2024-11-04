@@ -20,6 +20,7 @@ namespace WebApi.Controllers
         public UsersController(IDataService dataService, LinkGenerator linkGenerator,Hashing hashing) : base(linkGenerator)
         {
             _dataService = dataService;
+            _hashing = hashing;
         }
 
         [HttpPost]
@@ -49,12 +50,12 @@ namespace WebApi.Controllers
 
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("Is null");
             }
 
             if(!_hashing.Verify(model.Password, user.Password, user.Salt))
             {
-                return BadRequest();
+                return BadRequest("Could'nt Verify");
             }
 
             var claims = new List<Claim>
