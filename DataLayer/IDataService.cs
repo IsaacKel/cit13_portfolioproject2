@@ -53,8 +53,10 @@ namespace DataLayer
     IList<RatingCoPlayer> GetRatingCoPlayers(string nConst);
     IList<RatingCrew> GetRatingCrew(string tConst);
     IList<SimilarMovie> GetSimilarMovies(string tConst);
+        IList<SearchName> GetSearchNames(string searchTerm);
+        IList<SearchTitle> GetSearchTitles(string searchTerm);
         // --Name--
-    NameBasic GetNameByNConst(int userId, string nconst);
+        NameBasic GetNameByNConst(int userId, string nconst);
     IList<NameBasic> GetAllNames(int userId);
 
 

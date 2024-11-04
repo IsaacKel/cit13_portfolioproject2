@@ -1,3 +1,10 @@
+datalayer/bin/
+datalayer/obj/
+webapi/bin/
+webapi/obj/
+tests/bin/
+tests/obj/
+
 # Visual Studio
 .vs/
 *.user

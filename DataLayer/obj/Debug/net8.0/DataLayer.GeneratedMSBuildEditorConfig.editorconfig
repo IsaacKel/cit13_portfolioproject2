@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = DataLayer
-build_property.ProjectDir = C:\Users\sebas\Documents\GitHub\cit13_portfolioproject2\DataLayer\
+build_property.ProjectDir = C:\Users\matth\source\repos\cit13_portfolioproject2\DataLayer\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

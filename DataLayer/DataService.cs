@@ -282,6 +282,14 @@ namespace DataLayer
     {
       return _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
     }
+        public IList<SearchName> GetSearchNames(string searchTerm)
+        {
+            return _context.SearchNames.FromSqlInterpolated($"select * from search_names_by_text({searchTerm})").ToList();
+        }
+        public IList<SearchTitle> GetSearchTitles(string searchTerm)
+        {
+            return _context.SearchTitles.FromSqlInterpolated($"select * from string_search({searchTerm})").ToList();
+        }
 
         //// FAKE list 
         private readonly List<User> _users = new List<User>         {
