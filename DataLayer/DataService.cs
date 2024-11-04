@@ -35,10 +35,7 @@ namespace DataLayer
         
 
    //Create user for authentication part
-   public User CreateUser(string name, string username,
-       string? password = null, string? email = null,
-       string? salt = null,
-       string? role = "user")
+   public User CreateUser(string name, string username, string password , string email , string salt , string role = "user")
         {
             var user = new User
             {
@@ -46,6 +43,7 @@ namespace DataLayer
                 Name = name,
                 Username = username,
                 Password = password,
+                Email = email,
                 Salt = salt,
                 Role = role,
             };
