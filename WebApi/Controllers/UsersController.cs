@@ -38,12 +38,12 @@ namespace WebApi.Controllers
 
             (var hashedPwd, var salt) =_hashing.Hash(model.Password);
 
-            _dataService.CreateUser(model.Name, model.UserName, hashedPwd, model.Email, "user", salt);
+            _dataService.CreateUser(model.Name, model.UserName, hashedPwd, model.Email,  salt,"user");
 
-            return Ok();
+            return Ok("Created User");
 
         }
-           [HttpPut]
+           [HttpPut] // Could update password
             public IActionResult Login(LoginUserModel model)
             {
                var user = _dataService.GetUser(model.UserName);

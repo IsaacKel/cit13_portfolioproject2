@@ -42,14 +42,15 @@ namespace DataLayer
         {
             var user = new User
             {
-                Id = _users.Max(x => x.Id) + 1,
+        //     Id = _context.Users.Max(x => x.Id) + 1,
                 Name = name,
                 Username = username,
                 Password = password,
                 Salt = salt,
                 Role = role,
             };
-            _users.Add(user);
+            _context.Users.Add(user);
+            SaveChanges();
             return user;
         }
     // -- USER --
@@ -284,9 +285,9 @@ namespace DataLayer
       return _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
     }
 
-        // FAKE list 
+        //// FAKE list 
         private readonly List<User> _users = new List<User>         {
-            new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
+          new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
 
     // --Name-- (Actors, Directors, Writers)
     public NameBasic GetNameByNConst(int userId, string nconst)

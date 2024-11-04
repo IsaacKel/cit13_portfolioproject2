@@ -16,7 +16,7 @@ namespace Assignment4.Tests
     {
       var inMemorySettings = new Dictionary<string, string?>
             {
-                {"ConnectionStrings:imdbDatabase", "Host=localhost;Database=imdb;Username=postgres;Password=Golu@1998"}
+                {"ConnectionStrings:imdbDatabase", "Host=localhost;Database=imdb;Username=postgres;Password=postgres"}
             };
 
       configuration = new ConfigurationBuilder()

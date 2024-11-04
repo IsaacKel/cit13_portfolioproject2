@@ -18,8 +18,8 @@ Accept: application/json
 Content-Type: application/json
 {
   "name" : "1",
-  "userName" : "User One",
-  "password" : "hashedpassword1"
+  "userName" : "user1",
+  "password" : "password1"
 }
 
 ###
