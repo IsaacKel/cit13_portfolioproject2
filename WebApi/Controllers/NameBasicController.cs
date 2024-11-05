@@ -3,45 +3,44 @@ using DataLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize(Roles = "user")]
-    public class NameBasicController : ControllerBase
+    public class NameBasicController : BaseController
     {
         private readonly IDataService _dataService;
 
-        public NameBasicController(IDataService dataService)
+        public NameBasicController(IDataService dataService, LinkGenerator linkGenerator)
+            : base(linkGenerator)
         {
             _dataService = dataService;
         }
 
         // GET: api/NameBasic/{nconst}
         [HttpGet("{nconst}")]
-     //   [Authorize(Roles = "user")]
         public ActionResult<NameBasic> GetNameBasicByNConst(string nconst)
         {
-            
-              var nameBasic = _dataService.GetNameByNConst(nconst);
-              if (nameBasic == null)
-                {
+            var nameBasic = _dataService.GetNameByNConst(nconst);
+            if (nameBasic == null)
+            {
                 return NotFound();
-                }
-                return Ok(nameBasic);
-             
-          
+            }
+            return Ok(nameBasic);
         }
 
         // GET: api/NameBasic
-        [HttpGet]
-       // [Authorize(Roles = "admin")]
-        public ActionResult<IList<NameBasic>> GetAllNameBasics()
+        [HttpGet(Name = "GetAllNameBasics")]
+        public ActionResult<IList<NameBasic>> GetAllNameBasics(int page = 1, int pageSize = DefaultPageSize)
         {
-           
-                return Ok(_dataService.GetAllNames());  // Need paging
-      
-       }
-}
+            var allNames = _dataService.GetAllNames();
+
+            var paginatedNames = CreatePaging("GetAllNameBasics", page, pageSize, allNames.Count,
+                                              allNames.Skip((page - 1) * pageSize).Take(pageSize));
+
+            return Ok(paginatedNames);
+        }
+    }
 }

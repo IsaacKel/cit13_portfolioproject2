@@ -20,6 +20,7 @@ namespace WebApi.Controllers
       var uri = _linkGenerator.GetUriByName(HttpContext, linkName, args);
       return uri;
     }
+
     protected string? GetLinkUser(string linkName, int userId, int page, int pageSize)
     {
       return GetUrl(linkName, new { userId, page, pageSize });
@@ -66,6 +67,35 @@ namespace WebApi.Controllers
 
       // Previous page link (only if there is a previous page)
       var prevPage = page > 1 ? GetLinkNConst(linkName, nconst, page - 1, pageSize) : null;
+
+      var result = new
+      {
+        CurPage = curPage,
+        NextPage = nextPage,
+        PrevPage = prevPage,
+        NumberOfItems = total,
+        NumberPages = numberOfPages,
+        Items = items
+      };
+
+      return result;
+    }
+
+    protected string? GetLink(string linkName, int page, int pageSize)
+    {
+      return GetUrl(linkName, new { page, pageSize });
+    }
+
+    protected object CreatePaging<T>(string linkName, int page, int pageSize, int total, IEnumerable<T?> items)
+    {
+      // Ensure the pageSize doesn't exceed the maximum
+      pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+      var numberOfPages = (int)Math.Ceiling(total / (double)pageSize);
+
+      // Generate current, next, and previous page links
+      var curPage = GetLink(linkName, page, pageSize);
+      var nextPage = page < numberOfPages ? GetLink(linkName, page + 1, pageSize) : null;
+      var prevPage = page > 1 ? GetLink(linkName, page - 1, pageSize) : null;
 
       var result = new
       {
