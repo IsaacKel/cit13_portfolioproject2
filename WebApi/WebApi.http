@@ -8,15 +8,27 @@ Content-Type: application/json
   "name" : "GuestGuest",
   "userName" : "Guest",
   "email" : "Guest@Hotmail.com",
-  "password" : "Guest123"
+  "password" : "Guest123",
+  "role" : "user"
+}
+
+###
+//Create admin user
+POST {{WebApi_HostAddress}}/api/v3/users
+Accept: application/json
+Content-Type: application/json
+{
+  "name" : "Adam Admin",
+  "userName" : "userAdmin",
+  "email" : "user@AminMail.com",
+  "password" : "Guest123",
+  "role" : "amin"
 }
 
 ###
 
-//Login to a user. The password is encrypted and compared to the encrypted password in the database.
-//Also returns a token that is used to authenticate the user.
 
-//Login with only password and username
+//Login to User - Copy returned token and paste in Authorization header
 PUT {{WebApi_HostAddress}}/api/v3/users
 Accept: application/json
 Content-Type: application/json
@@ -27,12 +39,27 @@ Content-Type: application/json
 
 ###
 
+//Login to Admin - Copy returned token and paste in Authorization header
+PUT {{WebApi_HostAddress}}/api/v3/users
+Accept: application/json
+Content-Type: application/json
+{
+  "userName" : "userAdmin",
+  "password" : "Guest123"
+}
+
+
+###
+
 GET {{WebApi_HostAddress}}/api/NameBasic
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidXNlckFkbWluIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQW1pbiIsImV4cCI6MTczMTM3MTIwOH0.LLOYdndKblBYlKQobwenJQhbxP_Q07fv0Ptn86W_lo0ckk-FEwa2ahUPbW1JjlFlgoDgx8SpkstCWJJxsh1dWA
 
 ###
 
 //Authorize exammple (generate token first and paste after bearer)
 GET {{WebApi_HostAddress}}/api/NameBasic/nm0000138
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiR3Vlc3QiLCJleHAiOjE3MzA3MzAzOTF9.e_5wUVTBF0hGXb3qZShk5ofy_bBVinp2QXYgOpqgvJbX6hbH_ueVs4vg_IBB_wqt0VavNaZpDPDVpmhgWon3Fw.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiR3Vlc3QiLCJleHAiOjE3MzA3MzAzOTF9.e_5wUVTBF0hGXb3qZShk5ofy_bBVinp2QXYgOpqgvJbX6hbH_ueVs4vg_IBB_wqt0VavNaZpDPDVpmhgWon3Fw.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiR3Vlc3QiLCJleHAiOjE3MzA3Mjk2MzB9.CR-oUP4MgtiK5i2DD0yL-EbHZg70z7RUoO4Nhi8PLGmj5gGlXn0NFTBTonZN9b5BWn0pi_TcLi2q3X_SWlfflA
+Authorization: Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiR3Vlc3QiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwiZXhwIjoxNzMxMzcxNTc1fQ.LhskEULnf9eVsOC4giZxrkxSU0OhiOItNAQteA7yVOejNnfREsX8NRmFS-1gRc-PL0vdxtbv_UYC6JhuMQ-Z2w
+
+###

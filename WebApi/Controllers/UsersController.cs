@@ -44,7 +44,7 @@ namespace WebApi.Controllers
 
             (var hashedPwd, var salt) =_hashing.Hash(model.Password);
 
-            _dataService.CreateUser(model.Name, model.UserName, hashedPwd, model.Email,  salt,"user");
+            _dataService.CreateUser(model.Name, model.UserName, hashedPwd, model.Email,  salt, model.Role);
 
             return Ok("Created User");
 
@@ -67,7 +67,8 @@ namespace WebApi.Controllers
             var claims = new List<Claim>
             {
           
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var secret = _configuration.GetSection("Auth:Secret").Value;
@@ -80,7 +81,7 @@ namespace WebApi.Controllers
             var token = new JwtSecurityToken(
                 claims: claims,
                 //Life time on token
-                expires: DateTime.Now.AddSeconds(45),
+                expires: DateTime.Now.AddDays(7),
                 signingCredentials: creds
                 );
 

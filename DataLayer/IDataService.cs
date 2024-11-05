@@ -15,7 +15,7 @@ namespace DataLayer
 
 
     // --USERS for authetication
-   User CreateUser(string name, string username, string password, string email, string role, string salt);
+   User CreateUser(string name, string username, string password, string email, string salt, string role);
 
         // --BOOKMARK--
         IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10);
@@ -56,8 +56,8 @@ namespace DataLayer
         IList<SearchName> GetSearchNames(string searchTerm);
         IList<SearchTitle> GetSearchTitles(string searchTerm);
         // --Name--
-        NameBasic GetNameByNConst(int userId, string nconst);
-    IList<NameBasic> GetAllNames(int userId);
+        NameBasic GetNameByNConst(string nconst);
+    IList<NameBasic> GetAllNames();
 
 
     IList<KnownForTitle> GetKnownForTitlesByName(string nconst);

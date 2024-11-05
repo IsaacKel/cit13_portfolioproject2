@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs;
 using DataLayer;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
@@ -64,6 +65,7 @@ namespace WebApi.Controllers
 
     // -- DELETE USER --
     [HttpDelete("{userId}")]
+    [Authorize(Roles = "admin")]
     public IActionResult DeleteUser(int userId)
     {
       if (_dataService.GetUser(userId) == null) return NotFound();

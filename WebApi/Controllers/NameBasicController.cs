@@ -8,7 +8,7 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+   // [Authorize(Roles = "user")]
     public class NameBasicController : ControllerBase
     {
         private readonly IDataService _dataService;
@@ -20,38 +20,28 @@ namespace WebApi.Controllers
 
         // GET: api/NameBasic/{nconst}
         [HttpGet("{nconst}")]
-        [Authorize]
+     //   [Authorize(Roles = "user")]
         public ActionResult<NameBasic> GetNameBasicByNConst(string nconst)
         {
-            try
-            { 
-              var nameBasic = _dataService.GetNameByNConst(1,nconst);
+            
+              var nameBasic = _dataService.GetNameByNConst(nconst);
               if (nameBasic == null)
                 {
                 return NotFound();
                 }
                 return Ok(nameBasic);
-            }
-            catch
-            {
-                return Unauthorized();
-            }
+             
+          
         }
 
         // GET: api/NameBasic
         [HttpGet]
-        [Authorize]
-
+       // [Authorize(Roles = "admin")]
         public ActionResult<IList<NameBasic>> GetAllNameBasics()
         {
-            try
-            {
-                return Ok(_dataService.GetAllNames(1));  // Assuming this retrieves all NameBasic entries
-            }
-            catch
-            {
-                return Unauthorized();
-            }
+           
+                return Ok(_dataService.GetAllNames());  // Need paging
+      
        }
 }
 }

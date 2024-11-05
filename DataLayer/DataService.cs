@@ -35,7 +35,7 @@ namespace DataLayer
         
 
    //Create user for authentication part
-   public User CreateUser(string name, string username, string password , string email , string salt , string role = "user")
+   public User CreateUser(string name, string username, string password , string email , string salt , string role)
         {
             var user = new User
             {
@@ -45,7 +45,7 @@ namespace DataLayer
                 Password = password,
                 Email = email,
                 Salt = salt,
-                Role = role,
+                Role = role
             };
             _context.Users.Add(user);
             SaveChanges();
@@ -291,22 +291,18 @@ namespace DataLayer
             return _context.SearchTitles.FromSqlInterpolated($"select * from string_search({searchTerm})").ToList();
         }
 
-        //// FAKE list 
-        private readonly List<User> _users = new List<User>         {
-          new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
+        ////// FAKE list 
+        //private readonly List<User> _users = new List<User>         {
+        //  new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
 
     // --Name-- (Actors, Directors, Writers)
-    public NameBasic GetNameByNConst(int userId, string nconst)
+    public NameBasic GetNameByNConst(string nconst)
     {
-        if (_users.FirstOrDefault(x => x.Id ==userId) == null) 
-                throw new ArgumentException("User not found.");
-            return _context.NameBasics.FirstOrDefault(p => p.NConst == nconst);
+        return _context.NameBasics.FirstOrDefault(p => p.NConst == nconst);
     }
 
-    public IList<NameBasic> GetAllNames(int userId)
+    public IList<NameBasic> GetAllNames()
     {
-         if (_users.FirstOrDefault(x => x.Id == userId) == null)
-                throw new ArgumentException("User not found.");
             return _context.NameBasics.ToList();
     }
 
