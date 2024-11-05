@@ -22,14 +22,23 @@ namespace WebApi.Controllers
 
         // --  --
         [HttpGet("{tConst}")]
-        public ActionResult<SimilarMovie> GetSimilarMovies(string tConst)
+        public ActionResult<PagedResponse<SimilarMovie>> GetSimilarMovies(string tConst, int pageNumber = 1, int pageSize = 10)
         {
             var similarMovies = _dataService.GetSimilarMovies(tConst);
-            if (similarMovies == null)
+            if (similarMovies == null || !similarMovies.Any())
             {
                 return NotFound();
             }
-            return Ok(similarMovies);
+
+            var totalItems = similarMovies.Count();
+            var pagedSimilarMovies = similarMovies
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var response = CreatePagedResponse(pagedSimilarMovies, pageNumber, pageSize, totalItems, "GetSimilarMovies");
+
+            return Ok(response);
         }
     }
 }

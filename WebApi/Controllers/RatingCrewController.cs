@@ -22,14 +22,23 @@ namespace WebApi.Controllers
 
         // --  --
         [HttpGet("{tConst}")]
-        public ActionResult<RatingCrew> GetRatingCrew(string tConst)
+        public ActionResult<PagedResponse<RatingCrew>> GetRatingCrew(string tConst, int pageNumber = 1, int pageSize = 10)
         {
             var ratingCrew = _dataService.GetRatingCrew(tConst);
-            if (ratingCrew == null)
+            if (ratingCrew == null || !ratingCrew.Any())
             {
                 return NotFound();
             }
-            return Ok(ratingCrew);
+
+            var totalItems = ratingCrew.Count();
+            var pagedRatingCrew = ratingCrew
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var response = CreatePagedResponse(pagedRatingCrew, pageNumber, pageSize, totalItems, "GetRatingCrew");
+
+            return Ok(response);
         }
     }
 }

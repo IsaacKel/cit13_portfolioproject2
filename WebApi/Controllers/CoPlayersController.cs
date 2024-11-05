@@ -22,14 +22,23 @@ namespace WebApi.Controllers
 
         // --  --
         [HttpGet("{nConst}")]
-        public ActionResult<CoPlayer> GetCoPlayers(string nConst)
+        public ActionResult<PagedResponse<CoPlayer>> GetCoPlayers(string nConst, int pageNumber = 1, int pageSize = 10)
         {
-            var coplayer = _dataService.GetCoPlayers(nConst);
-            if (coplayer == null)
+            var coplayers = _dataService.GetCoPlayers(nConst);
+            if (coplayers == null || !coplayers.Any())
             {
                 return NotFound();
             }
-            return Ok(coplayer);
+
+            var totalItems = coplayers.Count();
+            var pagedCoPlayers = coplayers
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var response = CreatePagedResponse(pagedCoPlayers, pageNumber, pageSize, totalItems, "GetCoPlayers");
+
+            return Ok(response);
         }
     }
 }

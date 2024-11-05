@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using static WebApi.Controllers.SearchController;
 
 namespace WebApi.Controllers
 {
@@ -113,5 +114,46 @@ namespace WebApi.Controllers
     {
       return Url.Action(actionName, routeValues);
     }
-  }
+
+
+        //funcion paging
+
+        protected PagedResponse<T> CreatePagedResponse<T>(IEnumerable<T> items, int pageNumber, int pageSize, int totalItems, string actionName)
+        {
+            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var selfLink = GenerateFullLink(actionName, new { pageNumber, pageSize });
+            var nextPageLink = pageNumber < totalPages ? GenerateFullLink(actionName, new { pageNumber = pageNumber + 1, pageSize }) : null;
+            var prevPageLink = pageNumber > 1 ? GenerateFullLink(actionName, new { pageNumber = pageNumber - 1, pageSize }) : null;
+
+            return new PagedResponse<T>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = totalPages,
+                Self = selfLink,
+                Next = nextPageLink,
+                Previous = prevPageLink,
+                Items = items
+            };
+        }
+        private string GenerateFullLink(string actionName, object routeValues)
+        {
+            var uri = new Uri($"{Request.Scheme}://{Request.Host}{Url.Action(actionName, routeValues)}");
+            return uri.ToString();
+        }
+        public class PagedResponse<T>
+        {
+            public int PageNumber { get; set; }
+            public int PageSize { get; set; }
+            public int TotalItems { get; set; }
+            public int TotalPages { get; set; }
+            public string? Self { get; set; }
+            public string? Next { get; set; }
+            public string? Previous { get; set; }
+            public IEnumerable<T>? Items { get; set; }
+        }
+    }
 }
