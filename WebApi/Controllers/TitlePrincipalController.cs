@@ -7,23 +7,33 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TitlePrincipalController : ControllerBase
+    public class TitlePrincipalController : BaseController
     {
         private readonly IDataService _dataService;
 
-        public TitlePrincipalController(IDataService dataService)
+        public TitlePrincipalController(IDataService dataService, LinkGenerator linkGenerator)
+            : base(linkGenerator)
         {
             _dataService = dataService;
         }
 
         // GET: api/TitlePrincipal/by-name/{nconst}
-        [HttpGet("by-name/{nconst}")]
-        public ActionResult<IList<TitlePrincipal>> GetTitlePrincipalsByName(string nconst)
+        [HttpGet("by-name/{nconst}", Name = "GetTitlePrincipalsByName")]
+        public ActionResult<IEnumerable<TitlePrincipal>> GetTitlePrincipalsByName(string nconst, int page = 1, int pageSize = DefaultPageSize)
         {
-            return Ok(_dataService.GetTitlePrincipalsByName(nconst));
+            var titlePrincipals = _dataService.GetTitlePrincipalsByName(nconst);
+            var totalCount = titlePrincipals.Count;
+
+            // Apply pagination
+            var pagedResult = titlePrincipals.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            var result = CreatePagingNConst("GetTitlePrincipalsByName", nconst, page, pageSize, totalCount, titlePrincipals.Skip((page - 1) * pageSize).Take(pageSize));
+
+            return Ok(result);
         }
 
-       
+
+
         // GET: api/TitlePrincipal/by-title/{tconst}
         [HttpGet("by-title/{tconst}")]
         public ActionResult<IList<TitlePrincipal>> GetTitlePrincipalsByTitle(string tconst)
