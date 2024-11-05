@@ -9,18 +9,19 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class KnownForTitleController : ControllerBase
+    public class KnownForTitleController : BaseController
     {
         private readonly IDataService _dataService;
 
-        public KnownForTitleController(IDataService dataService)
+        public KnownForTitleController(IDataService dataService, LinkGenerator linkGenerator)
+            : base(linkGenerator)
         {
             _dataService = dataService;
         }
 
         // GET: api/KnownForTitle/{nconst}
-        [HttpGet("{nconst}")]
-        public ActionResult<IList<KnownForTitleDto>> GetKnownForTitlesByName(string nconst)
+        [HttpGet("{nconst}", Name = "GetKnownForTitlesByName")]
+        public ActionResult<IList<KnownForTitleDto>> GetKnownForTitlesByName(string nconst, int page = 1, int pageSize = DefaultPageSize)
         {
             var knownForTitles = _dataService.GetKnownForTitlesByName(nconst);
 
@@ -32,7 +33,8 @@ namespace WebApi.Controllers
                 Poster = kft.TitleBasic?.Poster
             }).ToList();
 
-            return Ok(knownForTitleDtos);
+            var result = CreatePagingNConst("GetKnownForTitlesByName", nconst, page, pageSize, knownForTitleDtos.Count, knownForTitleDtos.Skip((page - 1) * pageSize).Take(pageSize));
+            return Ok(result);
         }
     }
 }
