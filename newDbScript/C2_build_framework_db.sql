@@ -37,3 +37,7 @@ CREATE TABLE userBookmarks (
 
 ALTER TABLE userRatings
 ALTER COLUMN rating TYPE integer USING rating::integer; 
+ALTER TABLE users
+ADD COLUMN salt VARCHAR(100),
+ADD COLUMN name VARCHAR(50),
+ADD COLUMN role VARCHAR(50);
