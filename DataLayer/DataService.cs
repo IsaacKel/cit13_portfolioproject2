@@ -32,25 +32,25 @@ namespace DataLayer
 
     private T FindById<T>(int id) where T : class =>
         _context.Set<T>().Find(id);
-        
 
-   //Create user for authentication part
-   public User CreateUser(string name, string username, string password , string email , string salt , string role)
-        {
-            var user = new User
-            {
+
+    //Create user for authentication part
+    public User CreateUser(string name, string username, string password, string email, string salt, string role)
+    {
+      var user = new User
+      {
         //     Id = _context.Users.Max(x => x.Id) + 1,
-                Name = name,
-                Username = username,
-                Password = password,
-                Email = email,
-                Salt = salt,
-                Role = role
-            };
-            _context.Users.Add(user);
-            SaveChanges();
-            return user;
-        }
+        Name = name,
+        Username = username,
+        Password = password,
+        Email = email,
+        Salt = salt,
+        Role = role
+      };
+      _context.Users.Add(user);
+      SaveChanges();
+      return user;
+    }
     // -- USER --
 
     public User AddUser(string username, string password, string email)
@@ -282,38 +282,38 @@ namespace DataLayer
     {
       return _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
     }
-        public IList<SearchName> GetSearchNames(string searchTerm)
-        {
-            return _context.SearchNames.FromSqlInterpolated($"select * from search_names_by_text({searchTerm})").ToList();
-        }
-        public IList<SearchTitle> GetSearchTitles(string searchTerm)
-        {
-            return _context.SearchTitles.FromSqlInterpolated($"select * from string_search({searchTerm})").ToList();
-        }
+    public IList<SearchName> GetSearchNames(string searchTerm)
+    {
+      return _context.SearchNames.FromSqlInterpolated($"select * from search_names_by_text({searchTerm})").ToList();
+    }
+    public IList<SearchTitle> GetSearchTitles(string searchTerm)
+    {
+      return _context.SearchTitles.FromSqlInterpolated($"select * from string_search({searchTerm})").ToList();
+    }
 
-        ////// FAKE list 
-        //private readonly List<User> _users = new List<User>         {
-        //  new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
+    ////// FAKE list 
+    //private readonly List<User> _users = new List<User>         {
+    //  new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
 
     // --Name-- (Actors, Directors, Writers)
     public NameBasic GetNameByNConst(string nconst)
     {
-        return _context.NameBasics.FirstOrDefault(p => p.NConst == nconst);
+      return _context.NameBasics.FirstOrDefault(p => p.NConst == nconst);
     }
 
     public IList<NameBasic> GetAllNames()
     {
-            return _context.NameBasics.ToList();
+      return _context.NameBasics.ToList();
     }
 
 
     public IList<TitleCharacter> GetTitleCharactersByName(string nconst)
     {
       return _context.TitleCharacters
-                     .Where(tc => tc.NConst == nconst)
-                     .ToList();
+                           .Include(tc => tc.TitleBasic)
+                           .Where(tc => tc.NConst == nconst)
+                           .ToList();
     }
-
 
     // --TITLE PRINCIPALS--
     public IList<TitlePrincipal> GetTitlePrincipalsByName(string nconst)

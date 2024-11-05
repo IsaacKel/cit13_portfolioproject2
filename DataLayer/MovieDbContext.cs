@@ -34,10 +34,10 @@ public class MovieDbContext : DbContext
   public DbSet<TitleRating> TitleRatings { get; set; }
   public DbSet<TitleLanguage> TitleLanguages { get; set; }
   public DbSet<TitleAka> TitleAkas { get; set; }
-    public DbSet<SearchName> SearchNames { get; set; }
-    public DbSet<SearchTitle> SearchTitles { get; set; }
+  public DbSet<SearchName> SearchNames { get; set; }
+  public DbSet<SearchTitle> SearchTitles { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     MapUsers(modelBuilder);
     MapBookmarks(modelBuilder);
@@ -60,9 +60,9 @@ public class MovieDbContext : DbContext
     MapTitleRating(modelBuilder);
     MapTitleLanguages(modelBuilder);
     MapTitleAkas(modelBuilder);
-        MapSearchNames(modelBuilder);
-        MapSearchTitles(modelBuilder);
-    }
+    MapSearchNames(modelBuilder);
+    MapSearchTitles(modelBuilder);
+  }
   //User Table Mapping
   private static void MapUsers(ModelBuilder modelBuilder)
   {
@@ -75,7 +75,7 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<User>().Property(u => u.Salt).HasColumnName("salt");
     modelBuilder.Entity<User>().Property(u => u.Role).HasColumnName("role");
     modelBuilder.Entity<User>().Property(u => u.Name).HasColumnName("name");
-    }
+  }
 
   //Bookmark Table Mapping
   private static void MapBookmarks(ModelBuilder modelBuilder)
@@ -133,6 +133,11 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<TitleCharacter>().Property(tc => tc.Character).HasColumnName("character");
     modelBuilder.Entity<TitleCharacter>().Property(tc => tc.Ordering).HasColumnName("ordering");
 
+    modelBuilder.Entity<TitleCharacter>()
+      .HasOne(tc => tc.TitleBasic)
+      .WithMany()
+      .HasForeignKey(tc => tc.TConst)
+      .HasPrincipalKey(tb => tb.TConst);
   }
 
   // MapKnownForTitles method
@@ -144,6 +149,7 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<KnownForTitle>().Property(k => k.KnownForTitles).HasColumnName("knownfortitles");
 
   }
+
   // MapTitlePrincipals method
   private static void MapTitlePrincipals(ModelBuilder modelBuilder)
   {
@@ -154,8 +160,8 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.Ordering).HasColumnName("ordering");
     modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.Category).HasColumnName("category");
     modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.Job).HasColumnName("job");
- 
-    }
+
+  }
 
   // MapTitleBasic method
   private static void MapTitleBasic(ModelBuilder modelBuilder)
@@ -210,23 +216,23 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<SimilarMovie>().Property(c => c.PrimaryTitle).HasColumnName("primarytitle");
     modelBuilder.Entity<SimilarMovie>().Property(c => c.NumVotes).HasColumnName("numvotes");
   }
-    public static void MapSearchNames(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<SearchName>().HasNoKey();
-        modelBuilder.Entity<SearchName>().Property(sn => sn.NConst).HasColumnName("nconst");
-        modelBuilder.Entity<SearchName>().Property(sn => sn.PrimaryName).HasColumnName("primaryname");
-    }
-    public static void MapSearchTitles(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<SearchTitle>().HasNoKey();
-        modelBuilder.Entity<SearchTitle>().Property(st => st.TConst).HasColumnName("tconst");
-        modelBuilder.Entity<SearchTitle>().Property(st => st.PrimaryTitle).HasColumnName("title");
-    }
-    // modelBuilder.Entity<TitleBasic>().Property(tb => tb.PrimaryTitle).HasColumnName("primarytitle");
-    // modelBuilder.Entity<TitleBasic>().Property(tb => tb.TitleType).HasColumnName("titletype");
-    // modelBuilder.Entity<TitleBasic>().Property(tb => tb.StartYear).HasColumnName("startyear");
+  public static void MapSearchNames(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<SearchName>().HasNoKey();
+    modelBuilder.Entity<SearchName>().Property(sn => sn.NConst).HasColumnName("nconst");
+    modelBuilder.Entity<SearchName>().Property(sn => sn.PrimaryName).HasColumnName("primaryname");
+  }
+  public static void MapSearchTitles(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<SearchTitle>().HasNoKey();
+    modelBuilder.Entity<SearchTitle>().Property(st => st.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<SearchTitle>().Property(st => st.PrimaryTitle).HasColumnName("title");
+  }
+  // modelBuilder.Entity<TitleBasic>().Property(tb => tb.PrimaryTitle).HasColumnName("primarytitle");
+  // modelBuilder.Entity<TitleBasic>().Property(tb => tb.TitleType).HasColumnName("titletype");
+  // modelBuilder.Entity<TitleBasic>().Property(tb => tb.StartYear).HasColumnName("startyear");
 
-    private static void MapTitleCountries(ModelBuilder modelBuilder)
+  private static void MapTitleCountries(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<TitleCountry>().ToTable("titlecountries");
     modelBuilder.Entity<TitleCountry>().HasKey(tc => new { tc.TConst, tc.Country });

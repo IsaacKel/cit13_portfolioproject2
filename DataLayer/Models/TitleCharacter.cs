@@ -10,7 +10,8 @@ namespace DataLayer.Models
         public string NConst { get; set; }
         public string? TConst { get; set; }
         public string? Character { get; set; }
-
         public int Ordering { get; set; }
+        public TitleBasic TitleBasic { get; set; }
+
     }
 }
