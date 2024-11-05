@@ -22,8 +22,15 @@ namespace cit13_portfolioproject2.Tests
     /// Deserializes the response content to the specified type.
     public static async Task<T?> DeserializeData<T>(HttpResponseMessage response) where T : class
     {
-      var data = await response.Content.ReadAsStringAsync();
-      return JsonSerializer.Deserialize<T>(data);
+            var data = await response.Content.ReadAsStringAsync();
+
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                return null;
+            }
+
+            return JsonSerializer.Deserialize<T>(data);
+        
     }
 
     /// Creates a JSON StringContent for HTTP requests.
