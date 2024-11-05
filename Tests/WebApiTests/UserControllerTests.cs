@@ -61,7 +61,8 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
       {
         Username = "newusertest",
         Password = "password123",
-        Email = "newuser@example.com"
+        Email = "newuser@example.com",
+        Name = "test"
       };
       var (user, statusCode) = await HelperTest.PostData($"{UsersApi}/register", newUser);
 

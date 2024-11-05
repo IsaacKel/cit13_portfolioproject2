@@ -61,6 +61,7 @@ namespace cit13_portfolioproject2.WebApiTests.UserRatingControllerTests
         UserId = 1,
         TConst = "tt16120138",
         Rating = 8,
+        Name = "test"
       };
       var (rating, statusCode) = await HelperTest.PostData($"{UserRatingsApi}", newRating);
 
