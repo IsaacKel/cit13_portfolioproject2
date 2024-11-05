@@ -334,6 +334,7 @@ namespace DataLayer
     public IList<KnownForTitle> GetKnownForTitlesByName(string nconst)
     {
       return _context.KnownForTitles
+                    .Include(k => k.TitleBasic)
                      .Where(k => k.NConst == nconst)
                      .ToList();
     }

@@ -1,4 +1,6 @@
-﻿using DataLayer;
+﻿using WebApi.DTOs;
+using System.Linq;
+using DataLayer;
 using DataLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -18,10 +20,19 @@ namespace WebApi.Controllers
 
         // GET: api/KnownForTitle/{nconst}
         [HttpGet("{nconst}")]
-        public ActionResult<IList<KnownForTitle>> GetKnownForTitlesByName(string nconst)
+        public ActionResult<IList<KnownForTitleDto>> GetKnownForTitlesByName(string nconst)
         {
-            return Ok(_dataService.GetKnownForTitlesByName(nconst));
-        }
+            var knownForTitles = _dataService.GetKnownForTitlesByName(nconst);
 
+            var knownForTitleDtos = knownForTitles.Select(kft => new KnownForTitleDto
+            {
+                NConst = kft.NConst,
+                KnownForTitles = kft.KnownForTitles,
+                PrimaryTitle = kft.TitleBasic?.PrimaryTitle,
+                Poster = kft.TitleBasic?.Poster
+            }).ToList();
+
+            return Ok(knownForTitleDtos);
+        }
     }
 }

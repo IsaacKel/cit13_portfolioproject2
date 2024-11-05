@@ -147,6 +147,11 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<KnownForTitle>().HasKey(k => new { k.NConst, k.KnownForTitles });
     modelBuilder.Entity<KnownForTitle>().Property(k => k.NConst).HasColumnName("nconst");
     modelBuilder.Entity<KnownForTitle>().Property(k => k.KnownForTitles).HasColumnName("knownfortitles");
+    modelBuilder.Entity<KnownForTitle>()
+  .HasOne(k => k.TitleBasic)
+  .WithMany()
+  .HasForeignKey(k => k.KnownForTitles)
+  .HasPrincipalKey(tb => tb.TConst);
 
   }
 
