@@ -58,7 +58,8 @@ namespace DataLayer
         void rate(string tConst, int rating, int userId);
         // --Name--
         NameBasic GetNameByNConst(string nconst);
-    IList<NameBasic> GetAllNames();
+    IList<NameBasic> GetAllNames(int pageNumber = 1, int pageSize = 10);
+        int GetAllNamesCount();
 
 
     IList<KnownForTitle> GetKnownForTitlesByName(string nconst);

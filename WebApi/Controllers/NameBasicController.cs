@@ -33,14 +33,17 @@ namespace WebApi.Controllers
 
         // GET: api/NameBasic
         [HttpGet(Name = "GetAllNameBasics")]
-        public ActionResult<IList<NameBasic>> GetAllNameBasics(int page = 1, int pageSize = DefaultPageSize)
+        public ActionResult<IList<NameBasic>> GetAllNameBasics(int pageNumber = 1, int pageSize = DefaultPageSize)
         {
             var allNames = _dataService.GetAllNames();
+            var totalItems = _dataService.GetAllNamesCount();
+            foreach (var name in allNames)
+            {
+                name.NConst = new Uri($"{Request.Scheme}://{Request.Host}/api/namebasic/{name.NConst}").ToString();
+            }
 
-            var paginatedNames = CreatePaging("GetAllNameBasics", page, pageSize, allNames.Count,
-                                              allNames.Skip((page - 1) * pageSize).Take(pageSize));
-
-            return Ok(paginatedNames);
+            var pagedResponse = CreatePagedResponse(allNames, pageNumber, pageSize, totalItems, "GetAllNameBasics");
+            return Ok(pagedResponse);
         }
     }
 }

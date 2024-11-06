@@ -305,13 +305,18 @@ namespace DataLayer
       return _context.NameBasics.FirstOrDefault(p => p.NConst == nconst);
     }
 
-    public IList<NameBasic> GetAllNames()
-    {
-      return _context.NameBasics.ToList();
-    }
+        public IList<NameBasic> GetAllNames(int pageNumber = 1, int pageSize = 10)
+        {
+            var query = _context.NameBasics.AsQueryable();
+            return GetPagedResults(query, pageNumber, pageSize);
+        }
+        public int GetAllNamesCount()
+        {
+            return _context.NameBasics.Count();
+        }
 
 
-    public IList<TitleCharacter> GetTitleCharactersByName(string nconst)
+        public IList<TitleCharacter> GetTitleCharactersByName(string nconst)
     {
       return _context.TitleCharacters
                            .Include(tc => tc.TitleBasic)
