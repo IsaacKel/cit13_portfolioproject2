@@ -55,6 +55,7 @@ namespace DataLayer
     IList<SimilarMovie> GetSimilarMovies(string tConst);
         IList<SearchName> GetSearchNames(string searchTerm);
         IList<SearchTitle> GetSearchTitles(string searchTerm);
+        void rate(string tConst, int rating, int userId);
         // --Name--
         NameBasic GetNameByNConst(string nconst);
     IList<NameBasic> GetAllNames();

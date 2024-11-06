@@ -290,13 +290,17 @@ namespace DataLayer
     {
       return _context.SearchTitles.FromSqlInterpolated($"select * from string_search({searchTerm})").ToList();
     }
+        public void rate(string tConst, int rating, int userId)
+        {
+            _context.Database.ExecuteSqlInterpolated($"CALL rate({tConst}, {rating}, {userId})");
+        }
 
-    ////// FAKE list 
-    //private readonly List<User> _users = new List<User>         {
-    //  new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
+        ////// FAKE list 
+        //private readonly List<User> _users = new List<User>         {
+        //  new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
 
-    // --Name-- (Actors, Directors, Writers)
-    public NameBasic GetNameByNConst(string nconst)
+        // --Name-- (Actors, Directors, Writers)
+        public NameBasic GetNameByNConst(string nconst)
     {
       return _context.NameBasics.FirstOrDefault(p => p.NConst == nconst);
     }
