@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Xunit;
 using cit13_portfolioproject2.Tests;
+using Newtonsoft.Json.Linq;
 
 namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
 {
@@ -143,13 +144,27 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
         {
             var newUser = new
             {
-                Username = "todelete",
-                Password = "password123",
-                Email = "todelete@example.com",
-                Role = "user",
-                Name = "testter"
+                Username = "login_test_user",
+                Password = "loginPassword123",
+                Email = "login_test@example.com",
+                Role = "admin",
+                Name = "Test User"
             };
+
+            var loginCredentials = new
+            {
+                UserName = "login_test_user",
+                Password = "loginPassword123",
+                Email = "login_test@example.com"
+            };
+
             var (user, _) = await HelperTest.PostData($"{UsersApi}/register", newUser);
+
+            var (loginResponseContent, loginStatusCode) = await HelperTest.PutData($"{UsersApi}", loginCredentials);
+            var token = loginResponseContent["token"]?.ToString();
+            HelperTest.SetAuthorizationHeader(token);
+
+           
 
             // delete user
             string? id = user?["id"]?.ToString();
@@ -165,20 +180,12 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
         [Fact]
         public async Task ApiUsers_DeleteUserWithInvalidId_NotFound()
         {
-            var statusCode = await HelperTest.DeleteData($"{UsersApi}/999");
-
-            Assert.Equal(HttpStatusCode.NotFound, statusCode);
-        }
-
-        [Fact]
-        public async Task ApiUsers_Login_ValidCredentials_ReturnsToken()
-        {
             var newUser = new
             {
                 Username = "login_test_user",
                 Password = "loginPassword123",
                 Email = "login_test@example.com",
-                Role = "user",
+                Role = "admin",
                 Name = "Test User"
             };
             await HelperTest.PostData($"{UsersApi}/register", newUser);
@@ -190,7 +197,44 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
                 Email = "login_test@example.com"
             };
 
-            //  var (responseContent, statusCode) = await HelperTest.PutData($"{UsersApi}/login", loginCredentials);
+            var (loginResponseContent, loginStatusCode) = await HelperTest.PutData($"{UsersApi}", loginCredentials);
+            var token = loginResponseContent["token"]?.ToString();
+            HelperTest.SetAuthorizationHeader(token);
+      
+            var statusCode = await HelperTest.DeleteData($"{UsersApi}/999");
+
+            Assert.Equal(HttpStatusCode.NotFound, statusCode);
+
+            // Cleanup
+            string? id = (await HelperTest.GetObject($"{UsersApi}/username/{newUser.Username}")).Item1?["id"]?.ToString();
+            if (id != null)
+            {
+                await HelperTest.DeleteData($"{UsersApi}/{id}");
+            }
+
+
+        }
+
+        [Fact]
+        public async Task ApiUsers_Login_ValidCredentials_ReturnsToken()
+        {
+            var newUser = new
+            {
+                Username = "login_test_user",
+                Password = "loginPassword123",
+                Email = "login_test@example.com",
+                Role = "admin",
+                Name = "Test User"
+            };
+            await HelperTest.PostData($"{UsersApi}/register", newUser);
+
+            var loginCredentials = new
+            {
+                UserName = "login_test_user",
+                Password = "loginPassword123",
+                Email = "login_test@example.com"
+            };
+
             var (responseContent, statusCode) = await HelperTest.PutData($"{UsersApi}", loginCredentials);
 
             // Check if login was successful and a JWT token is returned
