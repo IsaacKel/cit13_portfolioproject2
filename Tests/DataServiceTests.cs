@@ -3,6 +3,7 @@ using DataLayer.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace Assignment4.Tests
@@ -71,16 +72,14 @@ namespace Assignment4.Tests
             // Ensure the user exists
           var newUser = service.CreateUser(_newUser.Name, _newUser.Username, _newUser.Password, _newUser.Email, "salt", _newUser.Role);
 
-       
             Assert.True(newUser.Id > 0);
 
-            // Add rating for the newly created user
-            var rating = service.AddUserRating(newUser.Id, "tt26919084", 5);
-            Assert.Equal(5, rating.Rating);
+             service.rate("tt26919084", 5, newUser.Id);
+     
 
-            //var ratings = service.GetUserRatings(newUser.Id);
-            //Assert.NotEmpty(ratings);
-            //Assert.Equal(5, ratings.First().Rating);
+            var ratings = service.GetUserRatings(newUser.Id);
+            Assert.NotEmpty(ratings);
+            Assert.Equal(5, ratings.First().Rating);
 
             //// Cleanup
             //service.DeleteUserRating(rating.Id);
