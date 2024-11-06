@@ -22,7 +22,7 @@ namespace WebApi.Controllers
 
         // --  --
         [HttpGet("{tConst}")]
-        public ActionResult<PagedResponse<RatingActor>> GetRatingActors(string tConst, int pageNumber = 1, int pageSize = 10)
+        public ActionResult<PagedResponse<RatingActor>> GetRatingActors(string tConst, int pageNumber = 1, int pageSize = DefaultPageSize)
         {
             var ratingActors = _dataService.GetRatingActors(tConst);
             if (ratingActors == null || !ratingActors.Any())
@@ -35,6 +35,13 @@ namespace WebApi.Controllers
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
+            foreach (var name in pagedRatingActors)
+            {
+                if (name.NConst != null)
+                {
+                    name.NConst = new Uri($"{Request.Scheme}://{Request.Host}/api/NameBasic/{name.NConst}").ToString();
+                }
+            }
 
             var response = CreatePagedResponse(pagedRatingActors, pageNumber, pageSize, totalItems, "GetRatingActors");
 

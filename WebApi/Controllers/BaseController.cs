@@ -129,30 +129,26 @@ namespace WebApi.Controllers
 
             return new PagedResponse<T>
             {
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalItems = totalItems,
-                TotalPages = totalPages,
-                Self = selfLink,
-                Next = nextPageLink,
-                Previous = prevPageLink,
+                numberOfItems = totalItems,
+                numberPages = totalPages,
+                curPage = selfLink,
+                nextPage = nextPageLink,
+                prevPage = prevPageLink,
                 Items = items
             };
         }
-        private string GenerateFullLink(string actionName, object routeValues)
+        protected string GenerateFullLink(string actionName, object routeValues)
         {
             var uri = new Uri($"{Request.Scheme}://{Request.Host}{Url.Action(actionName, routeValues)}");
             return uri.ToString();
         }
         public class PagedResponse<T>
         {
-            public int PageNumber { get; set; }
-            public int PageSize { get; set; }
-            public int TotalItems { get; set; }
-            public int TotalPages { get; set; }
-            public string? Self { get; set; }
-            public string? Next { get; set; }
-            public string? Previous { get; set; }
+            public string? curPage { get; set; }
+            public string? nextPage { get; set; }
+            public string? prevPage { get; set; }
+            public int numberOfItems { get; set; }
+            public int numberPages { get; set; }
             public IEnumerable<T>? Items { get; set; }
         }
     }

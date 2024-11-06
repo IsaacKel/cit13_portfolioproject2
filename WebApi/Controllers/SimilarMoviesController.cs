@@ -4,6 +4,7 @@ using DataLayer;
 using Mapster;
 using System;
 using DataLayer.Models;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace WebApi.Controllers
 {
@@ -22,7 +23,7 @@ namespace WebApi.Controllers
 
         // --  --
         [HttpGet("{tConst}")]
-        public ActionResult<PagedResponse<SimilarMovie>> GetSimilarMovies(string tConst, int pageNumber = 1, int pageSize = 10)
+        public ActionResult<PagedResponse<SimilarMovie>> GetSimilarMovies(string tConst, int pageNumber = 1, int pageSize = DefaultPageSize)
         {
             var similarMovies = _dataService.GetSimilarMovies(tConst);
             if (similarMovies == null || !similarMovies.Any())
@@ -35,6 +36,13 @@ namespace WebApi.Controllers
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
+            foreach (var title in pagedSimilarMovies)
+            {
+                if (title.TConst != null)
+                {
+                    title.TConst = new Uri($"{Request.Scheme}://{Request.Host}/api/Title/{title.TConst}").ToString();
+                }
+            }
 
             var response = CreatePagedResponse(pagedSimilarMovies, pageNumber, pageSize, totalItems, "GetSimilarMovies");
 

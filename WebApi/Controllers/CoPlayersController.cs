@@ -22,7 +22,7 @@ namespace WebApi.Controllers
 
         // --  --
         [HttpGet("{nConst}")]
-        public ActionResult<PagedResponse<CoPlayer>> GetCoPlayers(string nConst, int pageNumber = 1, int pageSize = 10)
+        public ActionResult<PagedResponse<CoPlayer>> GetCoPlayers(string nConst, int pageNumber = 1, int pageSize = DefaultPageSize)
         {
             var coplayers = _dataService.GetCoPlayers(nConst);
             if (coplayers == null || !coplayers.Any())
@@ -35,6 +35,13 @@ namespace WebApi.Controllers
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
+            foreach (var name in pagedCoPlayers)
+            {
+                if (name.NConst != null)
+                {
+                    name.NConst = new Uri($"{Request.Scheme}://{Request.Host}/api/NameBasic/{name.NConst}").ToString();
+                }
+            }
 
             var response = CreatePagedResponse(pagedCoPlayers, pageNumber, pageSize, totalItems, "GetCoPlayers");
 

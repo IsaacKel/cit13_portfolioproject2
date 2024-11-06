@@ -6,6 +6,7 @@ using System;
 using DataLayer.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace WebApi.Controllers
 {
@@ -22,7 +23,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("name/{searchTerm}")]
-        public ActionResult<PagedResponse<SearchName>> GetSearchNames(string searchTerm, int pageNumber = 1, int pageSize = 10)
+        public ActionResult<PagedResponse<SearchName>> GetSearchNames(string searchTerm, int pageNumber = 1, int pageSize = DefaultPageSize)
         {
             var names = _dataService.GetSearchNames(searchTerm);
             if (names == null || !names.Any())
@@ -36,13 +37,22 @@ namespace WebApi.Controllers
                 .Take(pageSize)
                 .ToList();
 
+            // Replace nconst with self-link
+                foreach (var name in pagedNames)
+                {
+                if (name.NConst != null)
+                { 
+                    name.NConst = new Uri($"{Request.Scheme}://{Request.Host}/api/NameBasic/{name.NConst}").ToString();
+                }
+            }
+
             var response = CreatePagedResponse(pagedNames, pageNumber, pageSize, totalItems, "GetSearchNames");
 
             return Ok(response);
         }
 
         [HttpGet("title/{searchTerm}")]
-        public ActionResult<PagedResponse<SearchTitle>> GetSearchTitles(string searchTerm, int pageNumber = 1, int pageSize = 10)
+        public ActionResult<PagedResponse<SearchTitle>> GetSearchTitles(string searchTerm, int pageNumber = 1, int pageSize = DefaultPageSize)
         {
             var titles = _dataService.GetSearchTitles(searchTerm);
             if (titles == null || !titles.Any())
@@ -56,9 +66,19 @@ namespace WebApi.Controllers
                 .Take(pageSize)
                 .ToList();
 
+            // Replace tconst with self-link
+            foreach (var title in pagedTitles)
+            {
+                if (title.TConst != null)
+                {
+                    title.TConst = new Uri($"{Request.Scheme}://{Request.Host}/api/Title/{title.TConst}").ToString();
+                }
+            }
+
             var response = CreatePagedResponse(pagedTitles, pageNumber, pageSize, totalItems, "GetSearchTitles");
 
             return Ok(response);
         }
+
     }
 }
