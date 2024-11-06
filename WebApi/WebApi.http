@@ -1,7 +1,7 @@
 @WebApi_HostAddress = https://localhost:5003
 
 //Create a user. Encryption is done on the password before it is stored in the database.
-POST {{WebApi_HostAddress}}/api/v3/users
+POST {{WebApi_HostAddress}}/api/v3/user
 Accept: application/json
 Content-Type: application/json
 {
@@ -14,7 +14,7 @@ Content-Type: application/json
 
 ###
 //Create admin user
-POST {{WebApi_HostAddress}}/api/v3/users
+POST {{WebApi_HostAddress}}/api/v3/user
 Accept: application/json
 Content-Type: application/json
 {
@@ -29,7 +29,7 @@ Content-Type: application/json
 
 
 //Login to User - Copy returned token and paste in Authorization header
-PUT {{WebApi_HostAddress}}/api/v3/users
+PUT {{WebApi_HostAddress}}/api/v3/user
 Accept: application/json
 Content-Type: application/json
 {
@@ -40,7 +40,7 @@ Content-Type: application/json
 ###
 
 //Login to Admin - Copy returned token and paste in Authorization header
-PUT {{WebApi_HostAddress}}/api/v3/users
+PUT {{WebApi_HostAddress}}/api/v3/user
 Accept: application/json
 Content-Type: application/json
 {

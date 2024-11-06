@@ -75,14 +75,29 @@ namespace cit13_portfolioproject2.Tests
     }
 
     /// Sends a PUT request with JSON content and returns the status code.
-    public static async Task<HttpStatusCode> PutData(string url, object content)
+   public static async Task<(JsonNode?, HttpStatusCode)> PutData(string url, object content)
+{
+    var response = await client.PutAsync(url, CreateJsonContent(content));
+    JsonNode? responseContent = null;
+
+    if (response.Content.Headers.ContentType?.MediaType == "application/json")
     {
-      var response = await client.PutAsync(url, CreateJsonContent(content));
-      return response.StatusCode;
+        var contentString = await response.Content.ReadAsStringAsync();
+        responseContent = JsonNode.Parse(contentString);
     }
 
-    /// Sends a DELETE request and returns the status code.
-    public static async Task<HttpStatusCode> DeleteData(string url)
+    return (responseContent, response.StatusCode);
+
+}
+        public static async Task<HttpStatusCode> PutDataStatusOnly(string url, object content)
+        {
+            var response = await client.PutAsync(url, CreateJsonContent(content));
+            return response.StatusCode;
+        }
+
+
+        /// Sends a DELETE request and returns the status code.
+        public static async Task<HttpStatusCode> DeleteData(string url)
     {
       var response = await client.DeleteAsync(url);
       return response.StatusCode;

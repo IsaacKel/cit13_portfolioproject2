@@ -136,7 +136,7 @@ namespace cit13_portfolioproject2.WebApiTests.UserRatingControllerTests
         Rating = 9
       };
       string? updateUrl = $"{UserRatingsApi}/{newRating.UserId}/{rating?["id"]?.ToString()}";
-      var statusCode = await HelperTest.PutData(updateUrl, updatedRating);
+      var statusCode = await HelperTest.PutDataStatusOnly(updateUrl, updatedRating);
 
       Assert.Equal(HttpStatusCode.NoContent, statusCode);
 

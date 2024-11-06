@@ -169,5 +169,43 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
 
             Assert.Equal(HttpStatusCode.NotFound, statusCode);
         }
+
+        [Fact]
+        public async Task ApiUsers_Login_ValidCredentials_ReturnsToken()
+        {
+            var newUser = new
+            {
+                Username = "login_test_user",
+                Password = "loginPassword123",
+                Email = "login_test@example.com",
+                Role = "user",
+                Name = "Test User"
+            };
+            await HelperTest.PostData($"{UsersApi}/register", newUser);
+
+            var loginCredentials = new
+            {
+                UserName = "login_test_user",
+                Password = "loginPassword123",
+                Email = "login_test@example.com"
+            };
+
+            //  var (responseContent, statusCode) = await HelperTest.PutData($"{UsersApi}/login", loginCredentials);
+            var (responseContent, statusCode) = await HelperTest.PutData($"{UsersApi}", loginCredentials);
+
+            // Check if login was successful and a JWT token is returned
+            Assert.Equal(HttpStatusCode.OK, statusCode);
+            Assert.NotNull(responseContent);
+            Assert.True(responseContent?["token"] != null);
+
+            // Cleanup
+            string? id = (await HelperTest.GetObject($"{UsersApi}/username/{newUser.Username}")).Item1?["id"]?.ToString();
+            if (id != null)
+            {
+                await HelperTest.DeleteData($"{UsersApi}/{id}");
+            }
+        }
+
+
     }
 }

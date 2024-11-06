@@ -101,7 +101,7 @@ namespace cit13_portfolioproject2.WebApiTests
         Note = "Updated Note"
       };
 
-      statusCode = await HelperTest.PutData(putUrl, update);
+      statusCode = await HelperTest.PutDataStatusOnly(putUrl, update);
       Assert.Equal(HttpStatusCode.NoContent, statusCode);
 
       // Verify update
