@@ -121,6 +121,7 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<NameBasic>().Property(p => p.BirthYear).HasColumnName("birthyear");
     modelBuilder.Entity<NameBasic>().Property(p => p.DeathYear).HasColumnName("deathyear");
     modelBuilder.Entity<NameBasic>().Property(p => p.ActualName).HasColumnName("primaryname");
+        modelBuilder.Entity<NameBasic>().Property(p => p.NRating).HasColumnName("nrating");
   }
 
   // MapTitleCharacters method
