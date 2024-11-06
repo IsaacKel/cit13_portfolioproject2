@@ -6,14 +6,14 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Xunit;
 
-namespace Assignment4.Tests
+namespace DataLayer.Tests
 {
-  public class UserBookmarkTests
+  public class DataServiceTests
   {
     private IConfiguration configuration;
     private DataService service;
 
-    public UserBookmarkTests()
+    public DataServiceTests()
     {
       var inMemorySettings = new Dictionary<string, string?>
             {

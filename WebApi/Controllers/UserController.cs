@@ -218,7 +218,7 @@ namespace WebApi.Controllers
 
     // -- DELETE USER --
     [HttpDelete("{userId}")]
-   // [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin")]
     public IActionResult DeleteUser(int userId)
     {
       if (_dataService.GetUser(userId) == null) return NotFound("Coundn't deplete, because ID not found");

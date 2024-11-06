@@ -6,7 +6,7 @@ using Xunit;
 using cit13_portfolioproject2.Tests;
 using Newtonsoft.Json.Linq;
 
-namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
+namespace Tests.WebApiTests
 {
     public class UserControllerTests
     {
