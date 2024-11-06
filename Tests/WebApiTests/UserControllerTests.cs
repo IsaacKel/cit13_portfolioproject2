@@ -17,13 +17,33 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
         [Fact]
         public async Task ApiUsers_GetUserWithValidId_OkAndUserDetails()
         {
-            int userId = 1;
-            var (user, statusCode) = await HelperTest.GetObject($"{UsersApi}/{userId}");
-            //await HelperTest.GetObject($"{UsersApi}/{userId}");
+            // Creating a user for test
+            var newUser = new
+            {
+                Username = "Bree",
+                Password = "password123",
+                Email = "normal@example.com",
+                Role = "user",
+                Name = "Bree Sunshiner"
+            };
+            await HelperTest.PostData($"{UsersApi}/register", newUser);
+            string username = "Bree";
+            var (_user, _statusCode) = await HelperTest.GetObject($"{UsersApi}/username/{username}");
 
-            Assert.Equal(HttpStatusCode.OK, statusCode);
-            Assert.NotNull(user);
-            Assert.Equal(userId, user?.ValueInt("id"));
+
+
+            string? id = _user?["id"]?.ToString();
+            if (id != null)
+            {
+
+                var (user, statusCode) = await HelperTest.GetObject($"{UsersApi}/{id}");
+                Assert.Equal(HttpStatusCode.OK, statusCode);
+                Assert.NotNull(user);
+                Assert.Equal(id, user?["id"]?.ToString());
+
+                //Clean up after test
+                await HelperTest.DeleteData($"{UsersApi}/{id}");
+            }
         }
 
         [Fact]
@@ -38,7 +58,7 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
         [Fact]
         public async Task ApiUsers_GetUserByUsernameWithValidUsername_OkAndUserDetails()
         {
-           // Creating a user for test
+            // Creating a user for test
             var newUser = new
             {
                 Username = "john_doe",
@@ -83,7 +103,8 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
                 Username = "newusertest",
                 Password = "password123",
                 Email = "newuser@example.com",
-                Name = "test"
+                Name = "test",
+                Role = "user",
             };
             var (user, statusCode) = await HelperTest.PostData($"{UsersApi}/register", newUser);
 
@@ -108,7 +129,8 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
                 Username = "",
                 Password = "123",
                 Email = "invalidemail",
-                Role = "invalidrole"
+                Role = "invalidrole",
+                Name = "Perry"
 
             };
             var (_, statusCode) = await HelperTest.PostData($"{UsersApi}/register", invalidUser);
@@ -130,10 +152,8 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
             var (user, _) = await HelperTest.PostData($"{UsersApi}/register", newUser);
 
             // delete user
-
             string? id = user?["id"]?.ToString();
-            //string? id = "48";
-            //user?["id"]?.ToString();
+
             if (id != null)
             {
                 var statusCode = await HelperTest.DeleteData($"{UsersApi}/{id}");
