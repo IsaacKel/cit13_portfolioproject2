@@ -22,7 +22,7 @@ Content-Type: application/json
   "userName" : "userAdmin",
   "email" : "user@AminMail.com",
   "password" : "Guest123",
-  "role" : "amin"
+  "role" : "admin"
 }
 
 ###

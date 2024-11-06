@@ -9,7 +9,7 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
 {
   public class UserControllerTests
   {
-    private const string UsersApi = "http://localhost:5002/api/user";
+    private const string UsersApi = "http://localhost:5002/api/v3/user";
     private static readonly HttpClient client = new HttpClient();
 
     /* /api/user */
@@ -19,8 +19,9 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
     {
       int userId = 1;
       var (user, statusCode) = await HelperTest.GetObject($"{UsersApi}/{userId}");
+            //await HelperTest.GetObject($"{UsersApi}/{userId}");
 
-      Assert.Equal(HttpStatusCode.OK, statusCode);
+            Assert.Equal(HttpStatusCode.OK, statusCode);
       Assert.NotNull(user);
       Assert.Equal(userId, user?.ValueInt("id"));
     }
@@ -86,7 +87,9 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
       {
         Username = "",
         Password = "123",
-        Email = "invalidemail"
+        Email = "invalidemail",
+        Role = "invalidrole"
+
       };
       var (_, statusCode) = await HelperTest.PostData($"{UsersApi}/register", invalidUser);
 
@@ -96,18 +99,23 @@ namespace cit13_portfolioproject2.WebApiTests.UserControllerTests
     [Fact]
     public async Task ApiUsers_DeleteUserWithValidId_NoContent()
     {
-      var newUser = new
-      {
-        Username = "todelete",
-        Password = "password123",
-        Email = "todelete@example.com"
-      };
-      var (user, _) = await HelperTest.PostData($"{UsersApi}/register", newUser);
+            var newUser = new
+            {
+                Username = "todelete",
+                Password = "password123",
+                Email = "todelete@example.com",
+                Role = "user",
+                Name = "testter"
+            };
+            var (user, _) = await HelperTest.PostData($"{UsersApi}/register", newUser);
 
-      // delete user
-      string? id = user?["id"]?.ToString();
-      if (id != null)
-      {
+            // delete user
+  
+            string? id = user?["id"]?.ToString();
+            //string? id = "48";
+            //user?["id"]?.ToString();
+            if (id != null)
+            {
         var statusCode = await HelperTest.DeleteData($"{UsersApi}/{id}");
         Assert.Equal(HttpStatusCode.NoContent, statusCode);
       }

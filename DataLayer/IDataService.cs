@@ -14,11 +14,11 @@ namespace DataLayer
     bool UserExists(int userId);
 
 
-    // --USERS for authetication
+    // --USER for with security --
    User CreateUser(string name, string username, string password, string email, string salt, string role);
 
-        // --BOOKMARK--
-        IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10);
+    // --BOOKMARK--
+    IList<Bookmark> GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10);
     Bookmark GetBookmark(int userId, int bookmarkId);
     Bookmark GetBookmarkById(int bookmarkId);
     Bookmark AddBookmark(int userId, string tconst, string nconst, string note);

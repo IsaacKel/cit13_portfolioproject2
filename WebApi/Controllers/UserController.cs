@@ -90,7 +90,7 @@ using Mapster;
 namespace WebApi.Controllers
 {
   [ApiController]
-  [Route("api/v3/users")]
+  [Route("api/v3/user")]
   public class UsersController : BaseController
   {
     private readonly IDataService _dataService;
@@ -143,7 +143,11 @@ namespace WebApi.Controllers
         return BadRequest(ModelState);
       }
 
-      var user = _dataService.AddUser(dto.Username, dto.Password, dto.Email);
+     (var hashedPwd, var salt) = _hashing.Hash(dto.Password);
+
+     var user = _dataService.CreateUser(dto.Name, dto.Username, hashedPwd, dto.Email, salt, dto.Role);
+
+      //var user = _dataService.AddUser(dto.Username, dto.Password, dto.Email);
       var userDto = user.Adapt<UserDTO>();
       userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId = user.Id });
 
@@ -214,10 +218,10 @@ namespace WebApi.Controllers
 
     // -- DELETE USER --
     [HttpDelete("{userId}")]
-   // [Authorize(Roles = "admin")]
+  //  [Authorize(Roles = "admin")]
     public IActionResult DeleteUser(int userId)
     {
-      if (_dataService.GetUser(userId) == null) return NotFound();
+      if (_dataService.GetUser(userId) == null) return NotFound("Coundn't deplete, because ID not found");
 
       _dataService.DeleteUser(userId);
       return NoContent();
