@@ -1,15 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
-    <a
-      className="btn btn-primary"
-      href="https://reactjs.org"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Learn React
-    </a>
+    <>
+      <NavBar />
+    </>
   );
 }
 

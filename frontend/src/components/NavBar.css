@@ -1,0 +1,33 @@
+.navbar-links .nav-link {
+  color: #333;
+  font-size: 1rem;
+}
+
+.navbar-links .nav-link:hover {
+  color: #007bff;
+}
+
+.searchbar {
+  max-width: 100%;
+}
+
+button {
+  margin: 0 5px;
+}
+
+/* Hide extra padding and adjust button spacing on smaller screens */
+@media (max-width: 768px) {
+  .navbar-links .nav-link {
+    font-size: 14px;
+  }
+  button {
+    margin: 5px 0;
+  }
+}
+
+/* Search bar alignment for larger screens */
+@media (min-width: 992px) {
+  .searchbar {
+    margin-right: 10px;
+  }
+}
