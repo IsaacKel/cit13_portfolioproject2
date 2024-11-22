@@ -1,12 +1,24 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 
-function App() {
+import Login from "./pages/Login";
+import HomePage from "./pages/HomePage";
+import IndividualTitlePage from "./pages/IndividualTitlePage";
+
+const App = () => {
   return (
     <>
-      <NavBar />
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/title/:tconst" element={<IndividualTitlePage />} />
+        </Routes>
+      </Router>
     </>
   );
-}
+};
 
 export default App;

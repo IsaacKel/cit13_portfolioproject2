@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Navbar,
   Nav,
@@ -7,10 +7,17 @@ import {
   Button,
   Row,
   Col,
+  Modal,
 } from "react-bootstrap";
 import "./NavBar.css";
+import Login from "../pages/Login";
 
 const NavBar = () => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
     <Navbar bg="light" expand="lg" className="p-3">
       <Row className="w-100 align-items-center">
@@ -18,9 +25,9 @@ const NavBar = () => {
         <Col xs={3} className="d-flex align-items-center">
           <Navbar.Brand href="/" className="pl-3">
             <img
-              src="/path/to/logo.png"
+              src={require("../images/tmdbLogo.svg").default}
               alt="Logo"
-              style={{ height: "50px" }} // Adjust the logo size as needed
+              style={{ height: "4rem" }}
             />
           </Navbar.Brand>
         </Col>
@@ -51,7 +58,7 @@ const NavBar = () => {
               <Nav.Link href="/titles/tvshows" className="px-3">
                 TV Shows
               </Nav.Link>
-              <Nav.Link href="/titles/people" className="px-3">
+              <Nav.Link href="/people" className="px-3">
                 People
               </Nav.Link>
             </Nav>
@@ -60,7 +67,11 @@ const NavBar = () => {
 
         {/* Column 3: Login and Sign Up */}
         <Col xs={3} className="d-flex justify-content-end">
-          <Button variant="outline-primary" className="mr-2">
+          <Button
+            variant="outline-primary"
+            className="mr-2"
+            onClick={handleShow}
+          >
             Log In
           </Button>
           <Button variant="primary" className="ml-2">
@@ -68,6 +79,14 @@ const NavBar = () => {
           </Button>
         </Col>
       </Row>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Log In</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Login />
+        </Modal.Body>
+      </Modal>
     </Navbar>
   );
 };

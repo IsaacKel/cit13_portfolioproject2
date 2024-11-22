@@ -78,3 +78,4 @@ local.settings.json
 **local.settings.json
 .vs/cit13_portfolioproject2/DesignTimeBuild/.dtbcache.v2
 /.vs
+.fake

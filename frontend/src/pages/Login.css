@@ -1,0 +1,26 @@
+.login-form {
+  width: 90%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-submit {
+  width: 90%;
+  margin-top: 20px;
+}
+
+.login-input {
+  width: 90%;
+}
+
+.login-label {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

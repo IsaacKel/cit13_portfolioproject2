@@ -1,6 +1,7 @@
 .navbar-links .nav-link {
   color: #333;
   font-size: 1rem;
+  text-transform: uppercase;
 }
 
 .navbar-links .nav-link:hover {
