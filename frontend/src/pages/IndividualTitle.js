@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 const IndividualTitle = () => {
   const { tConst } = useParams();
   const [titleData, setTitleData] = useState(null);
+  const [similarTitles, setSimilarTitles] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +30,20 @@ const IndividualTitle = () => {
     fetchTitleData();
   }, [tConst]);
 
+  useEffect(() => {
+    // Fetch similar titles from the API
+    fetch(
+      "http://localhost:5002/api/SimilarMovies/tt0816692?pageNumber=1&pageSize=10"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.items) {
+          setSimilarTitles(data.items);
+        }
+      })
+      .catch((error) => console.error("Error fetching similar titles:", error));
+  }, []);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -49,6 +64,24 @@ const IndividualTitle = () => {
       </p>
       <p>
         <strong>Type:</strong> {titleData.titleType}
+      </p>
+      <p>
+        <strong>Genres:</strong> {titleData.genres.join(", ")}
+      </p>
+      <p>
+        <strong>Rating:</strong> {titleData.averageRating}
+      </p>
+      <p>
+        Similar Titles:
+        <ul>
+          {similarTitles.length > 0 ? (
+            similarTitles.map((title) => (
+              <li key={title.tConst}>{title.primaryTitle}</li>
+            ))
+          ) : (
+            <li>No similar titles available</li>
+          )}
+        </ul>
       </p>
       {titleData.poster && (
         <img src={titleData.poster} alt={titleData.primaryTitle} />
