@@ -9,6 +9,21 @@ const SearchResults = () => {
   const [titles, setTitles] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [curPage, setCurPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [showAll, setShowAll] = useState(false);
+
+  const handleShowMore = () => {
+    setShowAll(true);
+  };
+
+  const handleShowLess = () => {
+    setShowAll(false);
+  };
+
+  const displayedTitles = showAll ? titles : titles.slice(0, 3);
+
   useEffect(() => {
     if (query) {
       const fetchData = async () => {
@@ -24,6 +39,7 @@ const SearchResults = () => {
 
           setNames(nameData.items || []);
           setTitles(titleData.items || []);
+          setTotalPages(titleRes.data.totalPages || 1);
         } catch (error) {
           console.error("Error fetching search results:", error);
         } finally {
@@ -44,39 +60,61 @@ const SearchResults = () => {
       <h2>Search Results for "{query}"</h2>
       <h3>Titles</h3>
       <div className="search-results-container">
-        {titles.map((title, index) => (
+        {titles.length === 0 && <p>No results found</p>}
+        {displayedTitles.map((title, index) => (
           <Link
             to={`/title/${title.tConst.split("/").pop()}`}
             key={index}
             className="search-item-link"
           >
             <div className="search-item">
-              <img
-                src={title.poster}
-                alt={title.primaryTitle}
-                className="search-item-poster"
-              />
+              {title.poster && (
+                <img
+                  src={title.poster}
+                  alt={title.primaryTitle}
+                  className="search-item-poster"
+                />
+              )}
               <div className="search-item-title">{title.primaryTitle}</div>
               <div className="search-item-details">
-                <p>{title.startYear}</p>
-                <p>{title.genre}</p>
+                <p className="search-item-year">{title.startYear}</p>
+                <p className="search-item-genre">{title.genre}</p>
               </div>
-              <div className="search-item-rating">
-                <span>⭐</span>
-                <p>{title.rating}</p>
-              </div>
+              {title.rating && (
+                <div className="search-item-rating">
+                  <span className="star">⭐</span>
+                  <p className="title-rating">{title.rating}</p>
+                </div>
+              )}
             </div>
           </Link>
         ))}
       </div>
+      {!showAll && titles.length > 4 && (
+        <p onClick={handleShowMore} className="see-more-text">
+          See more...
+        </p>
+      )}
+      {showAll && (
+        <p onClick={handleShowLess} className="see-more-text">
+          See less...
+        </p>
+      )}
       <h3>People</h3>
-      <ul>
+      {names.length === 0 && <p>No people found</p>}
+      <div className="search-results-container">
         {names.map((name, index) => (
-          <li key={index}>
-            <a href={name.nConst}>{name.primaryName}</a>
-          </li>
+          <Link
+            to={`/name/${name.nConst.split("/").pop()}`}
+            key={index}
+            className="search-item-link"
+          >
+            <div className="search-item">
+              <div className="search-item-title">{name.primaryName}</div>
+            </div>
+          </Link>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
