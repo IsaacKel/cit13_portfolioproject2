@@ -1,18 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  Navbar,
-  Nav,
-  Form,
-  FormControl,
-  Button,
-  Row,
-  Col,
-  Modal,
-} from "react-bootstrap";
+import { Navbar, Nav, Button, Row, Col, Modal } from "react-bootstrap";
 import "./NavBar.css";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
+import SearchBar from "./SearchBar";
 
 const NavBar = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -23,15 +14,6 @@ const NavBar = () => {
 
   const handleCloseSignUp = () => setShowSignUp(false);
   const handleShowSignUp = () => setShowSignUp(true);
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
-
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-    }
-  };
 
   return (
     <Navbar bg="light" expand="lg" className="p-3">
@@ -51,18 +33,7 @@ const NavBar = () => {
           <Row className="align-items-center">
             {/* Search bar with Button */}
             <Col xs={12} className="d-flex justify-content-center">
-              <Form inline className="d-flex w-75">
-                <FormControl
-                  type="text"
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="mr-2 flex-grow-1"
-                />
-                <Button variant="outline-success" onClick={handleSearch}>
-                  Search
-                </Button>
-              </Form>
+              <SearchBar />
             </Col>
           </Row>
           <Row>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import "./SearchResults.css";
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
@@ -41,7 +42,34 @@ const SearchResults = () => {
   return (
     <div>
       <h2>Search Results for "{query}"</h2>
-      <h3>Names</h3>
+      <h3>Titles</h3>
+      <div className="search-results-container">
+        {titles.map((title, index) => (
+          <Link
+            to={`/title/${title.tConst.split("/").pop()}`}
+            key={index}
+            className="search-item-link"
+          >
+            <div className="search-item">
+              <img
+                src={title.poster}
+                alt={title.primaryTitle}
+                className="search-item-poster"
+              />
+              <div className="search-item-title">{title.primaryTitle}</div>
+              <div className="search-item-details">
+                <p>{title.startYear}</p>
+                <p>{title.genre}</p>
+              </div>
+              <div className="search-item-rating">
+                <span>⭐</span>
+                <p>{title.rating}</p>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+      <h3>People</h3>
       <ul>
         {names.map((name, index) => (
           <li key={index}>
@@ -49,21 +77,6 @@ const SearchResults = () => {
           </li>
         ))}
       </ul>
-      <h3>Titles</h3>
-      <ul>
-        {titles.map((title, index) => (
-          <li key={index}>
-            <a href={title.tConst}>{title.primaryTitle}</a>
-          </li>
-        ))}
-      </ul>
-      {titles.map((title, index) => (
-        <div key={index}>
-          <Link to={`/title/${title.tConst.split("/").pop()}`}>
-            {title.primaryTitle}
-          </Link>
-        </div>
-      ))}
     </div>
   );
 };
