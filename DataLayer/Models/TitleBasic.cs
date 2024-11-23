@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataLayer.Models
+﻿namespace DataLayer.Models
 {
     public class TitleBasic
     {
@@ -23,5 +16,10 @@ namespace DataLayer.Models
         public string? ProductionCompany { get; set; }
         public string? Poster { get; set; }
         public string? BoxOffice { get; set; }
+
+        // Navigation properties
+        public TitleRating? TitleRating { get; set; }
+        public ICollection<TitleGenre> TitleGenres { get; set; }
+        public ICollection<TitleCountry> TitleCountries { get; set; }
     }
 }

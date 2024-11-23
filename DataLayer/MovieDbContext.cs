@@ -121,7 +121,7 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<NameBasic>().Property(p => p.BirthYear).HasColumnName("birthyear");
     modelBuilder.Entity<NameBasic>().Property(p => p.DeathYear).HasColumnName("deathyear");
     modelBuilder.Entity<NameBasic>().Property(p => p.ActualName).HasColumnName("primaryname");
-        modelBuilder.Entity<NameBasic>().Property(p => p.NRating).HasColumnName("nrating");
+    modelBuilder.Entity<NameBasic>().Property(p => p.NRating).HasColumnName("nrating");
   }
 
   // MapTitleCharacters method
@@ -188,6 +188,22 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<TitleBasic>().Property(tb => tb.ProductionCompany).HasColumnName("productioncompany");
     modelBuilder.Entity<TitleBasic>().Property(tb => tb.Poster).HasColumnName("poster");
     modelBuilder.Entity<TitleBasic>().Property(tb => tb.BoxOffice).HasColumnName("boxoffice");
+
+    // Relationships
+    modelBuilder.Entity<TitleBasic>()
+        .HasOne(tb => tb.TitleRating)
+        .WithOne()
+        .HasForeignKey<TitleRating>(tr => tr.TConst);
+
+    modelBuilder.Entity<TitleBasic>()
+        .HasMany(tb => tb.TitleGenres)
+        .WithOne()
+        .HasForeignKey(tg => tg.TConst);
+
+    modelBuilder.Entity<TitleBasic>()
+        .HasMany(tb => tb.TitleCountries)
+        .WithOne()
+        .HasForeignKey(tc => tc.TConst);
   }
   private static void MapCoPlayer(ModelBuilder modelBuilder)
   {
@@ -240,7 +256,7 @@ public class MovieDbContext : DbContext
 
   private static void MapTitleCountries(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<TitleCountry>().ToTable("titlecountries");
+    modelBuilder.Entity<TitleCountry>().ToTable("titlecountry");
     modelBuilder.Entity<TitleCountry>().HasKey(tc => new { tc.TConst, tc.Country });
     modelBuilder.Entity<TitleCountry>().Property(tc => tc.TConst).HasColumnName("tconst");
     modelBuilder.Entity<TitleCountry>().Property(tc => tc.Country).HasColumnName("country");
@@ -258,7 +274,7 @@ public class MovieDbContext : DbContext
 
   private static void MapTitleGenres(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<TitleGenre>().ToTable("titlegenres");
+    modelBuilder.Entity<TitleGenre>().ToTable("titlegenre");
     modelBuilder.Entity<TitleGenre>().HasKey(tg => new { tg.TConst, tg.Genre });
     modelBuilder.Entity<TitleGenre>().Property(tg => tg.TConst).HasColumnName("tconst");
     modelBuilder.Entity<TitleGenre>().Property(tg => tg.Genre).HasColumnName("genre");

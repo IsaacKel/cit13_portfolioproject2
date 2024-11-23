@@ -260,6 +260,21 @@ namespace DataLayer
     {
       return _context.TitleBasics.FirstOrDefault(tb => tb.TConst == tConst);
     }
+
+    public IEnumerable<TitleGenre> GetGenresByTConst(string tConst)
+    {
+      return _context.TitleGenres.Where(tg => tg.TConst == tConst).ToList();
+    }
+
+    public IEnumerable<TitleCountry> GetCountriesByTConst(string tConst)
+    {
+      return _context.TitleCountries.Where(tc => tc.TConst == tConst).ToList();
+    }
+
+    public TitleRating GetRatingByTConst(string tConst)
+    {
+      return _context.TitleRatings.FirstOrDefault(tr => tr.TConst == tConst);
+    }
     // coplayers
     public IList<CoPlayer> GetCoPlayers(string nConst)
     {

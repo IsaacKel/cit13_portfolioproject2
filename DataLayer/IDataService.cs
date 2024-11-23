@@ -46,6 +46,9 @@ namespace DataLayer
 
         // --TITLE BASIC--
         TitleBasic GetTitleByTConst(string tConst);
+        IEnumerable<TitleGenre> GetGenresByTConst(string tConst);
+        IEnumerable<TitleCountry> GetCountriesByTConst(string tConst);
+        TitleRating GetRatingByTConst(string tConst);
 
         // --COPLAYYERS--
         IList<CoPlayer> GetCoPlayers(string nConst);
