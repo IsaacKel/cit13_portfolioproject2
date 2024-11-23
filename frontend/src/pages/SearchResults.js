@@ -22,6 +22,10 @@ const SearchResults = () => {
     setShowAll(false);
   };
 
+  const handlePageChange = (page) => {
+    setCurPage(page);
+  };
+
   const displayedTitles = showAll ? titles : titles.slice(0, 3);
 
   useEffect(() => {
@@ -39,7 +43,7 @@ const SearchResults = () => {
 
           setNames(nameData.items || []);
           setTitles(titleData.items || []);
-          setTotalPages(titleRes.data.totalPages || 1);
+          setTotalPages(titleData.numberPages || 1);
         } catch (error) {
           console.error("Error fetching search results:", error);
         } finally {
@@ -100,9 +104,10 @@ const SearchResults = () => {
           See less...
         </p>
       )}
+      <p>Total pages - need to add pagination: {totalPages}</p>
       <h3>People</h3>
-      {names.length === 0 && <p>No people found</p>}
       <div className="search-results-container">
+        {names.length === 0 && <p>No people found</p>}
         {names.map((name, index) => (
           <Link
             to={`/name/${name.nConst.split("/").pop()}`}
