@@ -44,11 +44,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     opt.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
-        ClockSkew = TimeSpan.Zero
+      ValidateIssuer = false,
+      ValidateAudience = false,
+      ValidateIssuerSigningKey = true,
+      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+      ClockSkew = TimeSpan.Zero
     }
     );
 
@@ -57,14 +57,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // added CORS-service to apllow requests from React-app (localhost:5173)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", policy =>
-    {
-        policy.WithOrigins("http://localhost:5173") // URL to React-app
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+  options.AddPolicy("AllowReactApp", policy =>
+  {
+    policy.WithOrigins("http://localhost:5173", "http://localhost:3000") // URL to React-app
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+  });
 });
-
 
 builder.Services.AddScoped<IDataService, DataService>();
 

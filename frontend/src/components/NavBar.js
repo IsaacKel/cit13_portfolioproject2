@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Navbar,
   Nav,
@@ -11,12 +12,26 @@ import {
 } from "react-bootstrap";
 import "./NavBar.css";
 import Login from "../pages/Login";
+import SignUp from "../pages/SignUp";
 
 const NavBar = () => {
-  const [show, setShow] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleCloseLogin = () => setShowLogin(false);
+  const handleShowLogin = () => setShowLogin(true);
+
+  const handleCloseSignUp = () => setShowSignUp(false);
+  const handleShowSignUp = () => setShowSignUp(true);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+    }
+  };
 
   return (
     <Navbar bg="light" expand="lg" className="p-3">
@@ -40,9 +55,13 @@ const NavBar = () => {
                 <FormControl
                   type="text"
                   placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="mr-2 flex-grow-1"
                 />
-                <Button variant="outline-success">Search</Button>
+                <Button variant="outline-success" onClick={handleSearch}>
+                  Search
+                </Button>
               </Form>
             </Col>
           </Row>
@@ -70,21 +89,31 @@ const NavBar = () => {
           <Button
             variant="outline-primary"
             className="mr-2"
-            onClick={handleShow}
+            onClick={handleShowLogin}
           >
             Log In
           </Button>
-          <Button variant="primary" className="ml-2">
+          <Button variant="primary" className="ml-2" onClick={handleShowSignUp}>
             Sign Up
           </Button>
         </Col>
       </Row>
-      <Modal show={show} onHide={handleClose}>
+
+      <Modal show={showLogin} onHide={handleCloseLogin}>
         <Modal.Header closeButton>
           <Modal.Title>Log In</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Login />
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showSignUp} onHide={handleCloseSignUp}>
+        <Modal.Header closeButton>
+          <Modal.Title>Sign Up</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <SignUp />
         </Modal.Body>
       </Modal>
     </Navbar>
