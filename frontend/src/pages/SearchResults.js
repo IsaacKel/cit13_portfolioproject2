@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
@@ -35,7 +35,7 @@ const SearchResults = () => {
   }, [query]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Searching...</div>;
   }
 
   return (
@@ -57,6 +57,13 @@ const SearchResults = () => {
           </li>
         ))}
       </ul>
+      {titles.map((title, index) => (
+        <div key={index}>
+          <Link to={`/title/${title.tConst.split("/").pop()}`}>
+            {title.primaryTitle}
+          </Link>
+        </div>
+      ))}
     </div>
   );
 };

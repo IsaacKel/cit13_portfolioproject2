@@ -4,7 +4,7 @@ import NavBar from "./components/NavBar";
 
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
-import IndividualTitlePage from "./pages/IndividualTitlePage";
+import IndividualTitle from "./pages/IndividualTitle";
 import SearchResults from "./pages/SearchResults";
 
 const App = () => {
@@ -16,7 +16,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/title/:tconst" element={<IndividualTitlePage />} />
+          <Route path="/title/:tConst" element={<IndividualTitle />} />
         </Routes>
       </Router>
     </>
