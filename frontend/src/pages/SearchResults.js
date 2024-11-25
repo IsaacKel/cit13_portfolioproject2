@@ -34,8 +34,8 @@ const SearchResults = () => {
         setLoading(true);
         try {
           const [nameRes, titleRes] = await Promise.all([
-            fetch(`http://localhost:5002/api/Search/name/${query}`),
-            fetch(`http://localhost:5002/api/Search/title/${query}`),
+            fetch(`https://localhost:5003/api/Search/name/${query}`),
+            fetch(`https://localhost:5003/api/Search/title/${query}`),
           ]);
 
           const nameData = await nameRes.json();

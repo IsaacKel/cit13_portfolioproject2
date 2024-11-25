@@ -13,7 +13,7 @@ const IndividualTitle = () => {
     const fetchTitleData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5002/api/Title/${tConst}`
+          `https://localhost:5003/api/Title/${tConst}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch title data");
@@ -33,7 +33,7 @@ const IndividualTitle = () => {
   useEffect(() => {
     // Fetch similar titles from the API
     fetch(
-      "http://localhost:5002/api/SimilarMovies/tt0816692?pageNumber=1&pageSize=10"
+      "https://localhost:5003/api/SimilarMovies/tt0816692?pageNumber=1&pageSize=10"
     )
       .then((response) => response.json())
       .then((data) => {

@@ -36,23 +36,6 @@ const NavBar = () => {
               <SearchBar />
             </Col>
           </Row>
-          <Row>
-            {/* Navbar links */}
-            <Nav className="w-100 justify-content-center navbar-links mt-2">
-              <Nav.Link href="/" className="px-3">
-                Home
-              </Nav.Link>
-              <Nav.Link href="/titles/movies" className="px-3">
-                Movies
-              </Nav.Link>
-              <Nav.Link href="/titles/tvshows" className="px-3">
-                TV Shows
-              </Nav.Link>
-              <Nav.Link href="/people" className="px-3">
-                People
-              </Nav.Link>
-            </Nav>
-          </Row>
         </Col>
 
         {/* Column 3: Login and Sign Up */}
