@@ -63,8 +63,8 @@ const SearchResults = () => {
     <div>
       <h2>Search Results for "{query}"</h2>
       <h3>Titles</h3>
+      {titles.length === 0 && <p>No results found</p>}
       <div className="search-results-container">
-        {titles.length === 0 && <p>No results found</p>}
         {displayedTitles.map((title, index) => (
           <Link
             to={`/title/${title.tConst.split("/").pop()}`}
@@ -88,6 +88,12 @@ const SearchResults = () => {
                 <div className="search-item-rating">
                   <span className="star">⭐</span>
                   <p className="title-rating">{title.rating}</p>
+                  <button
+                    onClick={() => console.log("Add rating")}
+                    className="add-to-bookmarks-button"
+                  >
+                    + Add to Bookmarks
+                  </button>
                 </div>
               )}
             </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./IndividualTitle.css";
+import { fetchImages } from "../services/apiService";
 
 const IndividualTitle = () => {
   const { tConst } = useParams();
@@ -9,6 +10,7 @@ const IndividualTitle = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [principals, setPrincipals] = useState([]);
+  const [castWithImages, setCastWithImages] = useState([]);
 
   useEffect(() => {
     const fetchTitleData = async () => {
@@ -59,6 +61,20 @@ const IndividualTitle = () => {
       );
   }, [tConst]);
 
+  useEffect(() => {
+    const fetchCastImages = async () => {
+      const updatedPrincipals = await Promise.all(
+        principals.map(async (principal) => {
+          const imageUrl = await fetchImages(principal.name);
+          return { ...principal, imageUrl };
+        })
+      );
+      setCastWithImages(updatedPrincipals);
+    };
+
+    fetchCastImages();
+  }, [principals]);
+
   const formatTitleType = (type) => {
     return type === "tvShow" || "TvSeries"
       ? "TV Show"
@@ -106,21 +122,30 @@ const IndividualTitle = () => {
       <section className="similar-titles">
         <h2>Cast & Crew</h2>
         <div className="similar-titles-list">
-          {principals.length > 0 ? (
-            principals.map((principal) => (
+          {castWithImages.length > 0 ? (
+            castWithImages.map((principal) => (
               <Link
                 to={`/name/${principal.nConst}`}
                 key={principal.nConst}
                 className="search-item-link"
               >
-                <div key={principal.nconst} className="cast-crew-item">
-                  <p>{principal.name}</p>
-                  <p>{principal.category}</p>
+                <div key={principal.nConst} className="cast-card">
+                  {principal.imageUrl && (
+                    <img
+                      src={principal.imageUrl}
+                      alt={principal.name}
+                      className="cast-card-img"
+                    />
+                  )}
+                  <div className="cast-card-details">
+                    <p>{principal.name}</p>
+                    <p>{principal.category}</p>
+                  </div>
                 </div>
               </Link>
             ))
           ) : (
-            <p>No cast and crew available.</p>
+            <></>
           )}
         </div>
       </section>
@@ -141,7 +166,7 @@ const IndividualTitle = () => {
               </Link>
             ))
           ) : (
-            <p>No similar titles available</p>
+            <></>
           )}
         </div>
       </section>
