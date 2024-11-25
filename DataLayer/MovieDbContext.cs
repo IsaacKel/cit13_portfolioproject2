@@ -237,7 +237,9 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<SimilarMovie>().Property(c => c.TConst).HasColumnName("tconst");
     modelBuilder.Entity<SimilarMovie>().Property(c => c.PrimaryTitle).HasColumnName("primarytitle");
     modelBuilder.Entity<SimilarMovie>().Property(c => c.NumVotes).HasColumnName("numvotes");
-  }
+    modelBuilder.Entity<SimilarMovie>().Property(c => c.MatchingLanguages).HasColumnName("matching_languages");
+    modelBuilder.Entity<SimilarMovie>().Property(c => c.Poster).HasColumnName("poster");
+    }
   public static void MapSearchNames(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<SearchName>().HasNoKey();

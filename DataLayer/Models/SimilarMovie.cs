@@ -11,5 +11,7 @@ namespace DataLayer.Models
         public string TConst { get; set; }
         public string PrimaryTitle { get; set; }
         public int? NumVotes { get; set; }
+        public int? MatchingLanguages { get; set; }
+        public string? Poster { get; set; }
     }
 }

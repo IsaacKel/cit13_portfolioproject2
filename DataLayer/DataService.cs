@@ -294,10 +294,18 @@ namespace DataLayer
       return _context._RatingCrew.FromSqlInterpolated($"select * from ratingcrew({tConst})").ToList();
     }
     public IList<SimilarMovie> GetSimilarMovies(string tConst)
-    {
-      return _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
-    }
-    public IList<SearchName> GetSearchNames(string searchTerm)
+        {
+         var queryResult = _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
+         foreach (var movie in queryResult)
+         {
+             if (movie.Poster == null)
+             {
+                 movie.Poster = "null";
+             }
+         }
+         return queryResult;
+     }
+        public IList<SearchName> GetSearchNames(string searchTerm)
     {
       return _context.SearchNames.FromSqlInterpolated($"select * from search_names_by_text({searchTerm})").ToList();
     }
