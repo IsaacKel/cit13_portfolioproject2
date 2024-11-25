@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
 
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/title/:tConst" element={<IndividualTitle />} />
         </Routes>
+        <Footer />
       </Router>
     </>
   );

@@ -41,5 +41,16 @@ namespace WebApi.Controllers
             return Ok(_dataService.GetTitlePrincipalsByTitle(tconst));
         }
 
+
+        [HttpGet("{tConst}/principals")]
+        public ActionResult<IList<TitlePrincipal>> GetTitlePrincipals(string tConst)
+        {
+            var result = _dataService.GetTitlePrincipals(tConst);
+            if (!result.Any())
+                return NotFound(new { Message = "No principals found for this title." });
+
+            return Ok(result);
+        }
+
     }
 }

@@ -310,6 +310,12 @@ namespace DataLayer
       _context.Database.ExecuteSqlInterpolated($"CALL rate({tConst}, {rating}, {userId})");
     }
 
+
+    public IList<TitlePrincipal> GetTitlePrincipals(string tConst)
+    {
+      return _context.TitlePrincipals.FromSqlInterpolated($"select * from get_title_principals({tConst})").ToList();
+    }
+
     ////// FAKE list 
     //private readonly List<User> _users = new List<User>         {
     //  new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
@@ -352,6 +358,7 @@ namespace DataLayer
                      .Where(tp => tp.TConst == tconst)
                      .ToList();
     }
+
 
 
     // --KNOWN FOR TITLES--
