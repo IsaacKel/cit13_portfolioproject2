@@ -161,8 +161,18 @@ const IndividualTitle = () => {
                 key={title.tConst}
                 className="search-item-link"
               >
-                <img src={title.poster} alt={title.primaryTitle} />
-                <p>{title.primaryTitle}</p>
+                <div key={title.tConst} className="cast-card">
+                  {title.poster && (
+                    <img
+                      src={title.poster}
+                      alt={title.primaryTitle}
+                      className="cast-card-img"
+                    />
+                  )}
+                  <div className="cast-card-details">
+                    <p>{title.primaryTitle}</p>
+                  </div>
+                </div>
               </Link>
             ))
           ) : (
