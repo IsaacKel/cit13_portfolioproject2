@@ -300,43 +300,39 @@ namespace DataLayer
       {
         if (movie.Poster == null)
         {
-         var queryResult = _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
-         foreach (var movie in queryResult)
-         {
-             if (movie.Poster == null)
-             {
-                 movie.Poster = "null";
-             }
-         }
-         return queryResult;
-     }
+          movie.Poster = "null";
+        }
+      }
+      return queryResult;
+    }
+
     public IList<Top10Series> GetTop10Series()
     {
-        var queryResult = _context.Top10Series.FromSqlInterpolated($"select * from top10series()").ToList();
-        foreach (var title in queryResult)
+      var queryResult = _context.Top10Series.FromSqlInterpolated($"select * from top10series()").ToList();
+      foreach (var title in queryResult)
+      {
+        if (title.Poster == null)
         {
-            if (title.Poster == null)
-            {
-                title.Poster = "null";
-            }
+          title.Poster = "null";
         }
-        return queryResult;
+      }
+      return queryResult;
     }
     public IList<Top10Movies> GetTop10Movies()
     {
-        var queryResult = _context.Top10Movies.FromSqlInterpolated($"select * from top10movies()").ToList();
-        foreach (var title in queryResult)
+      var queryResult = _context.Top10Movies.FromSqlInterpolated($"select * from top10movies()").ToList();
+      foreach (var title in queryResult)
+      {
+        if (title.Poster == null)
         {
-            if (title.Poster == null)
-            {
-                title.Poster = "null";
-            }
+          title.Poster = "null";
         }
-        return queryResult;
+      }
+      return queryResult;
     }
     public IList<Top10Actors> GetTop10Actors()
     {
-        return _context.Top10Actors.FromSqlInterpolated($"select * from top10actors()").ToList();
+      return _context.Top10Actors.FromSqlInterpolated($"select * from top10actors()").ToList();
     }
     public IList<SearchName> GetSearchNames(string searchTerm)
     {
