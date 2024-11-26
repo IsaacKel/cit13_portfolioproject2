@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./IndividualTitle.css";
-import { fetchImages } from "../services/apiService";
+import { fetchImages, fetchTitleData, fetchSimilarTitles, fetchTitlePrincipals } from "../services/apiService";
 import Bookmark from "../components/Bookmark";
 
 const IndividualTitle = () => {
@@ -30,24 +30,23 @@ const IndividualTitle = () => {
     similarTitlesEndIndex
   );
 
-  useEffect(() => {
-    const fetchTitleData = async () => {
-      try {
-        const response = await fetch(
-          `https://localhost:5003/api/Title/${tConst}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch title data");
-        const data = await response.json();
-        setTitleData(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchTitleData();
-  }, [tConst]);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchTitleData(tConst);
+                setTitleData(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [tConst]);
+
 
   useEffect(() => {
     fetch(
