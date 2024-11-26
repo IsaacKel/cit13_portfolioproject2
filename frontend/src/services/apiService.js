@@ -79,3 +79,64 @@ export const fetchImages = async (personName) => {
     return null;
   }
 };
+
+export const fetchTop10Movies = async () => {
+  try {
+    const response = await fetch(`${baseURL}/Top10/movies`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching top 10 movies:", error);
+    throw error;
+  }
+}
+export const fetchTop10TVShows = async () => {
+  try {
+    const response = await fetch(`${baseURL}/Top10/series`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching top 10 TV shows:", error);
+    throw error;
+  }
+}
+export const fetchTop10Actors = async () => {
+  try {
+    const response = await fetch(`${baseURL}/Top10/actors`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching top 10 actors:", error);
+    throw error;
+  }
+}
