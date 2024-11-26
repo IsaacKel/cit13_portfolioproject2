@@ -61,24 +61,21 @@ const IndividualTitle = () => {
         fetchSimilar();
     }, [tConst]);
 
-  useEffect(() => {
-    fetch(`https://localhost:5003/api/TitlePrincipal/${tConst}/principals`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.length === 0) {
-          console.warn("No crew found for this title.");
-        }
-        setPrincipals(data);
-      })
-      .catch((error) =>
-        console.error("Error fetching title principals:", error)
-      );
-  }, [tConst]);
+    useEffect(() => {
+        const fetchPrincipals = async () => {
+            try {
+                const data = await fetchTitlePrincipals(tConst);
+                if (data.length === 0) {
+                    console.warn("No crew found for this title.");
+                }
+                setPrincipals(data);
+            } catch (error) {
+                console.error("Error fetching title principals:", error);
+            }
+        };
+
+        fetchPrincipals();
+    }, [tConst]);
 
   useEffect(() => {
     const fetchCastImages = async () => {
