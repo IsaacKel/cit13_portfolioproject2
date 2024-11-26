@@ -294,18 +294,18 @@ namespace DataLayer
       return _context._RatingCrew.FromSqlInterpolated($"select * from ratingcrew({tConst})").ToList();
     }
     public IList<SimilarMovie> GetSimilarMovies(string tConst)
+    {
+      var queryResult = _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
+      foreach (var movie in queryResult)
+      {
+        if (movie.Poster == null)
         {
-         var queryResult = _context.SimilarMovies.FromSqlInterpolated($"select * from similarmovies({tConst})").ToList();
-         foreach (var movie in queryResult)
-         {
-             if (movie.Poster == null)
-             {
-                 movie.Poster = "null";
-             }
-         }
-         return queryResult;
-     }
-        public IList<SearchName> GetSearchNames(string searchTerm)
+          movie.Poster = "null";
+        }
+      }
+      return queryResult;
+    }
+    public IList<SearchName> GetSearchNames(string searchTerm)
     {
       return _context.SearchNames.FromSqlInterpolated($"select * from search_names_by_text({searchTerm})").ToList();
     }
@@ -318,10 +318,32 @@ namespace DataLayer
       _context.Database.ExecuteSqlInterpolated($"CALL rate({tConst}, {rating}, {userId})");
     }
 
-
-    public IList<TitlePrincipal> GetTitlePrincipals(string tConst)
+    public IEnumerable<TitlePrincipal> GetTitlePrincipals(string tConst)
     {
-      return _context.TitlePrincipals.FromSqlInterpolated($"select * from get_title_principals({tConst})").ToList();
+      var results = new List<TitlePrincipal>();
+
+      using (var command = _context.Database.GetDbConnection().CreateCommand())
+      {
+        command.CommandText = $"SELECT * FROM get_title_principals('{tConst}')";
+        _context.Database.OpenConnection();
+
+        using (var reader = command.ExecuteReader())
+        {
+          while (reader.Read())
+          {
+            var principal = new TitlePrincipal
+            {
+              TConst = reader.GetString(0),
+              NConst = reader.GetString(1),
+              Name = reader.GetString(2),
+              Ordering = reader.GetInt32(3),
+              Roles = reader.IsDBNull(4) ? null : reader.GetString(4)
+            };
+            results.Add(principal);
+          }
+        }
+      }
+      return results;
     }
 
     ////// FAKE list 

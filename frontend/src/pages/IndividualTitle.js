@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./IndividualTitle.css";
 import { fetchImages } from "../services/apiService";
+import Bookmark from "../components/Bookmark";
 
 const IndividualTitle = () => {
   const { tConst } = useParams();
@@ -11,6 +12,23 @@ const IndividualTitle = () => {
   const [loading, setLoading] = useState(true);
   const [principals, setPrincipals] = useState([]);
   const [castWithImages, setCastWithImages] = useState([]);
+  const [showBookmarkModal, setShowBookmarkModal] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 8;
+  const [similarTitlesPage, setSimilarTitlesPage] = useState(0);
+  const similarTitlesPerPage = 8;
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentCast = castWithImages.slice(startIndex, endIndex);
+
+  const similarTitlesStartIndex = similarTitlesPage * similarTitlesPerPage;
+  const similarTitlesEndIndex = similarTitlesStartIndex + similarTitlesPerPage;
+  const currentSimilarTitles = similarTitles.slice(
+    similarTitlesStartIndex,
+    similarTitlesEndIndex
+  );
 
   useEffect(() => {
     const fetchTitleData = async () => {
@@ -75,10 +93,46 @@ const IndividualTitle = () => {
     fetchCastImages();
   }, [principals]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [tConst]);
+
   const formatTitleType = (type) => {
     return type === "tvShow" || "TvSeries"
       ? "TV Show"
       : type.charAt(0).toUpperCase() + type.slice(1);
+  };
+
+  const handleNextPage = () => {
+    if (endIndex < castWithImages.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (startIndex > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextSimilarTitlesPage = () => {
+    if (similarTitlesEndIndex < similarTitles.length) {
+      setSimilarTitlesPage(similarTitlesPage + 1);
+    }
+  };
+
+  const handlePrevSimilarTitlesPage = () => {
+    if (similarTitlesStartIndex > 0) {
+      setSimilarTitlesPage(similarTitlesPage - 1);
+    }
+  };
+
+  const handleBookmarkClick = () => {
+    setShowBookmarkModal(true);
+  };
+
+  const handleCloseBookmarkModal = () => {
+    setShowBookmarkModal(false);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -100,9 +154,11 @@ const IndividualTitle = () => {
           </div>
         </div>
         <div className="title-actions">
-          <span className="rating">⭐ {titleData.averageRating}</span>
+          {titleData.averageRating !== null && (
+            <span className="rating">⭐ {titleData.averageRating}</span>
+          )}{" "}
           <button>+ Add Rating</button>
-          <button>+ Add to Bookmarks</button>
+          <button onClick={handleBookmarkClick}>+ Add to Bookmarks</button>
         </div>
       </div>
 
@@ -118,28 +174,29 @@ const IndividualTitle = () => {
         <p className="plot">{titleData.plot}</p>
       </div>
 
-      {/* Cast & Crew */}
       <section className="similar-titles">
         <h2>Cast & Crew</h2>
         <div className="similar-titles-list">
-          {castWithImages.length > 0 ? (
-            castWithImages.map((principal) => (
+          {currentCast.length > 0 ? (
+            currentCast.map((principal) => (
               <Link
                 to={`/name/${principal.nConst}`}
                 key={principal.nConst}
                 className="search-item-link"
               >
                 <div key={principal.nConst} className="cast-card">
-                  {principal.imageUrl && (
+                  {principal.imageUrl ? (
                     <img
                       src={principal.imageUrl}
                       alt={principal.name}
                       className="cast-card-img"
                     />
+                  ) : (
+                    <div className="cast-card-img placeholder"></div>
                   )}
                   <div className="cast-card-details">
                     <p>{principal.name}</p>
-                    <p>{principal.category}</p>
+                    <p className="title-data">{principal.roles}</p>
                   </div>
                 </div>
               </Link>
@@ -148,26 +205,38 @@ const IndividualTitle = () => {
             <></>
           )}
         </div>
+        <div className="pagination-buttons">
+          <button onClick={handlePrevPage} disabled={startIndex === 0}>
+            &lt; Prev
+          </button>
+          <button
+            onClick={handleNextPage}
+            disabled={endIndex >= castWithImages.length}
+          >
+            Next &gt;
+          </button>
+        </div>
       </section>
 
-      {/* Similar Titles */}
       <section className="similar-titles">
         <h2>Similar Titles</h2>
         <div className="similar-titles-list">
-          {similarTitles.length > 0 ? (
-            similarTitles.map((title) => (
+          {currentSimilarTitles.length > 0 ? (
+            currentSimilarTitles.map((title) => (
               <Link
                 to={`/title/${title.tConst.split("/").pop()}`}
                 key={title.tConst}
                 className="search-item-link"
               >
                 <div key={title.tConst} className="cast-card">
-                  {title.poster && (
+                  {title.poster ? (
                     <img
                       src={title.poster}
                       alt={title.primaryTitle}
                       className="cast-card-img"
                     />
+                  ) : (
+                    <div className="cast-card-img placeholder"></div>
                   )}
                   <div className="cast-card-details">
                     <p>{title.primaryTitle}</p>
@@ -179,7 +248,22 @@ const IndividualTitle = () => {
             <></>
           )}
         </div>
+        <div className="pagination-buttons">
+          <button
+            onClick={handlePrevSimilarTitlesPage}
+            disabled={similarTitlesStartIndex === 0}
+          >
+            &lt; Prev
+          </button>
+          <button
+            onClick={handleNextSimilarTitlesPage}
+            disabled={similarTitlesEndIndex >= similarTitles.length}
+          >
+            Next &gt;
+          </button>
+        </div>
       </section>
+      <Bookmark show={showBookmarkModal} onClose={handleCloseBookmarkModal} />
     </div>
   );
 };

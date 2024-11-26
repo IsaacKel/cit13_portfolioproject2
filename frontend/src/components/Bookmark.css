@@ -1,0 +1,53 @@
+.bookmark-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bookmark-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 300px;
+  text-align: center;
+}
+
+.bookmark-content h2 {
+  margin-bottom: 20px;
+}
+
+.bookmark-content form {
+  display: flex;
+  flex-direction: column;
+}
+
+.bookmark-content label {
+  margin-bottom: 5px;
+}
+
+.bookmark-content input {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.bookmark-content button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.bookmark-content .close-button {
+  margin-top: 10px;
+  background: #dc3545;
+}

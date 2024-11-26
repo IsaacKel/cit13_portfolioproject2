@@ -45,12 +45,16 @@ namespace WebApi.Controllers
         [HttpGet("{tConst}/principals")]
         public ActionResult<IList<TitlePrincipal>> GetTitlePrincipals(string tConst)
         {
-            var result = _dataService.GetTitlePrincipals(tConst);
-            if (!result.Any())
-                return NotFound(new { Message = "No principals found for this title." });
-
-            return Ok(result);
+            try
+            {
+                var results = _dataService.GetTitlePrincipals(tConst);
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in Controller: {ex.Message}");
+                return StatusCode(500, "Internal server error.");
+            }
         }
-
     }
 }

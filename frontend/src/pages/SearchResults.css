@@ -1,10 +1,44 @@
+.search-page {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.filters-column {
+  flex: 0.7;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filters-column h4 {
+  margin-bottom: 1rem;
+}
+
+.filters-column label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.results-column {
+  flex: 3.3;
+}
+
+.results-column h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.results-section {
+  margin-bottom: 2rem;
+}
+
 .search-results-container {
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 100%;
   border-radius: 8px;
-  padding: 1rem;
-  margin: 10px;
 }
 
 .search-item-link {
