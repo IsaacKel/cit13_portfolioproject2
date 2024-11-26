@@ -48,16 +48,18 @@ const IndividualTitle = () => {
     }, [tConst]);
 
 
-  useEffect(() => {
-    fetch(
-      `https://localhost:5003/api/SimilarMovies/${tConst}?pageNumber=1&pageSize=10`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.items) setSimilarTitles(data.items);
-      })
-      .catch((error) => console.error("Error fetching similar titles:", error));
-  }, [tConst]);
+    useEffect(() => {
+        const fetchSimilar = async () => {
+            try {
+                const data = await fetchSimilarTitles(tConst, 1, 10);
+                if (data.items) setSimilarTitles(data.items);
+            } catch (error) {
+                console.error("Error fetching similar titles:", error);
+            }
+        };
+
+        fetchSimilar();
+    }, [tConst]);
 
   useEffect(() => {
     fetch(`https://localhost:5003/api/TitlePrincipal/${tConst}/principals`)
