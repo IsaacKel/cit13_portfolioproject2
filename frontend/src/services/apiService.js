@@ -1,28 +1,65 @@
-// Base URL for the API
 const baseURL = "https://localhost:5003/api";
 
-// Function to get a Title from the API
-export const fetchTitle = async () => {
-  try {
-    const response = await fetch(`${baseURL}/Title/tt1375666`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+// Fetch title data by tConst
+export const fetchTitleData = async (tConst) => {
+    try {
+        const response = await fetch(`${baseURL}/Title/${tConst}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch title data: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching title data:", error);
+        throw error;
     }
-
-    const data = await response.json();
-    console.log("API Response:", data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching title:", error);
-    throw error;
-  }
 };
+
+// Fetch similar titles
+export const fetchSimilarTitles = async (tConst, pageNumber = 1, pageSize = 10) => {
+    try {
+        const response = await fetch(
+            `${baseURL}/SimilarMovies/${tConst}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+            {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch similar titles: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching similar titles:", error);
+        throw error;
+    }
+};
+
+// Fetch title principals
+export const fetchTitlePrincipals = async (tConst) => {
+    try {
+        const response = await fetch(`${baseURL}/TitlePrincipal/${tConst}/principals`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch title principals: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching title principals:", error);
+        throw error;
+    }
+};
+
 
 // Function to post data (Just placeholder)
 export const createUser = async (userData) => {
