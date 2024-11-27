@@ -5,7 +5,7 @@
 }
 
 .filters-column {
-  flex: 0.7;
+  flex: 0.5;
   background-color: #f9f9f9;
   border-radius: 8px;
   padding: 1rem;
@@ -22,16 +22,12 @@
 }
 
 .results-column {
-  flex: 3.3;
+  flex: 4;
 }
 
 .results-column h2 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-}
-
-.results-section {
-  margin-bottom: 2rem;
 }
 
 .search-results-container {
@@ -41,16 +37,11 @@
   border-radius: 8px;
 }
 
-.search-item-link {
-  text-decoration: none;
-  color: inherit;
-}
-
 .search-item {
   display: grid;
-  grid-template-columns: 0.35fr 2.65fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 0.5rem;
+  grid-template-columns: 4.3rem 2.6fr 0.3fr 1.2fr;
+  grid-template-rows: auto auto auto;
+  gap: 0.3rem;
   align-items: center;
   font-size: 1rem;
   margin-bottom: 1rem;
@@ -61,17 +52,32 @@
   width: 100%;
 }
 
+.search-item-link {
+  text-decoration: none;
+  color: inherit;
+  display: contents;
+}
+
+.search-item-poster {
+  grid-column: 1 / 2;
+  grid-row: 1 / 4;
+  width: 4rem;
+  border-radius: 5px;
+}
+
 .search-item-title {
   grid-column: 2 / 3;
-  grid-row: 1 / 2;
+  grid-row: 2 / 3;
   font-weight: bold;
+  margin-left: 0;
 }
 
 .search-item-details {
   grid-column: 2 / 3;
-  grid-row: 2 / 3;
+  grid-row: 3 / 4;
   display: flex;
   gap: 0.5rem;
+  margin-left: 0;
 }
 
 .search-item-year {
@@ -84,16 +90,24 @@
 
 .search-item-rating {
   grid-column: 3 / 4;
-  grid-row: 1 / 3;
+  grid-row: 1 / 4;
   display: flex;
   align-items: center;
 }
 
-.search-item-poster {
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
-  width: 3.5rem;
-  border-radius: 5px;
+.add-to-bookmarks-button {
+  grid-column: 4 / 5;
+  grid-row: 1 / 4;
+  padding: 0.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-to-bookmarks-button:hover {
+  background-color: #0056b3;
 }
 
 .star {
@@ -113,17 +127,4 @@
 
 .see-more-text:hover {
   text-decoration: underline;
-}
-
-.add-to-bookmarks-button {
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-to-bookmarks-button:hover {
-  background-color: #0056b3;
 }

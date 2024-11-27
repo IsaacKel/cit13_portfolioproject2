@@ -11,6 +11,9 @@ const SearchResults = () => {
   const [titles, setTitles] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  //open bookmark modal when bookmark is clicked
+  const [showBookmarkModal, setShowBookmarkModal] = useState(false);
+
   const [curPage, setCurPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -24,14 +27,18 @@ const SearchResults = () => {
     setCurPage(page);
   };
 
+  const handleBookmarkClick = () => {
+    setShowBookmarkModal(true);
+  };
+
   useEffect(() => {
     if (query) {
       const fetchData = async () => {
         setLoading(true);
         try {
           const [nameRes, titleRes] = await Promise.all([
-            fetch(`https://localhost:5003/api/Search/name/${query}`),
-            fetch(`https://localhost:5003/api/Search/title/${query}`),
+            fetch(`http://localhost:5003/api/Search/name/${query}`),
+            fetch(`http://localhost:5003/api/Search/title/${query}`),
           ]);
 
           const nameData = await nameRes.json();
@@ -41,7 +48,7 @@ const SearchResults = () => {
           const namesWithImages = await Promise.all(
             (nameData.items || []).map(async (person) => {
               const imageUrl = await fetchImages(person.primaryName);
-              return { ...person, imageUrl }; // Add imageUrl to each person
+              return { ...person, imageUrl };
             })
           );
 
@@ -103,12 +110,12 @@ const SearchResults = () => {
           {titles.length === 0 && <p>No results found</p>}
           <div className="search-results-container">
             {displayedTitles.map((title, index) => (
-              <Link
-                to={`/title/${title.tConst.split("/").pop()}`}
-                key={index}
-                className="search-item-link"
-              >
-                <div className="search-item">
+              <div className="search-item">
+                <Link
+                  to={`/title/${title.tConst.split("/").pop()}`}
+                  key={index}
+                  className="search-item-link"
+                >
                   {title.poster && (
                     <img
                       src={title.poster}
@@ -125,16 +132,16 @@ const SearchResults = () => {
                     <div className="search-item-rating">
                       <span className="star">⭐</span>
                       <p className="title-rating">{title.rating}</p>
-                      <button
-                        onClick={() => console.log("Add rating")}
-                        className="add-to-bookmarks-button"
-                      >
-                        + Add to Bookmarks
-                      </button>
                     </div>
                   )}
-                </div>
-              </Link>
+                </Link>
+                <button
+                  className="add-to-bookmarks-button"
+                  onClick={handleBookmarkClick}
+                >
+                  + Add to Bookmarks
+                </button>
+              </div>
             ))}
           </div>
           {titles.length > 3 && !showMoreTitles && (
@@ -159,12 +166,12 @@ const SearchResults = () => {
         <div className="search-results-container">
           {names.length === 0 && <p>No people found</p>}
           {displayedPeople.map((name, index) => (
-            <Link
-              to={`/name/${name.nConst.split("/").pop()}`}
-              key={index}
-              className="search-item-link"
-            >
-              <div className="search-item">
+            <div className="search-item">
+              <Link
+                to={`/name/${name.nConst.split("/").pop()}`}
+                key={index}
+                className="search-item-link"
+              >
                 {name.imageUrl ? (
                   <img
                     src={name.imageUrl}
@@ -175,8 +182,14 @@ const SearchResults = () => {
                   <div className="placeholder-image"></div>
                 )}
                 <div className="search-item-title">{name.primaryName}</div>
-              </div>
-            </Link>
+              </Link>
+              <button
+                className="add-to-bookmarks-button"
+                onClick={handleBookmarkClick}
+              >
+                + Add to Bookmarks
+              </button>
+            </div>
           ))}
           {names.length > 3 && !showMorePeople && (
             <p
@@ -196,6 +209,10 @@ const SearchResults = () => {
           )}
         </div>
       </div>
+      <Bookmark
+        show={showBookmarkModal}
+        onClose={() => setShowBookmarkModal(false)}
+      />
     </div>
   );
 };

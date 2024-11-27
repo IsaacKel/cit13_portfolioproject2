@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./IndividualTitle.css";
-import { fetchImages, fetchTitleData, fetchSimilarTitles, fetchTitlePrincipals } from "../services/apiService";
+import {
+  fetchImages,
+  fetchTitleData,
+  fetchSimilarTitles,
+  fetchTitlePrincipals,
+} from "../services/apiService";
 import Bookmark from "../components/Bookmark";
 
 const IndividualTitle = () => {
@@ -14,14 +19,14 @@ const IndividualTitle = () => {
   const [castWithImages, setCastWithImages] = useState([]);
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(0);
+  const [crewPage, setCrewPage] = useState(0);
   const itemsPerPage = 8;
   const [similarTitlesPage, setSimilarTitlesPage] = useState(0);
   const similarTitlesPerPage = 8;
 
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentCast = castWithImages.slice(startIndex, endIndex);
+  const crewStartIndex = crewPage * itemsPerPage;
+  const crewEndIndex = crewStartIndex + itemsPerPage;
+  const currentCast = castWithImages.slice(crewStartIndex, crewEndIndex);
 
   const similarTitlesStartIndex = similarTitlesPage * similarTitlesPerPage;
   const similarTitlesEndIndex = similarTitlesStartIndex + similarTitlesPerPage;
@@ -30,52 +35,50 @@ const IndividualTitle = () => {
     similarTitlesEndIndex
   );
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchTitleData(tConst);
+        setTitleData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const data = await fetchTitleData(tConst);
-                setTitleData(data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
+    fetchData();
+  }, [tConst]);
 
-        fetchData();
-    }, [tConst]);
+  useEffect(() => {
+    const fetchSimilar = async () => {
+      try {
+        const data = await fetchSimilarTitles(tConst, 1, 10);
+        if (data.items) setSimilarTitles(data.items);
+      } catch (error) {
+        console.error("Error fetching similar titles:", error);
+      }
+    };
 
+    fetchSimilar();
+  }, [tConst]);
 
-    useEffect(() => {
-        const fetchSimilar = async () => {
-            try {
-                const data = await fetchSimilarTitles(tConst, 1, 10);
-                if (data.items) setSimilarTitles(data.items);
-            } catch (error) {
-                console.error("Error fetching similar titles:", error);
-            }
-        };
+  useEffect(() => {
+    const fetchPrincipals = async () => {
+      try {
+        const data = await fetchTitlePrincipals(tConst);
+        if (data.length === 0) {
+          console.warn("No crew found for this title.");
+        }
+        setPrincipals(data);
+      } catch (error) {
+        console.error("Error fetching title principals:", error);
+      }
+    };
 
-        fetchSimilar();
-    }, [tConst]);
-
-    useEffect(() => {
-        const fetchPrincipals = async () => {
-            try {
-                const data = await fetchTitlePrincipals(tConst);
-                if (data.length === 0) {
-                    console.warn("No crew found for this title.");
-                }
-                setPrincipals(data);
-            } catch (error) {
-                console.error("Error fetching title principals:", error);
-            }
-        };
-
-        fetchPrincipals();
-    }, [tConst]);
+    fetchPrincipals();
+  }, [tConst]);
 
   useEffect(() => {
     const fetchCastImages = async () => {
@@ -101,15 +104,15 @@ const IndividualTitle = () => {
       : type.charAt(0).toUpperCase() + type.slice(1);
   };
 
-  const handleNextPage = () => {
-    if (endIndex < castWithImages.length) {
-      setCurrentPage(currentPage + 1);
+  const handleNextCrewPage = () => {
+    if (crewEndIndex < castWithImages.length) {
+      setCrewPage(crewPage + 1);
     }
   };
 
-  const handlePrevPage = () => {
-    if (startIndex > 0) {
-      setCurrentPage(currentPage - 1);
+  const handlePrevCrewPage = () => {
+    if (crewStartIndex > 0) {
+      setCrewPage(crewPage - 1);
     }
   };
 
@@ -172,9 +175,10 @@ const IndividualTitle = () => {
         <p className="plot">{titleData.plot}</p>
       </div>
 
-      <section className="similar-titles">
+      {/* Cast & Crew */}
+      <section className="cast-crew-similar-titles">
         <h2>Cast & Crew</h2>
-        <div className="similar-titles-list">
+        <div className="cards-list">
           {currentCast.length > 0 ? (
             currentCast.map((principal) => (
               <Link
@@ -182,17 +186,17 @@ const IndividualTitle = () => {
                 key={principal.nConst}
                 className="search-item-link"
               >
-                <div key={principal.nConst} className="cast-card">
+                <div key={principal.nConst} className="card">
                   {principal.imageUrl ? (
                     <img
                       src={principal.imageUrl}
                       alt={principal.name}
-                      className="cast-card-img"
+                      className="card-img"
                     />
                   ) : (
-                    <div className="cast-card-img placeholder"></div>
+                    <div className="card-img placeholder"></div>
                   )}
-                  <div className="cast-card-details">
+                  <div className="card-details">
                     <p>{principal.name}</p>
                     <p className="title-data">{principal.roles}</p>
                   </div>
@@ -204,21 +208,22 @@ const IndividualTitle = () => {
           )}
         </div>
         <div className="pagination-buttons">
-          <button onClick={handlePrevPage} disabled={startIndex === 0}>
+          <button onClick={handlePrevCrewPage} disabled={crewStartIndex === 0}>
             &lt; Prev
           </button>
           <button
-            onClick={handleNextPage}
-            disabled={endIndex >= castWithImages.length}
+            onClick={handleNextCrewPage}
+            disabled={crewEndIndex >= castWithImages.length}
           >
             Next &gt;
           </button>
         </div>
       </section>
 
-      <section className="similar-titles">
+      {/* Similar Titles */}
+      <section className="cast-crew-similar-titles">
         <h2>Similar Titles</h2>
-        <div className="similar-titles-list">
+        <div className="cards-list">
           {currentSimilarTitles.length > 0 ? (
             currentSimilarTitles.map((title) => (
               <Link
@@ -226,17 +231,17 @@ const IndividualTitle = () => {
                 key={title.tConst}
                 className="search-item-link"
               >
-                <div key={title.tConst} className="cast-card">
+                <div key={title.tConst} className="card">
                   {title.poster ? (
                     <img
                       src={title.poster}
                       alt={title.primaryTitle}
-                      className="cast-card-img"
+                      className="card-img"
                     />
                   ) : (
-                    <div className="cast-card-img placeholder"></div>
+                    <div className="card-img placeholder"></div>
                   )}
-                  <div className="cast-card-details">
+                  <div className="card-details">
                     <p>{title.primaryTitle}</p>
                   </div>
                 </div>
