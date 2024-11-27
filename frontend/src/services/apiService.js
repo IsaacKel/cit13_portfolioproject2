@@ -1,4 +1,52 @@
 const baseURL = "https://localhost:5003/api";
+const userBaseURL = `${baseURL}/v3/user`;
+
+
+// Function to register a user
+export const registerUser = async (userData) => {
+    try {
+        const response = await fetch(`${userBaseURL}/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `Big Error: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error registering user:", error);
+        throw error;
+    }
+};
+
+// Function to login a user
+export const loginUser = async (loginData) => {
+    try {
+        const response = await fetch(`${userBaseURL}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(loginData),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `Error: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error logging in user:", error);
+        throw error;
+    }
+};
 
 // Fetch title data by tConst
 export const fetchTitleData = async (tConst) => {
@@ -58,30 +106,6 @@ export const fetchTitlePrincipals = async (tConst) => {
         console.error("Error fetching title principals:", error);
         throw error;
     }
-};
-
-
-// Function to post data (Just placeholder)
-export const createUser = async (userData) => {
-  try {
-    const response = await fetch(`${baseURL}/******?`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error creating user:", error);
-    throw error;
-  }
 };
 
 // Function to get images of people using themovieDB API
