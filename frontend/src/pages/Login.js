@@ -1,31 +1,53 @@
-// Login page using bootstrap
-
-import React from "react";
-import { Form, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Form, Button, Alert } from "react-bootstrap";
+import { loginUser } from "../services/apiService";
 import "./Login.css";
 
 const Login = () => {
-  return (
-    <>
-      <Form className="login-form">
-        <Form.Label className="login-label">Username:</Form.Label>
-        <Form.Control
-          type="username"
-          placeholder="Enter username"
-          className="login-input"
-        />
-        <Form.Label className="login-label">Password: </Form.Label>
-        <Form.Control
-          type="password"
-          placeholder="Enter password"
-          className="login-input"
-        />
-        <Button variant="primary" type="submit" className="login-submit">
-          Log In
-        </Button>
-      </Form>
-    </>
-  );
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState(null);
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError(null);
+
+        try {
+            const response = await loginUser({ userName: username, password });
+            console.log("Login successful:", response);
+
+            // Save token and redirect (or handle user session)
+            localStorage.setItem("token", response.token);
+            alert("Login successful");
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    return (
+        <Form className="login-form" onSubmit={handleLogin}>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form.Label className="login-label">Username:</Form.Label>
+            <Form.Control
+                type="text"
+                placeholder="Enter username"
+                className="login-input"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+            />
+            <Form.Label className="login-label">Password: </Form.Label>
+            <Form.Control
+                type="password"
+                placeholder="Enter password"
+                className="login-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button variant="primary" type="submit" className="login-submit">
+                Log In
+            </Button>
+        </Form>
+    );
 };
 
 export default Login;
