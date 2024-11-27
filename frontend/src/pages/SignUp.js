@@ -6,7 +6,7 @@ import "./Login.css";
 const SignUp = () => {
     const [formData, setFormData] = useState({
         name: "",
-        userName: "", // Matches the input name for "Username"
+        userName: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -37,7 +37,7 @@ const SignUp = () => {
 
         console.log("Payload being sent:", {
             name: formData.name,
-            username: formData.userName, // Changed to match backend DTO property
+            username: formData.userName, 
             email: formData.email,
             password: formData.password,
             role: formData.role,
@@ -46,7 +46,7 @@ const SignUp = () => {
         try {
             const response = await registerUser({
                 name: formData.name,
-                username: formData.userName, // Changed to match backend DTO property
+                username: formData.userName, 
                 email: formData.email,
                 password: formData.password,
                 role: formData.role,
@@ -79,7 +79,7 @@ const SignUp = () => {
                 type="text"
                 placeholder="Enter username"
                 className="login-input"
-                name="userName" // Changed to match formData key
+                name="userName"
                 value={formData.userName}
                 onChange={handleChange}
             />

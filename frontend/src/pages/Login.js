@@ -7,10 +7,12 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError(null);
+        setSuccess(null);
 
         try {
             const response = await loginUser({ userName: username, password });
@@ -18,7 +20,7 @@ const Login = () => {
 
             // Save token and redirect (or handle user session)
             localStorage.setItem("token", response.token);
-            alert("Login successful");
+            setSuccess("Login successful!");
         } catch (err) {
             setError(err.message);
         }
@@ -27,6 +29,7 @@ const Login = () => {
     return (
         <Form className="login-form" onSubmit={handleLogin}>
             {error && <Alert variant="danger">{error}</Alert>}
+            {success && <Alert variant="success">{success}</Alert>}
             <Form.Label className="login-label">Username:</Form.Label>
             <Form.Control
                 type="text"
