@@ -25,13 +25,14 @@ const IndividualTitle = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Fetch main title data, similar titles, and cast/crew
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const [title, similar, principals] = await Promise.all([
           fetchTitleData(tConst),
-          fetchSimilarTitles(tConst, 1, 10),
+          fetchSimilarTitles(tConst, 1, ITEMS_PER_PAGE * 5),
           fetchTitlePrincipals(tConst),
         ]);
 
@@ -48,6 +49,7 @@ const IndividualTitle = () => {
     window.scrollTo(0, 0);
   }, [tConst]);
 
+  // Fetch cast images
   useEffect(() => {
     const fetchCastImages = async () => {
       if (!principals.length) return;
@@ -63,21 +65,21 @@ const IndividualTitle = () => {
   }, [principals]);
 
   const formatTitleType = (type) => {
-    if (!type) return type;
-    const lowerType = type.toLowerCase();
-    if (lowerType === "tvseries") return "TV Show";
-    if (lowerType === "tvepisode") return "TV Episode";
-    if (lowerType === "tvshort") return "TV Short";
-    if (lowerType === "movie") return "Movie";
-    if (lowerType === "videogame") return "Video Game";
-    if (lowerType === "short") return "Short";
-    if (lowerType === "tvmini") return "TV Mini-Series";
-    if (lowerType === "video") return "Video";
-    return type;
+    const typesMap = {
+      tvseries: "TV Show",
+      tvepisode: "TV Episode",
+      tvshort: "TV Short",
+      movie: "Movie",
+      videogame: "Video Game",
+      short: "Short",
+      tvmini: "TV Mini-Series",
+      video: "Video",
+    };
+    return typesMap[type?.toLowerCase()] || type;
   };
 
   const handlePageChange = (setter, value) => {
-    setter((prev) => prev + value);
+    setter((prev) => Math.max(0, prev + value));
   };
 
   if (loading) return <p>Loading...</p>;
@@ -172,7 +174,7 @@ const IndividualTitle = () => {
           )}
           renderItem={(title) => (
             <Link
-              to={`/title/${title.tConst.split("/").pop()}`}
+              to={`/title/${title.tConst}`}
               key={title.tConst}
               className="search-item-link"
             >
@@ -201,6 +203,7 @@ const IndividualTitle = () => {
           onPrevious={() => handlePageChange(setSimilarTitlesPage, -1)}
         />
       </section>
+
       <Bookmark
         show={showBookmarkModal}
         onClose={() => setShowBookmarkModal(false)}
