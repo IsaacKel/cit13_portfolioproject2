@@ -11,8 +11,9 @@
 }
 
 .login-submit {
-  width: 90%;
-  margin-top: 30px;
+    width: 90%;
+    margin-top: 30px;
+    transition: background-color 0.3s ease;
 }
 
 .login-input {
@@ -22,4 +23,16 @@
 .login-label {
   margin-bottom: 10px;
   margin-top: 10px;
+}
+
+.login-input:disabled {
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+}
+
+.login-submit:disabled {
+    background-color: #cccccc;
+    color: white;
+    cursor: not-allowed;
 }
