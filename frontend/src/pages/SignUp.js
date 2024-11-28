@@ -73,6 +73,7 @@ const SignUp = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                disabled={success}
             />
             <Form.Label className="login-label">Username:</Form.Label>
             <Form.Control
@@ -82,6 +83,7 @@ const SignUp = () => {
                 name="userName"
                 value={formData.userName}
                 onChange={handleChange}
+                disabled={success}
             />
             <Form.Label className="login-label">Email:</Form.Label>
             <Form.Control
@@ -91,6 +93,7 @@ const SignUp = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                disabled={success}
             />
             <Form.Label className="login-label">Password:</Form.Label>
             <Form.Control
@@ -100,6 +103,7 @@ const SignUp = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                disabled={success}
             />
             <Form.Label className="login-label">Confirm Password:</Form.Label>
             <Form.Control
@@ -109,8 +113,9 @@ const SignUp = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                disabled={success}
             />
-            <Button variant="primary" type="submit" className="login-submit">
+            <Button variant="primary" type="submit" className="login-submit" disabled={success}>
                 Sign Up
             </Button>
         </Form>
