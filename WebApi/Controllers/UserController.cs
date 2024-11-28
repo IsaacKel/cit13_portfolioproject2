@@ -148,7 +148,7 @@ namespace WebApi.Controllers
 
       var Jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-      return Ok(new { username = user.Username, token = Jwt });
+      return Ok(new { username = user.Username, token = Jwt, user.Id });
     }
 
     // -- DELETE USER --
