@@ -37,6 +37,7 @@ const Login = () => {
                 className="login-input"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                disabled={success}
             />
             <Form.Label className="login-label">Password: </Form.Label>
             <Form.Control
@@ -45,8 +46,9 @@ const Login = () => {
                 className="login-input"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                disabled={success}
             />
-            <Button variant="primary" type="submit" className="login-submit">
+            <Button variant="primary" type="submit" className="login-submit" disabled={success}>
                 Log In
             </Button>
         </Form>
