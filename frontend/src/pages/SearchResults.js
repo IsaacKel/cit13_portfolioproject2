@@ -24,47 +24,93 @@ const SearchResults = () => {
   const displayedPeople = showMorePeople ? names : names.slice(0, 3);
 
   const handlePageChange = (page) => {
-    setCurPage(page);
+    if (page >= 1 && page <= totalPages) {
+      setCurPage(page);
+      fetchData(query, page); // Fetch results for the selected page
+    }
   };
 
   const handleBookmarkClick = () => {
     setShowBookmarkModal(true);
   };
 
+  const fetchData = async (query, pageNumber) => {
+    setLoading(true);
+    try {
+      const [nameRes, titleRes] = await Promise.all([
+        fetch(
+          `http://localhost:5003/api/Search/name/${query}?pageNumber=${pageNumber}&pageSize=10`
+        ),
+        fetch(
+          `http://localhost:5003/api/Search/title/${query}?pageNumber=${pageNumber}&pageSize=10`
+        ),
+      ]);
+
+      const nameData = await nameRes.json();
+      const titleData = await titleRes.json();
+
+      // Fetch images for each person in the name data
+      const namesWithImages = await Promise.all(
+        (nameData.items || []).map(async (person) => {
+          const imageUrl = await fetchImages(person.primaryName);
+          return { ...person, imageUrl };
+        })
+      );
+
+      setNames(namesWithImages);
+      setTitles(titleData.items || []);
+      setTotalPages(titleData.numberPages || 1);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (query) {
-      const fetchData = async () => {
-        setLoading(true);
-        try {
-          const [nameRes, titleRes] = await Promise.all([
-            fetch(`http://localhost:5003/api/Search/name/${query}`),
-            fetch(`http://localhost:5003/api/Search/title/${query}`),
-          ]);
-
-          const nameData = await nameRes.json();
-          const titleData = await titleRes.json();
-
-          // Fetch images for each person in the name data
-          const namesWithImages = await Promise.all(
-            (nameData.items || []).map(async (person) => {
-              const imageUrl = await fetchImages(person.primaryName);
-              return { ...person, imageUrl };
-            })
-          );
-
-          setNames(namesWithImages);
-          setTitles(titleData.items || []);
-          setTotalPages(titleData.numberPages || 1);
-        } catch (error) {
-          console.error("Error fetching search results:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchData();
+      fetchData(query, curPage);
     }
-  }, [query]);
+  }, [query, curPage]);
+
+  const getPaginationButtons = () => {
+    const buttons = [];
+    const maxButtons = 5; // Maximum number of buttons to display
+
+    if (totalPages <= maxButtons) {
+      // If total pages are less than or equal to maxButtons, show all pages
+      for (let i = 1; i <= totalPages; i++) {
+        buttons.push(i);
+      }
+    } else {
+      // Always show the first page
+      buttons.push(1);
+
+      // Show the current page and up to two pages before and after it
+      let startPage = Math.max(curPage - 2, 2);
+      let endPage = Math.min(curPage + 2, totalPages - 1);
+
+      // Add ellipsis if there's a gap between the first page and the startPage
+      if (startPage > 2) {
+        buttons.push("...");
+      }
+
+      // Add the range of pages around the current page
+      for (let i = startPage; i <= endPage; i++) {
+        buttons.push(i);
+      }
+
+      // Add ellipsis if there's a gap between the endPage and the last page
+      if (endPage < totalPages - 1) {
+        buttons.push("...");
+      }
+
+      // Always show the last page
+      buttons.push(totalPages);
+    }
+
+    return buttons;
+  };
 
   if (loading) {
     return <div>Searching...</div>;
@@ -100,6 +146,7 @@ const SearchResults = () => {
           <select>
             <option value="releaseDate">Release Date</option>
             <option value="rating">Rating</option>
+            <option value="popularity">Popularity</option>
           </select>
         </div>
       </div>
@@ -116,12 +163,14 @@ const SearchResults = () => {
                   key={index}
                   className="search-item-link"
                 >
-                  {title.poster && (
+                  {title.poster ? (
                     <img
                       src={title.poster}
                       alt={title.primaryTitle}
-                      className="search-item-poster"
+                      className="search-item-img"
                     />
+                  ) : (
+                    <div className="search-item-img placeholder"></div>
                   )}
                   <div className="search-item-title">{title.primaryTitle}</div>
                   <div className="search-item-details">
@@ -161,7 +210,31 @@ const SearchResults = () => {
             </p>
           )}
         </div>
-        <p>Total pages - need to add pagination: {totalPages}</p>
+        {/* Pagination Controls */}
+        <div className="pagination">
+          <button
+            onClick={() => handlePageChange(curPage - 1)}
+            disabled={curPage === 1}
+          >
+            Previous
+          </button>
+          {getPaginationButtons().map((page, index) => (
+            <button
+              key={index}
+              onClick={() => page !== "..." && handlePageChange(page)}
+              className={curPage === page ? "active" : ""}
+              disabled={page === "..."}
+            >
+              {page}
+            </button>
+          ))}
+          <button
+            onClick={() => handlePageChange(curPage + 1)}
+            disabled={curPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
         <h3>People</h3>
         <div className="search-results-container">
           {names.length === 0 && <p>No people found</p>}
@@ -176,10 +249,10 @@ const SearchResults = () => {
                   <img
                     src={name.imageUrl}
                     alt={name.primaryName}
-                    className="search-item-poster"
+                    className="search-item-img"
                   />
                 ) : (
-                  <div className="placeholder-image"></div>
+                  <div className="search-item-img placeholder"></div>
                 )}
                 <div className="search-item-title">{name.primaryName}</div>
               </Link>
