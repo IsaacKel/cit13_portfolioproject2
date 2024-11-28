@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:5003/api";
+const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -47,27 +47,44 @@ export const loginUser = async (loginData) => {
   }
 };
 
-export const fetchSearchResults = async (query) => {
-  const [nameRes, titleRes] = await Promise.all([
-    fetch(`${baseURL}/Search/name/${query}`),
-    fetch(`${baseURL}/Search/title/${query}`),
-  ]);
+export const fetchSearchResults = async (
+  query,
+  pageNumber,
+  setLoading,
+  setNames,
+  setTitles,
+  setTotalPages
+) => {
+  setLoading(true);
+  try {
+    const [nameRes, titleRes] = await Promise.all([
+      fetch(
+        `${baseURL}/Search/name/${query}?pageNumber=${pageNumber}&pageSize=10`
+      ),
+      fetch(
+        `${baseURL}/Search/title/${query}?pageNumber=${pageNumber}&pageSize=10`
+      ),
+    ]);
 
-  const nameData = await nameRes.json();
-  const titleData = await titleRes.json();
+    const nameData = await nameRes.json();
+    const titleData = await titleRes.json();
 
-  const namesWithImages = await Promise.all(
-    (nameData.items || []).map(async (person) => {
-      const imageUrl = await fetchImages(person.primaryName);
-      return { ...person, imageUrl };
-    })
-  );
+    // Fetch images for each person in the name data
+    const namesWithImages = await Promise.all(
+      (nameData.items || []).map(async (person) => {
+        const imageUrl = await fetchImages(person.primaryName);
+        return { ...person, imageUrl };
+      })
+    );
 
-  return {
-    names: namesWithImages,
-    titles: titleData.items || [],
-    pages: titleData.numberPages || 1,
-  };
+    setNames(namesWithImages);
+    setTitles(titleData.items || []);
+    setTotalPages(titleData.numberPages || 1);
+  } catch (error) {
+    console.error("Error fetching search results:", error);
+  } finally {
+    setLoading(false);
+  }
 };
 
 // Fetch title data by tConst

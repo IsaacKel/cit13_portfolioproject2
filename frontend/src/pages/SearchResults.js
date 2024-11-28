@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import "./SearchResults.css";
-import { fetchImages } from "../services/apiService";
+import { fetchSearchResults } from "../services/apiService";
 import Bookmark from "../components/Bookmark";
 
 const SearchResults = () => {
@@ -35,36 +35,14 @@ const SearchResults = () => {
   };
 
   const fetchData = async (query, pageNumber) => {
-    setLoading(true);
-    try {
-      const [nameRes, titleRes] = await Promise.all([
-        fetch(
-          `http://localhost:5003/api/Search/name/${query}?pageNumber=${pageNumber}&pageSize=10`
-        ),
-        fetch(
-          `http://localhost:5003/api/Search/title/${query}?pageNumber=${pageNumber}&pageSize=10`
-        ),
-      ]);
-
-      const nameData = await nameRes.json();
-      const titleData = await titleRes.json();
-
-      // Fetch images for each person in the name data
-      const namesWithImages = await Promise.all(
-        (nameData.items || []).map(async (person) => {
-          const imageUrl = await fetchImages(person.primaryName);
-          return { ...person, imageUrl };
-        })
-      );
-
-      setNames(namesWithImages);
-      setTitles(titleData.items || []);
-      setTotalPages(titleData.numberPages || 1);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-    } finally {
-      setLoading(false);
-    }
+    await fetchSearchResults(
+      query,
+      pageNumber,
+      setLoading,
+      setNames,
+      setTitles,
+      setTotalPages
+    );
   };
 
   useEffect(() => {
