@@ -14,10 +14,10 @@ const PaginationButtons = ({
   return (
     <div className="pagination-buttons">
       <button onClick={onPrevious} disabled={!canPrevious}>
-        &lt; Prev
+        &lt;
       </button>
       <button onClick={onNext} disabled={!canNext}>
-        Next &gt;
+        &gt;
       </button>
     </div>
   );

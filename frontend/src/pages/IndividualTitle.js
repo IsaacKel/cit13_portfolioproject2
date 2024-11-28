@@ -71,6 +71,8 @@ const IndividualTitle = () => {
     if (lowerType === "movie") return "Movie";
     if (lowerType === "videogame") return "Video Game";
     if (lowerType === "short") return "Short";
+    if (lowerType === "tvmini") return "TV Mini-Series";
+    if (lowerType === "video") return "Video";
     return type;
   };
 

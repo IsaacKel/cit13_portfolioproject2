@@ -23,16 +23,22 @@ const SearchItem = ({ item, type, handleBookmarkClick }) => (
       <div className="search-item-title">
         {item.primaryTitle || item.primaryName}
       </div>
-      {type === "title" && (
+      {type === "title" ? (
         <div className="search-item-details">
           <p className="search-item-year">{item.startYear}</p>
           <p className="search-item-genre">{item.genre}</p>
         </div>
+      ) : (
+        <div className="search-item-details">
+          <p className="search-item-year">
+            {item.birthYear} - {item.deathYear}
+          </p>
+        </div>
       )}
-      {item.rating && (
+      {(item.rating || item.nRating) && (
         <div className="search-item-rating">
           <span className="star">⭐</span>
-          <p className="title-rating">{item.rating}</p>
+          <p className="title-rating">{item.rating || item.nRating}</p>
         </div>
       )}
     </Link>
