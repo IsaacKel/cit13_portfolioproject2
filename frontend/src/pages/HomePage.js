@@ -1,7 +1,9 @@
 // Home Page
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
+import { Link } from "react-router-dom";
 import { fetchTop10Movies, fetchTop10TVShows, fetchTop10Actors, fetchImages } from "../services/apiService";
+import "./IndividualTitle.css";
 
 const HomePage = () => {
   const [top10Movies, setTop10Movies] = useState([]);
@@ -44,32 +46,38 @@ const HomePage = () => {
 
   return (
     <>
-      <h1>Home Page</h1>
-      <p>Welcome to the Home Page</p>
+    <h1>Editors Choice</h1>
+    placeholder for editors choice
       <h2>Top 10 Movies</h2>
-      <ul>
+      <ul style={{ display: 'flex'}}>
         {top10Movies.map((movie) => (
-          <li key={movie.tConst}>
-            <img src={movie.poster} alt={movie.primaryTitle} style={{ width: "50px", marginRight: "10px" }} />
-            {movie.primaryTitle}
+          <li  className = 'card' key={movie.tConst} style={{ margin: '10px', width: '10%' }}>
+            <Link to={`/title/${movie.tConst}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <img src={movie.poster} alt={movie.primaryTitle} style={{ width: "100%", marginBottom: "10px" }} />
+              <div style={{ textAlign: 'center', wordWrap: 'break-word' }}>{movie.primaryTitle}</div>
+            </Link>
           </li>
         ))}
       </ul>
       <h2>Top 10 TV Shows</h2>
-      <ul>
+      <ul style={{ display: 'flex'}}>
         {top10TVShows.map((show) => (
-          <li key={show.tConst}>
-            <img src={show.poster} alt={show.primaryTitle} style={{ width: "50px", marginRight: "10px" }} />
-            {show.primaryTitle}
+          <li className = 'card' key={show.tConst} style={{ margin: '10px', width: '10%' }}>
+            <Link to={`/title/${show.tConst}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <img src={show.poster} alt={show.primaryTitle} style={{ width: "100%", marginBottom: "10px" }} />
+              <div style={{ textAlign: 'center', wordWrap: 'break-word' }}>{show.primaryTitle}</div>
+            </Link>
           </li>
         ))}
       </ul>
       <h2>Top 10 Actors</h2>
-      <ul>
-      {top10Actors.map((actor) => (
-          <li key={actor.nConst}>
-            <img src={actor.image} alt={actor.primaryName} style={{ width: "50px", marginRight: "10px" }} />
-            {actor.primaryName}
+      <ul style={{ display: 'flex'}}>
+        {top10Actors.map((actor) => (
+          <li className = 'card' key={actor.nConst} style={{ margin: '10px', width: '10%' }}>
+            <Link to={`/name/${actor.nConst}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <img src={actor.image} alt={actor.primaryName} style={{ width: "100%", marginBottom: "10px" }} />
+              <div style={{ textAlign: 'center', wordWrap: 'break-word' }}>{actor.primaryName}</div>
+            </Link>
           </li>
         ))}
       </ul>
