@@ -39,7 +39,7 @@ const Bookmark = ({ show, onClose }) => {
       </Modal.Header>
       <Modal.Body>
         {!isLoggedIn ? (
-          <p>You need to be logged in to add a bookmark.</p>
+          <p>You must be logged in to add a bookmark.</p>
         ) : (
           <Form>
             <Form.Group controlId="note">

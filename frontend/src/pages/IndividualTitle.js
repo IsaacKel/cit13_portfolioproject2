@@ -174,7 +174,7 @@ const IndividualTitle = () => {
           )}
           renderItem={(title) => (
             <Link
-              to={`/title/${title.tConst}`}
+              to={`/title/${title.tConst.split("/").pop()}`}
               key={title.tConst}
               className="search-item-link"
             >
