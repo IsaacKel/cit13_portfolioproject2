@@ -1,12 +1,11 @@
 .search-page {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 20rem 1fr;
   gap: 2rem;
   padding: 1rem;
 }
 
 .filters-column {
-  flex: 1;
   background-color: #f9f9f9;
   border-radius: 8px;
   padding: 1rem;
@@ -47,6 +46,7 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   text-align: left;
+  height: 6rem;
 }
 
 .search-item-link {
@@ -58,7 +58,7 @@
 .search-item-img {
   grid-column: 1 / 2;
   grid-row: 1 / 4;
-  width: 4rem;
+  width: 3.5rem;
   border-radius: 5px;
 }
 
@@ -147,13 +147,16 @@
   margin: 0 5px;
   padding: 8px 12px;
   border: none;
-  background-color: #f0f0f0;
-  cursor: pointer;
+  border-radius: 5px;
 }
 
 .pagination button.active {
   background-color: #007bff;
   color: white;
+}
+
+.pagination button:hover {
+  background-color: #0056b3;
 }
 
 .pagination button:disabled {

@@ -1,4 +1,4 @@
-const baseURL = "https://localhost:5003/api";
+const baseURL = "http://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -44,6 +44,62 @@ export const loginUser = async (loginData) => {
   } catch (error) {
     console.error("Error logging in user:", error);
     throw error;
+  }
+};
+
+export const fetchTitlesSearch = async (
+  query,
+  pageNumber,
+  setLoading,
+  setTitles,
+  setTotalPages
+) => {
+  setLoading(true);
+  try {
+    const titleRes = await fetch(
+      `${baseURL}/Search/title/${query}?pageNumber=${pageNumber}&pageSize=10`
+    );
+
+    const titleData = await titleRes.json();
+
+    setTitles(titleData.items || []);
+    setTotalPages(titleData.numberPages || 1);
+  } catch (error) {
+    console.error("Error fetching title search results:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+export const fetchNamesSearch = async (
+  query,
+  pageNumber,
+  setLoading,
+  setNames,
+  setTotalPages
+) => {
+  setLoading(true);
+  try {
+    const nameRes = await fetch(
+      `${baseURL}/Search/name/${query}?pageNumber=${pageNumber}&pageSize=10`
+    );
+
+    const nameData = await nameRes.json();
+
+    // Fetch images for each person in the name data
+    const namesWithImages = await Promise.all(
+      (nameData.items || []).map(async (person) => {
+        const imageUrl = await fetchImages(person.primaryName);
+        return { ...person, imageUrl };
+      })
+    );
+
+    setNames(namesWithImages);
+    setTotalPages(nameData.numberPages || 1);
+  } catch (error) {
+    console.error("Error fetching name search results:", error);
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -184,6 +240,28 @@ export const fetchImages = async (personName) => {
     return imgURL;
   } catch (error) {
     return null;
+  }
+};
+
+// Function to add a bookmark
+export const addBookmark = async (userId, tConst, note) => {
+  try {
+    const response = await fetch(`${baseURL}/bookmarks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, tConst, note }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add bookmark");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding bookmark:", error);
+    throw error;
   }
 };
 

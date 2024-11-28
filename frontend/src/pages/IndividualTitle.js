@@ -45,7 +45,7 @@ const IndividualTitle = () => {
       }
     };
     fetchData();
-    window.scrollTo(0, 0); // Reset scroll position on title change
+    window.scrollTo(0, 0);
   }, [tConst]);
 
   useEffect(() => {
@@ -62,8 +62,17 @@ const IndividualTitle = () => {
     fetchCastImages();
   }, [principals]);
 
-  const formatTitleType = (type) =>
-    type?.toLowerCase() === "tvseries" ? "TV Show" : type;
+  const formatTitleType = (type) => {
+    if (!type) return type;
+    const lowerType = type.toLowerCase();
+    if (lowerType === "tvseries") return "TV Show";
+    if (lowerType === "tvepisode") return "TV Episode";
+    if (lowerType === "tvshort") return "TV Short";
+    if (lowerType === "movie") return "Movie";
+    if (lowerType === "videogame") return "Video Game";
+    if (lowerType === "short") return "Short";
+    return type;
+  };
 
   const handlePageChange = (setter, value) => {
     setter((prev) => prev + value);
