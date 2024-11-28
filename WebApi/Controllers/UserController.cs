@@ -53,8 +53,8 @@ namespace WebApi.Controllers
       return Ok(userDto);
     }
 
-    // -- REGISTER USER (Create) --
-    [HttpPost("register")]
+        // -- REGISTER USER / CREATE USER --
+      [HttpPost("register")]
     public IActionResult RegisterUser([FromBody] UserRegisterDTO dto)
     {
       if (!ModelState.IsValid ||
@@ -65,7 +65,24 @@ namespace WebApi.Controllers
         return BadRequest(ModelState);
       }
 
-     (var hashedPwd, var salt) = _hashing.Hash(dto.Password);
+            if (_dataService.GetUser(dto.Username) != null)
+            {
+                return BadRequest("User already exists");
+            }
+            if (string.IsNullOrEmpty(dto.Password))
+            {
+                return BadRequest("No password");
+            }
+            if (string.IsNullOrEmpty(dto.Email))
+            {
+                return BadRequest("No email");
+            }
+
+
+
+
+
+            (var hashedPwd, var salt) = _hashing.Hash(dto.Password);
 
      var user = _dataService.CreateUser(dto.Name, dto.Username, hashedPwd, dto.Email, salt, dto.Role);
 
@@ -74,30 +91,43 @@ namespace WebApi.Controllers
       userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId = user.Id });
 
       return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, userDto);
-    }
-
-    // -- CREATE USER --
-    [HttpPost]
-    public IActionResult CreateUser(CreateUserModel model)
+    }      [HttpPost("register")]
+    public IActionResult RegisterUser([FromBody] UserRegisterDTO dto)
     {
-      if (_dataService.GetUser(model.UserName) != null)
+      if (!ModelState.IsValid ||
+          string.IsNullOrWhiteSpace(dto.Username) ||
+          string.IsNullOrWhiteSpace(dto.Password) ||
+          string.IsNullOrWhiteSpace(dto.Email))
       {
-        return BadRequest("User already exists");
-      }
-      if (string.IsNullOrEmpty(model.Password))
-      {
-        return BadRequest("No password");
-      }
-      if (string.IsNullOrEmpty(model.Email))
-      {
-        return BadRequest("No email");
+        return BadRequest(ModelState);
       }
 
-      (var hashedPwd, var salt) = _hashing.Hash(model.Password);
+            if (_dataService.GetUser(dto.Username) != null)
+            {
+                return BadRequest("User already exists");
+            }
+            if (string.IsNullOrEmpty(dto.Password))
+            {
+                return BadRequest("No password");
+            }
+            if (string.IsNullOrEmpty(dto.Email))
+            {
+                return BadRequest("No email");
+            }
 
-      _dataService.CreateUser(model.Name, model.UserName, hashedPwd, model.Email, salt, model.Role);
 
-      return Ok("Created User");
+
+
+
+            (var hashedPwd, var salt) = _hashing.Hash(dto.Password);
+
+     var user = _dataService.CreateUser(dto.Name, dto.Username, hashedPwd, dto.Email, salt, dto.Role);
+
+      //var user = _dataService.AddUser(dto.Username, dto.Password, dto.Email);
+      var userDto = user.Adapt<UserDTO>();
+      userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId = user.Id });
+
+      return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, userDto);
     }
 
     // -- LOGIN USER --
