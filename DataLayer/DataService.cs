@@ -436,6 +436,17 @@ namespace DataLayer
                      .Where(k => k.NConst == nconst)
                      .ToList();
     }
-
+    public IList<GetGenreData> GetGenreData()
+        {
+            return _context.GetGenreData.FromSqlInterpolated($"select * from get_distinct_genres()").ToList();
+        }
+    public IList<GetYearData> GetYearData()
+    {
+        return _context.GetYearData.FromSqlInterpolated($"select * from get_distinct_start_years()").ToList();
+    }
+    public IList<GetTitleTypeData> GetTitleTypeData()
+    {
+        return _context.GetTitleTypeData.FromSqlInterpolated($"select * from get_distinct_title_types()").ToList();
+    }
   }
 }

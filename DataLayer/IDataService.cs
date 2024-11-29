@@ -63,6 +63,9 @@ namespace DataLayer
         IList<Top10Actors> GetTop10Actors();
         IList<SearchTitleNumvote> GetSearchTitlesNumvote(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1);
         IList<SearchTitleRating> GetSearchTitlesRating(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1);
+        IList<GetGenreData> GetGenreData();
+        IList<GetYearData> GetYearData();
+        IList<GetTitleTypeData> GetTitleTypeData();
         void rate(string tConst, int rating, int userId);
         // --Name--
         NameBasic GetNameByNConst(string nconst);
