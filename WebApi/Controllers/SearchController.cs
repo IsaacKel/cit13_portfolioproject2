@@ -80,5 +80,53 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
+        [HttpGet("title/numvotes")]
+        public ActionResult<PagedResponse<SearchTitleNumvote>> GetSearchTitlesNumvote(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1, int pageNumber = 1, int pageSize = DefaultPageSize)
+        {
+            var titles = _dataService.GetSearchTitlesNumvote(searchTerm, searchTitleType, searchGenre, searchYear);
+            if (titles == null || !titles.Any())
+            {
+                return NotFound();
+            }
+            var totalItems = titles.Count();
+            var pagedTitles = titles
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            foreach (var title in pagedTitles)
+            {
+                if (title.TConst != null)
+                {
+                    title.TConst = new Uri($"{Request.Scheme}://{Request.Host}/api/Title/{title.TConst}").ToString();
+                }
+            }
+            var response = CreatePagedResponse(pagedTitles, pageNumber, pageSize, totalItems, "GetSearchTitlesNumvote");
+            return Ok(response);
+        }
+        [HttpGet("title/rating")]
+        public ActionResult<PagedResponse<SearchTitleRating>> GetSearchTitlesRating(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1, int pageNumber = 1, int pageSize = DefaultPageSize)
+        {
+            var titles = _dataService.GetSearchTitlesRating(searchTerm, searchTitleType, searchGenre, searchYear);
+            if (titles == null || !titles.Any())
+            {
+                return NotFound();
+            }
+            var totalItems = titles.Count();
+            var pagedTitles = titles
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            foreach (var title in pagedTitles)
+            {
+                if (title.TConst != null)
+                {
+                    title.TConst = new Uri($"{Request.Scheme}://{Request.Host}/api/Title/{title.TConst}").ToString();
+                }
+            }
+            var response = CreatePagedResponse(pagedTitles, pageNumber, pageSize, totalItems, "GetSearchTitlesRating");
+            return Ok(response);
+        }
     }
 }

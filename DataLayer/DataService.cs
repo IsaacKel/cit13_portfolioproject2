@@ -342,7 +342,15 @@ namespace DataLayer
     {
       return _context.SearchTitles.FromSqlInterpolated($"select * from string_search({searchTerm})").ToList();
     }
-    public void rate(string tConst, int rating, int userId)
+        public IList<SearchTitleNumvote> GetSearchTitlesNumvote(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1)
+        {
+            return _context.SearchTitleNumvotes.FromSqlInterpolated($"select * from filtered_search_numvotes({searchTerm},{searchTitleType},{searchGenre},{searchYear})").ToList();
+        }
+        public IList<SearchTitleRating> GetSearchTitlesRating(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1)
+        {
+            return _context.SearchTitleRatings.FromSqlInterpolated($"select * from filtered_search_avgrating({searchTerm},{searchTitleType},{searchGenre},{searchYear})").ToList();
+        }
+        public void rate(string tConst, int rating, int userId)
     {
       _context.Database.ExecuteSqlInterpolated($"CALL rate({tConst}, {rating}, {userId})");
     }
@@ -435,6 +443,17 @@ namespace DataLayer
                      .Where(k => k.NConst == nconst)
                      .ToList();
     }
-
+    public IList<GetGenreData> GetGenreData()
+        {
+            return _context.GetGenreData.FromSqlInterpolated($"select * from get_distinct_genres()").ToList();
+        }
+    public IList<GetYearData> GetYearData()
+    {
+        return _context.GetYearData.FromSqlInterpolated($"select * from get_distinct_start_years()").ToList();
+    }
+    public IList<GetTitleTypeData> GetTitleTypeData()
+    {
+        return _context.GetTitleTypeData.FromSqlInterpolated($"select * from get_distinct_title_types()").ToList();
+    }
   }
 }

@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Models
 {
-    public class TitleGenre
+  public class GetTitleTypeData
     {
-        public string TConst { get; set; }
-        public string Genre { get; set; }
-    }
+    public string? TitleType { get; set; }
+  }
 }
