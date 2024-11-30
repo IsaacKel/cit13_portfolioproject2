@@ -96,12 +96,30 @@ const IndividualName = () => {
         <p>{error}</p>
       ) : (
         <>
-          <h1>{nameData.actualName}</h1>
-          {personImage && <img src={personImage} alt={nameData.actualName} />}
-          <p>
-            {nameData.birthYear}
-            {nameData.deathYear ? ` - ${nameData.deathYear}` : ""}
-          </p>
+          <div className="title-header">
+            <div className="title-data">
+              <h1>{nameData.actualName}</h1>
+              <div className="meta-data">
+                {nameData.birthYear && <span>{nameData.birthYear}</span>}
+                {nameData.deathYear && <span> - {nameData.deathYear}</span>}
+              </div>
+            </div>
+            <div className="title-actions">
+              {nameData.nRating && (
+                <span className="rating">⭐ {nameData.nRating}</span>
+              )}
+              <button onClick={() => setShowBookmarkModal(true)}>
+                + Add to Bookmarks
+              </button>
+            </div>
+          </div>
+          {personImage && (
+            <img
+              src={personImage}
+              alt={nameData.actualName}
+              className="poster"
+            />
+          )}
           <h2>Known For</h2>
           <section className="cast-crew-similar-titles">
             <CardList
@@ -142,7 +160,7 @@ const IndividualName = () => {
               )}
               renderItem={(coPlayer) => (
                 <Link
-                  to={`/name/${coPlayer.primaryName}`}
+                  to={`/name/${coPlayer.nConst.split("/").pop()}`}
                   key={coPlayer.primaryName}
                   className="search-item-link"
                 >
