@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import IndividualTitle from "./pages/IndividualTitle";
+import IndividualName from "./pages/IndividualName";
 import SearchResults from "./pages/SearchResults";
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/search" element={<SearchResults />} />
             <Route path="/login" element={<Login />} />
             <Route path="/title/:tConst" element={<IndividualTitle />} />
+            <Route path="/name/:nConst" element={<IndividualName />} />
           </Routes>
         </div>
         <Footer />

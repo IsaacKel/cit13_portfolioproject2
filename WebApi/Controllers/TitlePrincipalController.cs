@@ -17,29 +17,29 @@ namespace WebApi.Controllers
             _dataService = dataService;
         }
 
-        // GET: api/TitlePrincipal/by-name/{nconst}
-        [HttpGet("by-name/{nconst}", Name = "GetTitlePrincipalsByName")]
-        public ActionResult<IEnumerable<TitlePrincipal>> GetTitlePrincipalsByName(string nconst, int page = 1, int pageSize = DefaultPageSize)
-        {
-            var titlePrincipals = _dataService.GetTitlePrincipalsByName(nconst);
-            var totalCount = titlePrincipals.Count;
+        // // GET: api/TitlePrincipal/by-name/{nconst}
+        // [HttpGet("by-name/{nconst}", Name = "GetTitlePrincipalsByName")]
+        // public ActionResult<IEnumerable<TitlePrincipal>> GetTitlePrincipalsByName(string nconst, int page = 1, int pageSize = DefaultPageSize)
+        // {
+        //     var titlePrincipals = _dataService.GetTitlePrincipalsByName(nconst);
+        //     var totalCount = titlePrincipals.Count;
 
-            // Apply pagination
-            var pagedResult = titlePrincipals.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        //     // Apply pagination
+        //     var pagedResult = titlePrincipals.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-            var result = CreatePagingNConst("GetTitlePrincipalsByName", nconst, page, pageSize, totalCount, titlePrincipals.Skip((page - 1) * pageSize).Take(pageSize));
+        //     var result = CreatePagingNConst("GetTitlePrincipalsByName", nconst, page, pageSize, totalCount, titlePrincipals.Skip((page - 1) * pageSize).Take(pageSize));
 
-            return Ok(result);
-        }
+        //     return Ok(result);
+        // }
 
 
 
-        // GET: api/TitlePrincipal/by-title/{tconst}
-        [HttpGet("by-title/{tconst}")]
-        public ActionResult<IList<TitlePrincipal>> GetTitlePrincipalsByTitle(string tconst)
-        {
-            return Ok(_dataService.GetTitlePrincipalsByTitle(tconst));
-        }
+        // // GET: api/TitlePrincipal/by-title/{tconst}
+        // [HttpGet("by-title/{tconst}")]
+        // public ActionResult<IList<TitlePrincipal>> GetTitlePrincipalsByTitle(string tconst)
+        // {
+        //     return Ok(_dataService.GetTitlePrincipalsByTitle(tconst));
+        // }
 
 
         [HttpGet("{tConst}/principals")]
@@ -55,6 +55,13 @@ namespace WebApi.Controllers
                 Console.WriteLine($"Error in Controller: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
+        }
+
+        [HttpGet("{nconst}/principals-name")]
+        public ActionResult<IEnumerable<TitlePrincipal>> GetTitlePrincipalsName(string nconst)
+        {
+            var titles = _dataService.GetTitlePrincipalsName(nconst);
+            return Ok(titles);
         }
     }
 }

@@ -46,6 +46,8 @@ const IndividualTitle = () => {
       }
     };
     fetchData();
+    setSimilarTitlesPage(0);
+    setCrewPage(0);
     window.scrollTo(0, 0);
   }, [tConst]);
 

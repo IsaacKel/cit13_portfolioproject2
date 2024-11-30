@@ -12,12 +12,9 @@ namespace DataLayer.Models
         public string TConst { get; set; }
         public string NConst { get; set; }
         public int Ordering { get; set; }
-        //public string? Category { get; set; }
-        //public string? Job { get; set; }
-        public string Name { get; set; }
-
-        [NotMapped]
+        public string? Name { get; set; }
         public string? Roles { get; set; }
+        public string? Title { get; set; }
     }
 
 }

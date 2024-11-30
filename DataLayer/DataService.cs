@@ -375,6 +375,13 @@ namespace DataLayer
       return results;
     }
 
+    public IList<TitlePrincipal> GetTitlePrincipalsName(string nconst)
+    {
+      return _context.TitlePrincipals
+                     .FromSqlInterpolated($"SELECT * FROM get_title_principals_name({nconst})")
+                     .ToList();
+    }
+
     ////// FAKE list 
     //private readonly List<User> _users = new List<User>         {
     //  new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
@@ -404,19 +411,19 @@ namespace DataLayer
                            .ToList();
     }
 
-    // --TITLE PRINCIPALS--
-    public IList<TitlePrincipal> GetTitlePrincipalsByName(string nconst)
-    {
-      return _context.TitlePrincipals
-                     .Where(tp => tp.NConst == nconst)
-                     .ToList();
-    }
-    public IList<TitlePrincipal> GetTitlePrincipalsByTitle(string tconst)
-    {
-      return _context.TitlePrincipals
-                     .Where(tp => tp.TConst == tconst)
-                     .ToList();
-    }
+    // // --TITLE PRINCIPALS--
+    // public IList<TitlePrincipal> GetTitlePrincipalsByName(string nconst)
+    // {
+    //   return _context.TitlePrincipals
+    //                  .Where(tp => tp.NConst == nconst)
+    //                  .ToList();
+    // }
+    // public IList<TitlePrincipal> GetTitlePrincipalsByTitle(string tconst)
+    // {
+    //   return _context.TitlePrincipals
+    //                  .Where(tp => tp.TConst == tconst)
+    //                  .ToList();
+    // }
 
 
 

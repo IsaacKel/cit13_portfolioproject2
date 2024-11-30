@@ -40,7 +40,7 @@ public class MovieDbContext : DbContext
   public DbSet<Top10Movies> Top10Movies { get; set; }
   public DbSet<Top10Series> Top10Series { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     MapUsers(modelBuilder);
     MapBookmarks(modelBuilder);
@@ -68,7 +68,7 @@ public class MovieDbContext : DbContext
     MapTop10Actors(modelBuilder);
     MapTop10Movies(modelBuilder);
     MapTop10Series(modelBuilder);
-    }
+  }
   //User Table Mapping
   private static void MapUsers(ModelBuilder modelBuilder)
   {
@@ -163,15 +163,39 @@ public class MovieDbContext : DbContext
   }
 
   // MapTitlePrincipals method
+  // private static void MapTitlePrincipals(ModelBuilder modelBuilder)
+  // {
+  //   modelBuilder.Entity<TitlePrincipal>().ToTable("titleprincipals");
+  //   modelBuilder.Entity<TitlePrincipal>().HasKey(tp => new { tp.TConst, tp.NConst, tp.Ordering });
+  //   modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.TConst).HasColumnName("tconst");
+  //   modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.NConst).HasColumnName("nconst");
+  //   modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.Ordering).HasColumnName("ordering");
+  // }
+
+  // MapTitlePrincipals method
   private static void MapTitlePrincipals(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<TitlePrincipal>().ToTable("titleprincipals");
     modelBuilder.Entity<TitlePrincipal>().HasKey(tp => new { tp.TConst, tp.NConst, tp.Ordering });
-    modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.TConst).HasColumnName("tconst");
-    modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.NConst).HasColumnName("nconst");
-    modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.Ordering).HasColumnName("ordering");
-    //modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.Category).HasColumnName("category");
-    //modelBuilder.Entity<TitlePrincipal>().Property(tp => tp.Job).HasColumnName("job");
+
+    modelBuilder.Entity<TitlePrincipal>()
+        .Property(tp => tp.TConst)
+        .HasColumnName("tconst");
+
+    modelBuilder.Entity<TitlePrincipal>()
+        .Property(tp => tp.NConst)
+        .HasColumnName("nconst");
+
+    modelBuilder.Entity<TitlePrincipal>()
+        .Property(tp => tp.Ordering)
+        .HasColumnName("ordering");
+
+    // Define relationship with TitleBasic
+    modelBuilder.Entity<TitlePrincipal>()
+        .HasOne<TitleBasic>()
+        .WithMany()
+        .HasForeignKey(tp => tp.TConst)
+        .HasPrincipalKey(tb => tb.TConst);
   }
 
   // MapTitleBasic method
@@ -244,7 +268,7 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<SimilarMovie>().Property(c => c.NumVotes).HasColumnName("numvotes");
     modelBuilder.Entity<SimilarMovie>().Property(c => c.MatchingLanguages).HasColumnName("matching_languages");
     modelBuilder.Entity<SimilarMovie>().Property(c => c.Poster).HasColumnName("poster");
-    }
+  }
   public static void MapSearchNames(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<SearchName>().HasNoKey();
@@ -317,32 +341,32 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<TitleAka>().Property(ta => ta.Attributes).HasColumnName("attributes");
     modelBuilder.Entity<TitleAka>().Property(ta => ta.IsOriginalTitle).HasColumnName("isoriginaltitle");
   }
-    private static void MapTop10Actors(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Top10Actors>().ToTable("top10actors");
-        modelBuilder.Entity<Top10Actors>().HasKey(ta => new { ta.NConst, ta.PrimaryName });
-        modelBuilder.Entity<Top10Actors>().Property(ta => ta.NConst).HasColumnName("nconst");
-        modelBuilder.Entity<Top10Actors>().Property(ta => ta.PrimaryName).HasColumnName("primaryname");
-        modelBuilder.Entity<Top10Actors>().Property(ta => ta.NumVotes).HasColumnName("total_numvotes");
-    }
-    private static void MapTop10Movies(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Top10Movies>().ToTable("top10movies");
-        modelBuilder.Entity<Top10Movies>().HasKey(tm => new { tm.TConst, tm.PrimaryTitle });
-        modelBuilder.Entity<Top10Movies>().Property(tm => tm.TConst).HasColumnName("tconst");
-        modelBuilder.Entity<Top10Movies>().Property(tm => tm.PrimaryTitle).HasColumnName("primarytitle");
-        modelBuilder.Entity<Top10Movies>().Property(tm => tm.TitleType).HasColumnName("titletype");
-        modelBuilder.Entity<Top10Movies>().Property(tm => tm.Poster).HasColumnName("poster");
-    }
-    private static void MapTop10Series(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Top10Series>().ToTable("top10series");
-        modelBuilder.Entity<Top10Series>().HasKey(ts => new { ts.TConst, ts.PrimaryTitle });
-        modelBuilder.Entity<Top10Series>().Property(ts => ts.TConst).HasColumnName("tconst");
-        modelBuilder.Entity<Top10Series>().Property(ts => ts.PrimaryTitle).HasColumnName("primarytitle");
-        modelBuilder.Entity<Top10Series>().Property(ts => ts.TitleType).HasColumnName("titletype");
-        modelBuilder.Entity<Top10Series>().Property(ts => ts.Poster).HasColumnName("poster");
-    }
-    }
+  private static void MapTop10Actors(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<Top10Actors>().ToTable("top10actors");
+    modelBuilder.Entity<Top10Actors>().HasKey(ta => new { ta.NConst, ta.PrimaryName });
+    modelBuilder.Entity<Top10Actors>().Property(ta => ta.NConst).HasColumnName("nconst");
+    modelBuilder.Entity<Top10Actors>().Property(ta => ta.PrimaryName).HasColumnName("primaryname");
+    modelBuilder.Entity<Top10Actors>().Property(ta => ta.NumVotes).HasColumnName("total_numvotes");
+  }
+  private static void MapTop10Movies(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<Top10Movies>().ToTable("top10movies");
+    modelBuilder.Entity<Top10Movies>().HasKey(tm => new { tm.TConst, tm.PrimaryTitle });
+    modelBuilder.Entity<Top10Movies>().Property(tm => tm.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<Top10Movies>().Property(tm => tm.PrimaryTitle).HasColumnName("primarytitle");
+    modelBuilder.Entity<Top10Movies>().Property(tm => tm.TitleType).HasColumnName("titletype");
+    modelBuilder.Entity<Top10Movies>().Property(tm => tm.Poster).HasColumnName("poster");
+  }
+  private static void MapTop10Series(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<Top10Series>().ToTable("top10series");
+    modelBuilder.Entity<Top10Series>().HasKey(ts => new { ts.TConst, ts.PrimaryTitle });
+    modelBuilder.Entity<Top10Series>().Property(ts => ts.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<Top10Series>().Property(ts => ts.PrimaryTitle).HasColumnName("primarytitle");
+    modelBuilder.Entity<Top10Series>().Property(ts => ts.TitleType).HasColumnName("titletype");
+    modelBuilder.Entity<Top10Series>().Property(ts => ts.Poster).HasColumnName("poster");
+  }
+}
 
 

@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:5003/api";
+const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -210,6 +210,49 @@ export const fetchTitlePrincipals = async (tConst) => {
   }
 };
 
+export const fetchNameData = async (nConst) => {
+  try {
+    const response = await fetch(`${baseURL}/NameBasic/${nConst}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch name data: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching name data:", error);
+    throw error;
+  }
+};
+
+export const fetchKnownForTitles = async (
+  nConst,
+  pageNumber = 1,
+  pageSize = 10
+) => {
+  try {
+    const response = await fetch(
+      `${baseURL}/KnownForTitle/${nConst}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch known for titles: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching known for titles:", error);
+    throw error;
+  }
+};
+
 // Function to get images of people using themovieDB API
 export const fetchImages = async (personName) => {
   try {
@@ -240,6 +283,47 @@ export const fetchImages = async (personName) => {
     return imgURL;
   } catch (error) {
     return null;
+  }
+};
+
+//Fetch principals by name
+export const fetchPrincipalsByName = async (nConst) => {
+  try {
+    const response = await fetch(
+      `${baseURL}/TitlePrincipal/${nConst}/principals-name`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch principals by name: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching principals by name:", error);
+    throw error;
+  }
+};
+
+//Fetch coplayers
+export const fetchCoPlayers = async (nConst) => {
+  try {
+    const response = await fetch(`${baseURL}/CoPlayers/${nConst}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch coplayers: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching coplayers:", error);
+    throw error;
   }
 };
 
