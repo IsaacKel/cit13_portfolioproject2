@@ -82,6 +82,10 @@ namespace WebApi.Controllers
             {
                 return BadRequest("User already exists");
             }
+            if (_dataService.GetUserByEmail(dto.Email) != null)
+            {
+                return BadRequest("Email already exists");
+            }
             if (string.IsNullOrEmpty(dto.Password))
             {
                 return BadRequest("No password");
