@@ -66,8 +66,8 @@ namespace WebApi.Controllers
        return Ok(userDto);
     }
 
-        // -- REGISTER USER / CREATE USER --
-        [HttpPost("register")]
+    // -- REGISTER USER / CREATE USER --
+    [HttpPost("register")]
     public IActionResult RegisterUser([FromBody] UserRegisterDTO dto)
     {
       if (!ModelState.IsValid ||
@@ -131,7 +131,7 @@ namespace WebApi.Controllers
     }
 
     // -- LOGIN USER --
-    [HttpPut] // Login
+    [HttpPut("login")]
     public IActionResult Login(LoginUserModel model)
     {
       var user = _dataService.GetUser(model.UserName);
@@ -168,12 +168,21 @@ namespace WebApi.Controllers
       return Ok(new { username = user.Username, token = Jwt, user.Id });
     }
 
+    // -- LOGOUT USER --
+    [HttpPost("logout")]
+    [Authorize]
+    public IActionResult Logout()
+    {
+        // [...code...] Kill the cookie here ( Not finished )
+        return Ok(new { message = "Logout successful" });
+    }
+
     // -- DELETE USER --
     [HttpDelete("{userId}")]
     [Authorize(Roles = "admin")]
     public IActionResult DeleteUser(int userId)
     {
-      if (_dataService.GetUser(userId) == null) return NotFound("Coundn't deplete, because ID not found");
+      if (_dataService.GetUser(userId) == null) return NotFound("Coundn't delete, because ID not found");
 
       _dataService.DeleteUser(userId);
       return NoContent();
