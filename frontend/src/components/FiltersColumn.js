@@ -38,7 +38,7 @@ const FiltersColumn = ({ onApplyFilters }) => {
     const filters = {
       sort: selectedSort === "None" ? null : selectedSort,
       genre: selectedGenre === "Select" ? null : selectedGenre,
-      year: selectedYear === "Select" ? null : selectedYear,
+      year: selectedYear === "Select" ? -1 : selectedYear,
       titleType: selectedTitleType === "Select" ? null : selectedTitleType,
     };
     console.log("Applying filters:", filters);
