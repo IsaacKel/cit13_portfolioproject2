@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import HomePage from "./pages/HomePage";
 import IndividualTitle from "./pages/IndividualTitle";
 import IndividualName from "./pages/IndividualName";
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/search" element={<SearchResults />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/title/:tConst" element={<IndividualTitle />} />
             <Route path="/name/:nConst" element={<IndividualName />} />
           </Routes>
