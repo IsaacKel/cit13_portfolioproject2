@@ -4,7 +4,7 @@ import {
   fetchYears,
   fetchTitleTypes,
 } from "../services/apiService";
-import "./FiltersColumn.css"; // Import the CSS file
+import "./FiltersColumn.css";
 
 const FiltersColumn = ({ onApplyFilters }) => {
   const [genres, setGenres] = useState([]);
@@ -43,6 +43,13 @@ const FiltersColumn = ({ onApplyFilters }) => {
     };
     console.log("Applying filters:", filters);
     onApplyFilters(filters);
+  };
+
+  const handleClearFilters = () => {
+    setSelectedSort("None");
+    setSelectedGenre("Select");
+    setSelectedYear("Select");
+    setSelectedTitleType("Select");
   };
 
   return (
@@ -107,6 +114,9 @@ const FiltersColumn = ({ onApplyFilters }) => {
       </div>
       <button onClick={handleApplyFilters} className="apply-filters">
         Apply Filters
+      </button>
+      <button onClick={handleClearFilters} className="clear-filters">
+        Clear Filters
       </button>
     </div>
   );
