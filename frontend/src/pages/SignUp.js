@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { registerUser } from "../services/apiService";
+import { loginUser } from "../services/apiService";
 import "./Login.css";
 
 const SignUp = () => {
@@ -51,6 +52,17 @@ const SignUp = () => {
                 password: formData.password,
                 role: formData.role,
             });
+
+            // Auto log-in the user after Sign-up
+            const loginResponse = await loginUser({
+                userName: formData.userName,
+                password: formData.password,
+            });
+
+            // Save token to localStorage
+            localStorage.setItem("token", loginResponse.token);
+
+
 
             console.log("Registration successful:", response);
             setSuccess(true);
