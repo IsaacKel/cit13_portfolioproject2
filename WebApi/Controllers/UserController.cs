@@ -53,6 +53,19 @@ namespace WebApi.Controllers
       return Ok(userDto);
     }
 
+    // -- GET USER by Email --
+    [HttpGet("email/{email}")]
+    public IActionResult GetUserByEmail(string email)
+    {
+       var user = _dataService.GetUserByEmail(email);
+       if (user == null) return NotFound();
+
+       var userDto = user.Adapt<UserDTO>();
+       userDto.SelfLink = GenerateSelfLink(nameof(GetUserByEmail), new { email });
+
+       return Ok(userDto);
+    }
+
         // -- REGISTER USER / CREATE USER --
         [HttpPost("register")]
     public IActionResult RegisterUser([FromBody] UserRegisterDTO dto)

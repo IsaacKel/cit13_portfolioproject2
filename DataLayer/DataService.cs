@@ -69,6 +69,9 @@ namespace DataLayer
     public User GetUser(int userId) =>
         FindById<User>(userId);
 
+    public User GetUserByEmail(string email) =>
+        _context.Users.FirstOrDefault(u => u.Email == email);
+
     public void DeleteUser(int userId)
     {
       var user = FindById<User>(userId);

@@ -10,6 +10,7 @@ namespace DataLayer
         User AddUser(string username, string password, string email);
         User GetUser(string username);
         User GetUser(int userId);
+        User GetUserByEmail(string email);
         void DeleteUser(int userId);
         bool UserExists(int userId);
 
