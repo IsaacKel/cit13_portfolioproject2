@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./SearchResults.css";
-import { fetchNamesSearch, fetchTitlesSearch } from "../services/apiService";
+import {
+  fetchNamesSearch,
+  fetchTitlesSearch,
+  fetchTitlesByNumVotes,
+  fetchTitlesByRating,
+} from "../services/apiService";
 import Bookmark from "../components/Bookmark";
 import FiltersColumn from "../components/FiltersColumn";
 import ResultsColumn from "../components/ResultsColumn";
@@ -44,8 +49,25 @@ const SearchResults = () => {
     setShowBookmarkModal(true);
   };
 
+  const [filters, setFilters] = useState({
+    sort: "rating",
+    genre: "",
+    year: "",
+    titleType: "",
+  });
+
+  const handleApplyFilters = (newFilters) => {
+    console.log("Applying filters search:", newFilters);
+    setFilters(newFilters);
+  };
+
   const fetchData = async (query, namesPage, titlesPage) => {
-    console.log("fetchData called with:", { query, namesPage, titlesPage });
+    console.log("fetchData called with:", {
+      query,
+      namesPage,
+      titlesPage,
+      filters,
+    });
     setLoading(true);
     try {
       await fetchNamesSearch(
@@ -56,13 +78,37 @@ const SearchResults = () => {
         setNamesTotalPages
       );
       console.log("fetchNamesSearch completed");
-      await fetchTitlesSearch(
-        query,
-        titlesPage,
-        setLoading,
-        setTitles,
-        setTitlesTotalPages
-      );
+      if (filters.sort === "rating") {
+        await fetchTitlesByRating(
+          query,
+          titlesPage,
+          setLoading,
+          setTitles,
+          setTitlesTotalPages,
+          filters.titleType,
+          filters.genre,
+          filters.year
+        );
+      } else if (filters.sort === "popularity") {
+        await fetchTitlesByNumVotes(
+          query,
+          titlesPage,
+          setLoading,
+          setTitles,
+          setTitlesTotalPages,
+          filters.titleType,
+          filters.genre,
+          filters.year
+        );
+      } else {
+        await fetchTitlesSearch(
+          query,
+          titlesPage,
+          setLoading,
+          setTitles,
+          setTitlesTotalPages
+        );
+      }
       console.log("fetchTitlesSearch completed");
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -73,10 +119,19 @@ const SearchResults = () => {
 
   useEffect(() => {
     if (query) {
-      console.log("useEffect triggered with query:", query);
+      console.log(
+        "useEffect triggered with query:",
+        query,
+        "namesPage:",
+        namesPage,
+        "titlesPage:",
+        titlesPage,
+        "filters:",
+        filters
+      );
       fetchData(query, namesPage, titlesPage);
     }
-  }, [query, namesPage, titlesPage]);
+  }, [query, namesPage, titlesPage, filters]);
 
   const getPaginationButtons = (totalPages, curPage) => {
     const buttons = [];
@@ -115,11 +170,12 @@ const SearchResults = () => {
 
   return (
     <div className="search-page">
-      <FiltersColumn />
+      <FiltersColumn onApplyFilters={handleApplyFilters} />
       <ResultsColumn
         query={query}
         titles={titles}
         names={names}
+        filters={filters}
         showMoreTitles={showMoreTitles}
         showMoreNames={showMoreNames}
         setShowMoreTitles={setShowMoreTitles}

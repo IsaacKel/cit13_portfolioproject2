@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:5003/api";
+const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -68,6 +68,132 @@ export const fetchTitlesSearch = async (
     console.error("Error fetching title search results:", error);
   } finally {
     setLoading(false);
+  }
+};
+
+//Fetch titles filtered by numvotes
+export const fetchTitlesByNumVotes = async (
+  query,
+  pageNumber,
+  setLoading,
+  setTitles,
+  setTotalPages,
+  titleType = null,
+  genre = null,
+  year = -1
+) => {
+  setLoading(true);
+  try {
+    const titleRes = await fetch(
+      `${baseURL}/Search/title/numvotes?searchTerm=${encodeURIComponent(
+        query
+      )}&searchTitleType=${titleType}&searchGenre=${genre}&searchYear=${year}&pageNumber=${pageNumber}&pageSize=10`
+    );
+    const titleData = await titleRes.json();
+    setTitles(titleData.items || []);
+    setTotalPages(titleData.numberPages || 1);
+  } catch (error) {
+    console.error("Error fetching title search results:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+//Fetch titles filtered by rating
+export const fetchTitlesByRating = async (
+  query,
+  pageNumber,
+  setLoading,
+  setTitles,
+  setTotalPages,
+  titleType = null,
+  genre = null,
+  year = -1
+) => {
+  setLoading(true);
+  try {
+    const titleRes = await fetch(
+      `${baseURL}/Search/title/rating?searchTerm=${encodeURIComponent(
+        query
+      )}&searchTitleType=${titleType}&searchGenre=${genre}&searchYear=${year}&pageNumber=${pageNumber}&pageSize=10`
+    );
+    const titleData = await titleRes.json();
+    setTitles(titleData.items || []);
+    setTotalPages(titleData.numberPages || 1);
+  } catch (error) {
+    console.error("Error fetching title search results:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+//fetch all genres
+export const fetchGenres = async () => {
+  try {
+    const response = await fetch(`${baseURL}/Data/genre`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const genres = await response.json();
+    return genres;
+  } catch (error) {
+    console.error("Error fetching genres:", error);
+    throw error;
+  }
+};
+
+const formatTitleTypes = (titleTypes) => {
+  return titleTypes.map((type) => {
+    let formattedType = type.titleType.replace(/([A-Z])/g, " $1").trim();
+    formattedType =
+      formattedType.charAt(0).toUpperCase() + formattedType.slice(1);
+    formattedType = formattedType.replace(/\bTv\b/, "TV");
+    return { ...type, titleType: formattedType };
+  });
+};
+
+// Fetch all title types
+export const fetchTitleTypes = async () => {
+  try {
+    const response = await fetch(`${baseURL}/Data/titletype`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const titleTypes = await response.json();
+    return formatTitleTypes(titleTypes);
+  } catch (error) {
+    console.error("Error fetching title types:", error);
+    throw error;
+  }
+};
+
+//fetch all years
+export const fetchYears = async () => {
+  try {
+    const response = await fetch(`${baseURL}/Data/startyear`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const years = await response.json();
+    return years;
+  } catch (error) {
+    console.error("Error fetching years:", error);
+    throw error;
   }
 };
 
