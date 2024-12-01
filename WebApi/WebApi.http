@@ -8,7 +8,7 @@ Content-Type: application/json
   "name" : "GuestGuest",
   "username" : "Guest",
   "email" : "Guest@Hotmail.com",
-  "password" : "Guest123",
+  "password" : "@Guest123",
   "role" : "user"
 }
 
@@ -21,7 +21,7 @@ Content-Type: application/json
   "name" : "Adam Admin",
   "username" : "userAdmin",
   "email" : "user@AminMail.com",
-  "password" : "Guest123",
+  "password" : "@Guest123",
   "role" : "admin"
 }
 
