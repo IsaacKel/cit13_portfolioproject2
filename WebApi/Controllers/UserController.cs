@@ -149,7 +149,8 @@ namespace WebApi.Controllers
       var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim("Id", user.Id.ToString())
             };
 
       var secret = _configuration.GetSection("Auth:Secret").Value;
