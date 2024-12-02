@@ -19,7 +19,7 @@ const Login = () => {
       console.log("Login successful:", response);
 
       // Save token
-      localStorage.setItem("token", response.token);
+      //localStorage.setItem("token", response.token);
       setSuccess("Login successful!");
     } catch (err) {
       setError(err.message);

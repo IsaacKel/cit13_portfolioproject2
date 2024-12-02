@@ -26,26 +26,34 @@ export const registerUser = async (userData) => {
 
 // Function to login a user
 export const loginUser = async (loginData) => {
-  try {
-    const response = await fetch(`${userBaseURL}/login`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginData),
-    });
+    try {
+        const response = await fetch(`${userBaseURL}/login`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(loginData),
+            credentials: "include",
+        });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || `Error: ${response.status}`);
+        if (!response.ok) {
+            // To make cookies work I had to attempt to parse text aswell as JSON
+            let errorData;
+            try {
+                errorData = await response.json();
+            } catch (e) {
+                errorData = await response.text();
+            }
+            throw new Error(errorData.message || errorData || `Error: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error logging in user:", error);
+        throw error;
     }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error logging in user:", error);
-    throw error;
-  }
 };
+
 
 export const fetchTitlesSearch = async (
   query,

@@ -1,6 +1,7 @@
 using DataLayer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -132,6 +133,7 @@ namespace WebApi.Controllers
 
     // -- LOGIN USER --
     [HttpPut("login")]
+    [EnableCors("AllowReactApp")]
     public IActionResult Login(LoginUserModel model)
     {
       var user = _dataService.GetUser(model.UserName);
@@ -166,7 +168,17 @@ namespace WebApi.Controllers
 
       var Jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-      return Ok(new { username = user.Username, token = Jwt, user.Id });
+       // Set token as cookie for authentication
+      Response.Cookies.Append("auth_token_cookie", Jwt, new CookieOptions
+    {
+        HttpOnly = true,
+        Secure = true, // Toggle HTTPS
+        SameSite = SameSiteMode.Lax, // can be 'none' or 'strict' ( depents on same site policy, AKA same port or not )
+          Expires = System.DateTimeOffset.UtcNow.AddHours(1)
+    });
+    
+      return Ok(new { username = user.Username, user.Id });
+    //  return Ok(new { username = user.Username, token = Jwt, user.Id });
     }
 
     // -- LOGOUT USER --
@@ -174,8 +186,8 @@ namespace WebApi.Controllers
     [Authorize]
     public IActionResult Logout()
     {
-        // [...code...] Kill the cookie here ( Not finished )
-        return Ok(new { message = "Logout successful" });
+            Response.Cookies.Delete("auth_token_cookie");
+            return Ok(new { message = "Logout successful" });
     }
 
     // -- DELETE USER --
