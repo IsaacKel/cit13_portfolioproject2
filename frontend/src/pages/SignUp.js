@@ -60,7 +60,7 @@ const SignUp = () => {
             });
 
             // Save token to localStorage
-            localStorage.setItem("token", loginResponse.token);
+          //  localStorage.setItem("token", loginResponse.token);
 
 
 
