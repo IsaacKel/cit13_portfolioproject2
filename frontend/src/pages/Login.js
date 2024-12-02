@@ -18,8 +18,7 @@ const Login = () => {
       const response = await loginUser({ userName: username, password });
       console.log("Login successful:", response);
 
-      // Save token
-      //localStorage.setItem("token", response.token);
+
       setSuccess("Login successful!");
     } catch (err) {
       setError(err.message);

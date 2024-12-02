@@ -14,6 +14,7 @@ namespace WebApi.Controllers
 {
   [ApiController]
   [Route("api/v3/user")]
+  [EnableCors("AllowReactApp")]
   public class UsersController : BaseController
   {
     private readonly IDataService _dataService;
@@ -122,9 +123,8 @@ namespace WebApi.Controllers
 
             (var hashedPwd, var salt) = _hashing.Hash(dto.Password);
 
-     var user = _dataService.CreateUser(dto.Name, dto.Username, hashedPwd, dto.Email, salt, dto.Role);
+      var user = _dataService.CreateUser(dto.Name, dto.Username, hashedPwd, dto.Email, salt, dto.Role);
 
-      //var user = _dataService.AddUser(dto.Username, dto.Password, dto.Email);
       var userDto = user.Adapt<UserDTO>();
       userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId = user.Id });
 
@@ -133,7 +133,6 @@ namespace WebApi.Controllers
 
     // -- LOGIN USER --
     [HttpPut("login")]
-    [EnableCors("AllowReactApp")]
     public IActionResult Login(LoginUserModel model)
     {
       var user = _dataService.GetUser(model.UserName);
@@ -173,12 +172,10 @@ namespace WebApi.Controllers
     {
         HttpOnly = true,
         Secure = true, // Toggle HTTPS
-        SameSite = SameSiteMode.Lax, // can be 'none' or 'strict' ( depents on same site policy, AKA same port or not )
-          Expires = System.DateTimeOffset.UtcNow.AddHours(1)
+        SameSite = SameSiteMode.Lax, // can be 'Lax', 'none' or 'strict' ( depents on same site policy, AKA same port or not )
+        Expires = System.DateTimeOffset.UtcNow.AddHours(1)
     });
-    
-      return Ok(new { username = user.Username, user.Id });
-    //  return Ok(new { username = user.Username, token = Jwt, user.Id });
+      return Ok(new { username = user.Username, token = Jwt});
     }
 
     // -- LOGOUT USER --
@@ -186,8 +183,8 @@ namespace WebApi.Controllers
     [Authorize]
     public IActionResult Logout()
     {
-            Response.Cookies.Delete("auth_token_cookie");
-            return Ok(new { message = "Logout successful" });
+         Response.Cookies.Delete("auth_token_cookie");
+         return Ok(new { message = "Logout successful" });
     }
 
     // -- DELETE USER --

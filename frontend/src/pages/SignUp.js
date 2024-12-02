@@ -59,9 +59,6 @@ const SignUp = () => {
                 password: formData.password,
             });
 
-            // Save token to localStorage
-          //  localStorage.setItem("token", loginResponse.token);
-
 
 
             console.log("Registration successful:", response);

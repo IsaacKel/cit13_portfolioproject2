@@ -39,7 +39,7 @@ Content-Type: application/json
 ###
 
 //Login to Admin - Copy returned token and paste in Authorization header
-PUT {{WebApi_HostAddress}}/api/v3/user
+PUT {{WebApi_HostAddress}}/api/v3/user/Login
 Accept: application/json
 Content-Type: application/json
 {
