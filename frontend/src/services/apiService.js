@@ -27,7 +27,7 @@ export const registerUser = async (userData) => {
 // Function to login a user
 export const loginUser = async (loginData) => {
   try {
-    const response = await fetch(`${userBaseURL}`, {
+    const response = await fetch(`${userBaseURL}/login`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
