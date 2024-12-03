@@ -171,7 +171,7 @@ namespace WebApi.Controllers
       Response.Cookies.Append("auth_token_cookie", Jwt, new CookieOptions
     {
         HttpOnly = true,
-        Secure = true, // Toggle HTTPS
+        Secure = false, // Toggle HTTPS
         SameSite = SameSiteMode.Lax, // can be 'Lax', 'none' or 'strict' ( depents on same site policy, AKA same port or not )
         Expires = System.DateTimeOffset.UtcNow.AddHours(1)
     });

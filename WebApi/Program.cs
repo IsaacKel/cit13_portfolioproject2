@@ -41,17 +41,32 @@ builder.Services.AddSingleton(new Hashing());
 var secret = builder.Configuration.GetSection("Auth:Secret").Value;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(opt =>
-    opt.TokenValidationParameters = new TokenValidationParameters
+    .AddJwtBearer(options =>
     {
-      ValidateIssuer = false,
-      ValidateAudience = false,
-      ValidateIssuerSigningKey = true,
-      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
-      ClockSkew = TimeSpan.Zero
-    }
-    );
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+            ClockSkew = TimeSpan.Zero
+        };
 
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                // Look for the token in the cookies
+                var token = context.HttpContext.Request.Cookies["auth_token_cookie"];
+                if (!string.IsNullOrEmpty(token))
+                {
+                    context.Token = token;
+                }
+
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 
 // added CORS-service to apllow requests from React-app (localhost:5173)
@@ -100,5 +115,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-

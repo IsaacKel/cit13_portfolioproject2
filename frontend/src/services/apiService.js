@@ -54,6 +54,41 @@ export const loginUser = async (loginData) => {
     }
 };
 
+// Function to logout a user
+export const logoutUser = async () => {
+  try {
+    const response = await fetch(`${userBaseURL}/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        errorData = await response.text();
+      }
+      throw new Error(errorData.message || errorData || `Error: ${response.status}`);
+    }
+
+    // Attempt to parse response if there is a response body
+    let responseData;
+    const contentType = response.headers.get("content-type");
+
+    if (contentType && contentType.includes("application/json")) {
+      responseData = await response.json();
+    } else {
+      responseData = await response.text();
+    }
+
+    return responseData;
+  } catch (error) {
+    console.error("Error logging out user:", error);
+    throw error;
+  }
+};
+
 
 export const fetchTitlesSearch = async (
   query,
