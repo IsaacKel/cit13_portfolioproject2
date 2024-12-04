@@ -26,32 +26,32 @@ export const registerUser = async (userData) => {
 
 // Function to login a user
 export const loginUser = async (loginData) => {
-    try {
-        const response = await fetch(`${userBaseURL}/login`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(loginData),
-            credentials: "include",
-        });
+try {
+    const response = await fetch(`${userBaseURL}/login`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+        credentials: "include",
+    });
 
-        if (!response.ok) {
-            // To make cookies work I had to attempt to parse text aswell as JSON
-            let errorData;
-            try {
-                errorData = await response.json();
-            } catch (e) {
-                errorData = await response.text();
-            }
-            throw new Error(errorData.message || errorData || `Error: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error("Error logging in user:", error);
-        throw error;
+    let responseData;
+    if (response.headers.get("content-type")?.includes("application/json")) {
+        responseData = await response.json();
+    } else {
+        responseData = await response.text();
     }
+
+    if (!response.ok) {
+        throw new Error(responseData.message || responseData || `Error: ${response.status}`);
+    }
+
+    return responseData;
+} catch (error) {
+    console.error("Error logging in user:", error);
+    throw error;
+}
 };
 
 // Function to logout a user
@@ -62,24 +62,18 @@ export const logoutUser = async () => {
       credentials: "include",
     });
 
-    if (!response.ok) {
-      let errorData;
-      try {
-        errorData = await response.json();
-      } catch (e) {
-        errorData = await response.text();
-      }
-      throw new Error(errorData.message || errorData || `Error: ${response.status}`);
-    }
-
-    // Attempt to parse response if there is a response body
     let responseData;
     const contentType = response.headers.get("content-type");
+
 
     if (contentType && contentType.includes("application/json")) {
       responseData = await response.json();
     } else {
       responseData = await response.text();
+    }
+
+    if (!response.ok) {
+      throw new Error(responseData.message || responseData || `Error: ${response.status}`);
     }
 
     return responseData;
