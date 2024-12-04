@@ -4,6 +4,7 @@ import React, { useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import { fetchTop10Movies, fetchTop10TVShows, fetchTop10Actors, fetchImages } from "../services/apiService";
 import "./IndividualTitle.css";
+import { editorsChoice } from "../services/editorsChoice";
 
 const HomePage = () => {
   const [top10Movies, setTop10Movies] = useState([]);
@@ -46,9 +47,19 @@ const HomePage = () => {
 
   return (
     <>
-    <h1>Editors Choice</h1>
-    placeholder for editors choice
-      <h2>Top 10 Movies</h2>
+    <h1 style={{textAlign: 'center'}}>Editors Choice</h1>
+    <ul style={{ display: 'flex', justifyContent: 'center', listStyleType: 'none', padding: 0 }}>
+        {editorsChoice.map((movie) => (
+          <li className = 'card' key={movie.tConst} style={{ margin: '10px', width: '10%' }}>
+            <h2>{movie.choice}</h2>
+            <Link to={`/title/${movie.tConst}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <img src={movie.poster} alt={movie.primaryTitle} style={{ width: "100%", marginBottom: "10px" }} />
+              <div style={{ textAlign: 'center', wordWrap: 'break-word' }}>{movie.primaryTitle}</div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <h2 style={{textAlign: 'center'}}>Top 10 Movies</h2>
       <ul style={{ display: 'flex'}}>
         {top10Movies.map((movie) => (
           <li  className = 'card' key={movie.tConst} style={{ margin: '10px', width: '10%' }}>
@@ -59,7 +70,7 @@ const HomePage = () => {
           </li>
         ))}
       </ul>
-      <h2>Top 10 TV Shows</h2>
+      <h2 style={{textAlign: 'center'}}>Top 10 TV Shows</h2>
       <ul style={{ display: 'flex'}}>
         {top10TVShows.map((show) => (
           <li className = 'card' key={show.tConst} style={{ margin: '10px', width: '10%' }}>
@@ -70,7 +81,7 @@ const HomePage = () => {
           </li>
         ))}
       </ul>
-      <h2>Top 10 Actors</h2>
+      <h2 style={{textAlign: 'center'}}>Top 10 Actors</h2>
       <ul style={{ display: 'flex'}}>
         {top10Actors.map((actor) => (
           <li className = 'card' key={actor.nConst} style={{ margin: '10px', width: '10%' }}>
