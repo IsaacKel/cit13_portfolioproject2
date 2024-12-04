@@ -171,7 +171,7 @@ namespace WebApi.Controllers
       Response.Cookies.Append("auth_token_cookie", Jwt, new CookieOptions
     {
         HttpOnly = true,
-        Secure = false, // Toggle HTTPS
+        Secure = true, // Toggle HTTPS
         SameSite = SameSiteMode.Lax, // can be 'Lax', 'none' or 'strict' ( depents on same site policy, AKA same port or not )
         Expires = System.DateTimeOffset.UtcNow.AddHours(1)
     });
@@ -180,11 +180,14 @@ namespace WebApi.Controllers
 
     // -- LOGOUT USER --
     [HttpPost("logout")]
-    [Authorize]
+   [Authorize]
     public IActionResult Logout()
     {
-         Response.Cookies.Delete("auth_token_cookie");
-         return Ok(new { message = "Logout successful" });
+            Response.Cookies.Delete("auth_token_cookie");
+
+            Console.WriteLine("LOGGING OUT DONE");
+
+            return Ok(new { message = "SERVER SAY : Logout successful" });
     }
 
     // -- DELETE USER --

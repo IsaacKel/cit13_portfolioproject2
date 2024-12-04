@@ -65,6 +65,9 @@ export const logoutUser = async () => {
     let responseData;
     const contentType = response.headers.get("content-type");
 
+    if (!response.ok) {
+      throw new Error(responseData.message || responseData || `Error: ${response.status}`);
+    }
 
     if (contentType && contentType.includes("application/json")) {
       responseData = await response.json();
@@ -72,9 +75,7 @@ export const logoutUser = async () => {
       responseData = await response.text();
     }
 
-    if (!response.ok) {
-      throw new Error(responseData.message || responseData || `Error: ${response.status}`);
-    }
+    
 
     return responseData;
   } catch (error) {

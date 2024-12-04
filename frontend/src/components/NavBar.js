@@ -15,14 +15,14 @@ const NavBar = () => {
   const handleShowLogin = () => setShowLogin(true);
 
   const handleCloseSignUp = () => setShowSignUp(false);
-  const handleShowSignUp = () => setShowSignUp(true);
+  const handleShowSilogoutUsergnUp = () => setShowSignUp(true);
 
   const handleCloseLogout = () => setShowLogout(false);
   const handleShowLogout = () => setShowLogout(true);
 
   const handleLogout = async () => {
   try {
-    await logoutUser();
+    await ();
     console.log("Logout successful");
     // Redirect here (proberbly not needed)
     handleCloseLogout();
