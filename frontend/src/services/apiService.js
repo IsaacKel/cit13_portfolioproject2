@@ -577,3 +577,41 @@ export const fetchTop10Actors = async () => {
     throw error;
   }
 };
+export const fetchUserData = async (userId) => {
+  try {
+    const response = await fetch(`${userBaseURL}/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error;
+  }
+}
+export const fetchUserBookmarks = async (userId) => {
+  try {
+    const response = await fetch(`${baseURL}/Bookmark/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user bookmarks:", error);
+    throw error;
+  }
+}

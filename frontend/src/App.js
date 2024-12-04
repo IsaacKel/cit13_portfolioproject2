@@ -10,6 +10,7 @@ import HomePage from "./pages/HomePage";
 import IndividualTitle from "./pages/IndividualTitle";
 import IndividualName from "./pages/IndividualName";
 import SearchResults from "./pages/SearchResults";
+import UserPage from "./pages/UserPage";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/title/:tConst" element={<IndividualTitle />} />
             <Route path="/name/:nConst" element={<IndividualName />} />
+            <Route path="/User" element={<UserPage />} />
           </Routes>
         </div>
         <Footer />
