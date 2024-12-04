@@ -23,7 +23,7 @@ const HomePage = () => {
 
         const actorsWithImages = await Promise.all(
           actors.map(async (actor) => {
-            const image = await fetchImages(actor.primaryName);
+            const image = await fetchImages(actor.nConst);
             return { ...actor, image };
           })
         );

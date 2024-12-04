@@ -43,8 +43,7 @@ const IndividualName = () => {
         setKnownFor(known.items || []);
         setCoPlayers(coPlayers || []);
         setPrincipals(principals || []);
-
-        const imageUrl = await fetchImages(name.actualName);
+        const imageUrl = await fetchImages(name.nConst);
         setPersonImage(imageUrl);
       } catch (err) {
         setError(err.message);
@@ -72,7 +71,8 @@ const IndividualName = () => {
       try {
         const updatedCoPlayers = await Promise.all(
           coPlayers.items.map(async (coPlayer) => {
-            const imageUrl = await fetchImages(coPlayer.primaryName);
+            const nConst = coPlayer.nConst.split("/").pop();
+            const imageUrl = await fetchImages(nConst);
             return { ...coPlayer, imageUrl };
           })
         );

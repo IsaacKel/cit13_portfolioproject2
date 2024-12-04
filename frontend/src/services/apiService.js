@@ -258,7 +258,8 @@ export const fetchNamesSearch = async (
     // Fetch images for each person in the name data
     const namesWithImages = await Promise.all(
       (nameData.items || []).map(async (person) => {
-        const imageUrl = await fetchImages(person.primaryName);
+        const nConst = person.nConst.split("/").pop();
+        const imageUrl = await fetchImages(nConst);
         return { ...person, imageUrl };
       })
     );
@@ -297,7 +298,7 @@ export const fetchSearchResults = async (
     // Fetch images for each person in the name data
     const namesWithImages = await Promise.all(
       (nameData.items || []).map(async (person) => {
-        const imageUrl = await fetchImages(person.primaryName);
+        const imageUrl = await fetchImages(person.nConst);
         return { ...person, imageUrl };
       })
     );
@@ -423,23 +424,21 @@ export const fetchKnownForTitles = async (
 };
 
 // Function to get images of people using themovieDB API
-export const fetchImages = async (personName) => {
+export const fetchImages = async (nConst) => {
   try {
     // API key for the movieDB
     const apiKey = "003b3d8750e2856a2fc6e6414311d7eb";
 
     // Find TMDB ID for the person via name
     const response = await fetch(
-      `https://api.themoviedb.org/3/search/person?query=${personName}&api_key=${apiKey}`
+      `https://api.themoviedb.org/3/find/${nConst}?external_source=imdb_id&api_key=${apiKey}`
     );
     const data = await response.json();
-
-    if (data.results.length === 0) {
+    if (data.person_results.length === 0) {
       return null;
     }
 
-    const personID = data.results[0].id;
-
+    const personID = data.person_results[0].id;
     // Get images of the person using the TMDB ID
     const imageResponse = await fetch(
       `https://api.themoviedb.org/3/person/${personID}/images?api_key=${apiKey}`
