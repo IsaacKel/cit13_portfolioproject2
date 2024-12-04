@@ -22,10 +22,11 @@ code {
 
 .main-content {
   flex: 1;
+  background-color: #000000;
 }
 
 footer {
-  background-color: #f8f9fa;
   text-align: center;
   padding: 1rem 0;
+  border-top: 1px solid #1a348a;
 }
