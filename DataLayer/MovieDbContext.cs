@@ -44,7 +44,8 @@ public class MovieDbContext : DbContext
   public DbSet<GetGenreData> GetGenreData { get; set; }
   public DbSet<GetTitleTypeData> GetTitleTypeData { get; set; }
   public DbSet<GetYearData> GetYearData { get; set; }
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  public DbSet<SearchTitleYear> SearchTitleYears { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     MapUsers(modelBuilder);
     MapBookmarks(modelBuilder);
@@ -77,7 +78,8 @@ public class MovieDbContext : DbContext
     MapGetGenreData(modelBuilder);
     MapGetTitleTypeData(modelBuilder);
     MapGetYearData(modelBuilder);
-  }
+    MapSearchTitleYears(modelBuilder);
+    }
   //User Table Mapping
   private static void MapUsers(ModelBuilder modelBuilder)
   {
@@ -304,7 +306,17 @@ public class MovieDbContext : DbContext
     modelBuilder.Entity<SearchTitleRating>().Property(str => str.Rating).HasColumnName("rating");
     modelBuilder.Entity<SearchTitleRating>().Property(str => str.NumVotes).HasColumnName("numvotes");
   }
-
+  private static void MapSearchTitleYears(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<SearchTitleYear>().HasNoKey();
+    modelBuilder.Entity<SearchTitleYear>().Property(str => str.TConst).HasColumnName("tconst");
+    modelBuilder.Entity<SearchTitleYear>().Property(str => str.PrimaryTitle).HasColumnName("primarytitle");
+    modelBuilder.Entity<SearchTitleYear>().Property(str => str.Poster).HasColumnName("poster");
+    modelBuilder.Entity<SearchTitleYear>().Property(str => str.StartYear).HasColumnName("startyear");
+    modelBuilder.Entity<SearchTitleYear>().Property(str => str.Genre).HasColumnName("genre");
+    modelBuilder.Entity<SearchTitleYear>().Property(str => str.Rating).HasColumnName("rating");
+    modelBuilder.Entity<SearchTitleYear>().Property(str => str.NumVotes).HasColumnName("numvotes");
+  }
 
   private static void MapTop10Actors(ModelBuilder modelBuilder)
   {

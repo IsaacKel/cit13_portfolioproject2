@@ -353,6 +353,10 @@ namespace DataLayer
         {
             return _context.SearchTitleRatings.FromSqlInterpolated($"select * from filtered_search_avgrating({searchTerm},{searchTitleType},{searchGenre},{searchYear})").ToList();
         }
+        public IList<SearchTitleYear> GetSearchTitlesYear(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1)
+        {
+            return _context.SearchTitleYears.FromSqlInterpolated($"select * from filtered_search_years({searchTerm},{searchTitleType},{searchGenre},{searchYear})").ToList();
+        }
         public void rate(string tConst, int rating, int userId)
     {
       _context.Database.ExecuteSqlInterpolated($"CALL rate({tConst}, {rating}, {userId})");
