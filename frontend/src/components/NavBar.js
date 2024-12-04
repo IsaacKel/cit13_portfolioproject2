@@ -31,7 +31,7 @@ const NavBar = () => {
   }
 };
   return (
-    <Navbar bg="light" expand="lg" className="p-3">
+    <Navbar bg="dark" expand="lg" className="p-3">
       <Row className="w-100 align-items-center">
         {/* Column 1: Logo */}
         <Col xs={3} className="d-flex align-items-center">
