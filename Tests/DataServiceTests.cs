@@ -181,7 +181,7 @@ namespace DataLayer.Tests
     [Fact]
         public void GetPrincipal_ValidID()
         {
-            var principals = service.GetTitlePrincipalsByName("nm0000138");
+            var principals = service.GetTitlePrincipals("nm0000138");
             Assert.NotEmpty(principals);
         }
         /* KnownForTitle Tests */
