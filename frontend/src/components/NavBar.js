@@ -80,7 +80,7 @@ const NavBar = () => {
           <Modal.Title>Log In</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Login />
+          <Login onLoginSuccess={handleCloseLogin} /> 
         </Modal.Body>
       </Modal>
 
@@ -89,7 +89,7 @@ const NavBar = () => {
           <Modal.Title>Sign Up</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <SignUp />
+          <SignUp onSignupSuccess={handleCloseSignUp} />
         </Modal.Body>
       </Modal>
         <Modal show={showLogout} onHide={handleCloseLogout}>

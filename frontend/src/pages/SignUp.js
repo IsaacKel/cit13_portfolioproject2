@@ -4,7 +4,7 @@ import { registerUser } from "../services/apiService";
 import { loginUser } from "../services/apiService";
 import "./Login.css";
 
-const SignUp = () => {
+const SignUp = ({ onSignupSuccess }) => {
     const [formData, setFormData] = useState({
         name: "",
         userName: "",
@@ -63,6 +63,9 @@ const SignUp = () => {
             localStorage.setItem("token", loginResponse.token); // Save token to local storage because only Fireox saves it in cookies
             console.log("Registration successful:", response);
             setSuccess(true);
+            if (onSignupSuccess) {
+                onSignupSuccess(); // Notify parent compponent (used to close the model in NavBar)
+            }
         } catch (err) {
             setError(err.message);
         }

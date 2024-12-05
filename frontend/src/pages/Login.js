@@ -3,7 +3,7 @@ import { Form, Button, Alert } from "react-bootstrap";
 import { loginUser } from "../services/apiService";
 import "./Login.css";
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -19,7 +19,10 @@ const Login = () => {
       
         localStorage.setItem("token", response.token); // Save token to local storage because only Fireox saves it in cookies
 
-      setSuccess("Login successful!");
+        setSuccess("Login successful!");
+        if (onLoginSuccess) {
+            onLoginSuccess(); // Notify parent compponent (used to close the model in NavBar)
+        }
     } catch (err) {
       setError(err.message);
     }
