@@ -1,114 +1,103 @@
+/* Global Styles */
 .homepage {
   padding: 20px;
   font-family: Arial, sans-serif;
+  color: #333;
 }
 
-.editors-choice {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.editors-choice h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-}
-
-.media-list {
-  margin-bottom: 40px;
-}
-
+/* Section Titles */
+.editors-choice h1,
 .media-list h2 {
-  font-size: 1.8rem;
+  text-align: center;
+  font-size: 2rem;
   margin-bottom: 20px;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 10px;
+  color: #222;
 }
 
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 20px;
-}
-
-.home-card {
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
+/* Editor's Choice Placeholder */
+.editors-choice-placeholder {
+  background-color: #f7f7f7;
+  border: 1px dashed #ccc;
+  padding: 50px;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  aspect-ratio: 2 / 3;
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+/* Grid Layout */
+.card-grid {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  padding: 10px 0; /* Add padding to ensure space for shadows */
+}
+
+/* Card Styles */
+.home-card {
+  display: block;
+  overflow: visible; /* Ensure overflow is visible */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .home-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-.card-link {
-  text-decoration: none;
-  color: inherit;
-}
-
+/* Card Images */
 .home-card-img {
-  width: 100%;
-  object-position: center;
+  width: 9.35rem;
+  height: 14.0625rem; /* 225px converted to rem */
   object-fit: cover;
-  background-color: #f0f0f0;
-}
-
-.home-card-title {
-  padding: 10px;
-  text-align: center;
-  font-size: 1rem;
-  color: #333;
+  border-radius: 12px;
 }
 
 .carousel {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  position: relative;
+  width: 100%;
   margin: 20px 0;
-  overflow: hidden;
-}
-
-.carousel-items {
-  display: flex;
-  gap: 15px;
-  overflow: hidden;
-  max-width: 80%;
-}
-
-.carousel-item {
-  flex: 1 0 calc(100% / 8); 
+  padding: 10px 0; /* Add padding to ensure space for buttons */
 }
 
 .carousel-button {
+  transition: background-color 0.3s;
   background-color: #007bff;
-  color: white;
   border: none;
   border-radius: 50%;
+  padding: 10px;
   width: 40px;
   height: 40px;
-  cursor: pointer;
-  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
 }
-
 .carousel-button:hover {
   background-color: #0056b3;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
+  .editors-choice-placeholder {
+    padding: 30px;
+    font-size: 0.9rem;
+  }
+
   .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    flex-wrap: nowrap;
+  }
+
+  .home-card {
+    flex: 0 0 25%; /* 100% / 4 items for smaller screens */
   }
 
   .home-card-img {
-    height: 180px;
+    height: 11.25rem; /* 180px converted to rem */
   }
 }

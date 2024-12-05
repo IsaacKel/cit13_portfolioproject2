@@ -49,50 +49,12 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
-      <h1>Editor's Choice</h1>
-      <p>Placeholder for editor's choice</p>
-
-      <h2>Top 10 Movies</h2>
-      <Carousel
-        items={top10Movies.map((movie) => (
-          <div className="card" key={movie.tConst}>
-            <img
-              src={movie.poster}
-              alt={movie.primaryTitle}
-              className="card-img"
-            />
-            <p>{movie.primaryTitle}</p>
-          </div>
-        ))}
-      />
-
-      <h2>Top 10 TV Shows</h2>
-      <Carousel
-        items={top10TVShows.map((show) => (
-          <div className="card" key={show.tConst}>
-            <img
-              src={show.poster}
-              alt={show.primaryTitle}
-              className="card-img"
-            />
-            <p>{show.primaryTitle}</p>
-          </div>
-        ))}
-      />
-
-      <h2>Top 10 Actors</h2>
-      <Carousel
-        items={top10Actors.map((actor) => (
-          <div className="card" key={actor.nConst}>
-            <img
-              src={actor.image}
-              alt={actor.primaryName}
-              className="card-img"
-            />
-            <p>{actor.primaryName}</p>
-          </div>
-        ))}
-      />
+      <div className="editors-choice">
+        <h1>Editor's Choice</h1>
+      </div>
+      <Carousel title="Top 10 Movies" items={top10Movies} itemType="title" />
+      <Carousel title="Top 10 TV Shows" items={top10TVShows} itemType="title" />
+      <Carousel title="Top 10 Actors" items={top10Actors} itemType="name" />
     </div>
   );
 };

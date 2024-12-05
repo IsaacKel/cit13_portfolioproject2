@@ -1,41 +1,51 @@
 import React, { useState } from "react";
-import "../pages/HomePage.css";
+import { Link } from "react-router-dom";
 
-const Carousel = ({ items, itemsToShow = 8 }) => {
-  const [startIndex, setStartIndex] = useState(0);
+const Carousel = ({ title, items, itemType }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const totalItems = items.length;
-
-  const nextItems = () => {
-    setStartIndex((prevIndex) => (prevIndex + 1) % totalItems);
+  const handleLeftClick = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + 10) % 10);
   };
 
-  const prevItems = () => {
-    setStartIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
+  const handleRightClick = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % 10);
   };
 
   const getVisibleItems = () => {
-    return Array.from(
-      { length: itemsToShow },
-      (_, i) => items[(startIndex + i) % totalItems]
-    );
+    const visibleItems = [];
+    for (let i = 0; i < 8; i++) {
+      visibleItems.push(items[(currentIndex + i) % 10]);
+    }
+    return visibleItems;
   };
 
   return (
-    <div className="carousel">
-      <button className="carousel-button" onClick={prevItems}>
-        &lt;
-      </button>
-      <div className="carousel-items">
-        {getVisibleItems().map((item, index) => (
-          <div className="carousel-item" key={index}>
-            {item}
-          </div>
-        ))}
+    <div className="media-list">
+      <h2>{title}</h2>
+      <div className="carousel">
+        <button onClick={handleLeftClick} className="carousel-button">
+          &lt;
+        </button>
+        <div className="card-grid">
+          {getVisibleItems().map((item) => (
+            <Link
+              to={`/${itemType}/${item.tConst || item.nConst}`}
+              key={item.tConst || item.nConst}
+              className="home-card"
+            >
+              <img
+                src={item.poster || item.image}
+                alt={itemType === "title" ? "Poster" : "Actor"}
+                className="home-card-img"
+              />
+            </Link>
+          ))}
+        </div>
+        <button onClick={handleRightClick} className="carousel-button">
+          &gt;
+        </button>
       </div>
-      <button className="carousel-button" onClick={nextItems}>
-        &gt;
-      </button>
     </div>
   );
 };
