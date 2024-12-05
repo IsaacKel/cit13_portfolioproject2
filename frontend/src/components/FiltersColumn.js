@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilters, setSortBy } from "../redux/slices/searchSlice";
 import {
   fetchGenres,
   fetchYears,
@@ -6,14 +8,10 @@ import {
 } from "../services/apiService";
 import "./FiltersColumn.css";
 
-const FiltersColumn = ({ onApplyFilters }) => {
+const FiltersColumn = () => {
   const [genres, setGenres] = useState([]);
   const [years, setYears] = useState([]);
   const [titleTypes, setTitleTypes] = useState([]);
-  const [selectedSort, setSelectedSort] = useState("None");
-  const [selectedGenre, setSelectedGenre] = useState("Select");
-  const [selectedYear, setSelectedYear] = useState("Select");
-  const [selectedTitleType, setSelectedTitleType] = useState("Select");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,47 +32,75 @@ const FiltersColumn = ({ onApplyFilters }) => {
     fetchData();
   }, []);
 
+  const dispatch = useDispatch();
+  const { filters, sortBy } = useSelector((state) => state.search);
+
+  const [localFilters, setLocalFilters] = useState(filters);
+  const [localSortBy, setLocalSortBy] = useState(sortBy);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setLocalFilters((prev) => ({
+      ...prev,
+      [name]: value === "null" ? null : value,
+    }));
+  };
+
+  const handleSortChange = (e) => {
+    setLocalSortBy(e.target.value);
+  };
+
   const handleApplyFilters = () => {
-    const filters = {
-      sort: selectedSort === "None" ? null : selectedSort,
-      genre: selectedGenre === "Select" ? null : selectedGenre,
-      year: selectedYear === "Select" ? -1 : selectedYear,
-      titleType: selectedTitleType === "Select" ? null : selectedTitleType,
-    };
-    console.log("Applying filters:", filters);
-    onApplyFilters(filters);
+    dispatch(setFilters(localFilters));
+    dispatch(setSortBy(localSortBy));
   };
 
   const handleClearFilters = () => {
-    setSelectedSort("None");
-    setSelectedGenre("Select");
-    setSelectedYear("Select");
-    setSelectedTitleType("Select");
+    const clearedFilters = { titleType: null, genre: null, year: -1 };
+    setLocalFilters(clearedFilters);
+    dispatch(setFilters(clearedFilters));
+    dispatch(setSortBy("popularity"));
   };
 
   return (
-    <div className="filters-column">
+    <div>
       <h4>Filters</h4>
       <div>
         <label>Sort By:</label>
         <select
           className="dropdown"
-          value={selectedSort}
-          onChange={(e) => setSelectedSort(e.target.value)}
+          value={localSortBy}
+          onChange={handleSortChange}
         >
-          <option value="None">None</option>
-          <option value="rating">Rating</option>
           <option value="popularity">Popularity</option>
+          <option value="rating">Rating</option>
         </select>
       </div>
       <div>
-        <label>Genres:</label>
+        <label>Title Type:</label>
         <select
+          name="titleType"
           className="dropdown"
-          value={selectedGenre}
-          onChange={(e) => setSelectedGenre(e.target.value)}
+          value={localFilters.titleType || "null"}
+          onChange={handleFilterChange}
         >
-          <option value="Select">Select</option>
+          <option value="null">Select</option>
+          {titleTypes.map((type) => (
+            <option key={type.titleType} value={type.titleType}>
+              {type.titleType}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label>Genre:</label>
+        <select
+          name="genre"
+          className="dropdown"
+          value={localFilters.genre || "null"}
+          onChange={handleFilterChange}
+        >
+          <option value="null">Select</option>
           {genres.map((genre) => (
             <option key={genre.genre} value={genre.genre}>
               {genre.genre}
@@ -85,29 +111,15 @@ const FiltersColumn = ({ onApplyFilters }) => {
       <div>
         <label>Years:</label>
         <select
+          name="year"
           className="dropdown"
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
+          value={localFilters.year || "null"}
+          onChange={handleFilterChange}
         >
-          <option value="Select">Select</option>
+          <option value="null">Select</option>
           {years.map((year) => (
             <option key={year.startYear} value={year.startYear}>
               {year.startYear}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label>Title Types:</label>
-        <select
-          className="dropdown"
-          value={selectedTitleType}
-          onChange={(e) => setSelectedTitleType(e.target.value)}
-        >
-          <option value="Select">Select</option>
-          {titleTypes.map((type) => (
-            <option key={type.titleType} value={type.titleType}>
-              {type.titleType}
             </option>
           ))}
         </select>

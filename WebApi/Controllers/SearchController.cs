@@ -38,10 +38,10 @@ namespace WebApi.Controllers
                 .ToList();
 
             // Replace nconst with self-link
-                foreach (var name in pagedNames)
-                {
+            foreach (var name in pagedNames)
+            {
                 if (name.NConst != null)
-                { 
+                {
                     name.NConst = new Uri($"{Request.Scheme}://{Request.Host}/api/NameBasic/{name.NConst}").ToString();
                 }
             }
@@ -51,10 +51,47 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("title/{searchTerm}")]
-        public ActionResult<PagedResponse<SearchTitle>> GetSearchTitles(string searchTerm, int pageNumber = 1, int pageSize = DefaultPageSize)
+        [HttpGet("title")]
+        public ActionResult<PagedResponse<SearchTitle>> GetSearchTitles(
+            string? query = "null",
+            string? sortBy = "popularity",
+            string? titleType = "null",
+            string? genre = "null",
+            int? year = -1,
+            int pageNumber = 1,
+            int pageSize = DefaultPageSize)
         {
-            var titles = _dataService.GetSearchTitles(searchTerm);
+            titleType = UnformatTitleType(titleType);
+            genre = genre?.ToLower();
+            IEnumerable<SearchTitle> titles;
+
+            if (sortBy == "rating")
+            {
+                var ratingTitles = _dataService.GetSearchTitlesRating(query, titleType, genre, year);
+                titles = ratingTitles.Select(rt => new SearchTitle
+                {
+                    TConst = rt.TConst,
+                    PrimaryTitle = rt.PrimaryTitle,
+                    Poster = rt.Poster,
+                    Rating = rt.Rating,
+                    StartYear = rt.StartYear,
+                    Genre = rt.Genre
+                });
+            }
+            else
+            {
+                var numvoteTitles = _dataService.GetSearchTitlesNumvote(query, titleType, genre, year);
+                titles = numvoteTitles.Select(nt => new SearchTitle
+                {
+                    TConst = nt.TConst,
+                    PrimaryTitle = nt.PrimaryTitle,
+                    Poster = nt.Poster,
+                    Rating = nt.Rating,
+                    StartYear = nt.StartYear,
+                    Genre = nt.Genre
+                });
+            }
+
             if (titles == null || !titles.Any())
             {
                 return NotFound();
@@ -66,7 +103,6 @@ namespace WebApi.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            // Replace tconst with self-link
             foreach (var title in pagedTitles)
             {
                 if (title.TConst != null)
@@ -76,57 +112,29 @@ namespace WebApi.Controllers
             }
 
             var response = CreatePagedResponse(pagedTitles, pageNumber, pageSize, totalItems, "GetSearchTitles");
-
             return Ok(response);
         }
 
-        [HttpGet("title/numvotes")]
-        public ActionResult<PagedResponse<SearchTitleNumvote>> GetSearchTitlesNumvote(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1, int pageNumber = 1, int pageSize = DefaultPageSize)
+        private string UnformatTitleType(string titleType)
         {
-            var titles = _dataService.GetSearchTitlesNumvote(searchTerm, searchTitleType, searchGenre, searchYear);
-            if (titles == null || !titles.Any())
+            if (string.IsNullOrEmpty(titleType))
             {
-                return NotFound();
+                return titleType;
             }
-            var totalItems = titles.Count();
-            var pagedTitles = titles
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
 
-            foreach (var title in pagedTitles)
-            {
-                if (title.TConst != null)
-                {
-                    title.TConst = new Uri($"{Request.Scheme}://{Request.Host}/api/Title/{title.TConst}").ToString();
-                }
-            }
-            var response = CreatePagedResponse(pagedTitles, pageNumber, pageSize, totalItems, "GetSearchTitlesNumvote");
-            return Ok(response);
-        }
-        [HttpGet("title/rating")]
-        public ActionResult<PagedResponse<SearchTitleRating>> GetSearchTitlesRating(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1, int pageNumber = 1, int pageSize = DefaultPageSize)
-        {
-            var titles = _dataService.GetSearchTitlesRating(searchTerm, searchTitleType, searchGenre, searchYear);
-            if (titles == null || !titles.Any())
-            {
-                return NotFound();
-            }
-            var totalItems = titles.Count();
-            var pagedTitles = titles
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
+            // Remove spaces and capitalize the first letter of each word
+            titleType = titleType.Replace(" ", "");
 
-            foreach (var title in pagedTitles)
+            // Replace "TV" with "Tv"
+            titleType = titleType.Replace("TV", "Tv");
+
+            // Lowercase the first letter
+            if (titleType.Length > 0)
             {
-                if (title.TConst != null)
-                {
-                    title.TConst = new Uri($"{Request.Scheme}://{Request.Host}/api/Title/{title.TConst}").ToString();
-                }
+                titleType = char.ToLower(titleType[0]) + titleType.Substring(1);
             }
-            var response = CreatePagedResponse(pagedTitles, pageNumber, pageSize, totalItems, "GetSearchTitlesRating");
-            return Ok(response);
+
+            return titleType;
         }
     }
 }

@@ -16,6 +16,7 @@
   font-size: 16px;
   color: #555;
   margin-top: 2px;
+  max-width: 70%;
 }
 
 .meta-data {
@@ -41,6 +42,19 @@
 .title-actions .rating {
   font-size: 18px;
   font-weight: bold;
+}
+
+.rating-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.num-votes {
+  font-size: 0.8em;
+  color: #888;
+  text-align: center;
 }
 
 .title-actions button {
@@ -127,6 +141,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding: 10px;
   text-align: center;
   height: 6rem;

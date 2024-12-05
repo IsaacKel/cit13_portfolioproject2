@@ -1,4 +1,4 @@
-const baseURL = "https://localhost:5003/api";
+const baseURL = "http://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -26,113 +26,142 @@ export const registerUser = async (userData) => {
 
 // Function to login a user
 export const loginUser = async (loginData) => {
-    try {
-        const response = await fetch(`${userBaseURL}/login`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(loginData),
-            credentials: "include",
-        });
+  try {
+    const response = await fetch(`${userBaseURL}/login`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
+      credentials: "include",
+    });
 
-        if (!response.ok) {
-            // To make cookies work I had to attempt to parse text aswell as JSON
-            let errorData;
-            try {
-                errorData = await response.json();
-            } catch (e) {
-                errorData = await response.text();
-            }
-            throw new Error(errorData.message || errorData || `Error: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error("Error logging in user:", error);
-        throw error;
+    if (!response.ok) {
+      // To make cookies work I had to attempt to parse text aswell as JSON
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        errorData = await response.text();
+      }
+      throw new Error(
+        errorData.message || errorData || `Error: ${response.status}`
+      );
     }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    throw error;
+  }
 };
 
+// export const fetchNamesSearch = async (
+//   query,
+//   pageNumber,
+//   setNames,
+//   setTotalPages
+// ) => {
+//   try {
+//     const nameRes = await fetch(
+//       `${baseURL}/Search/name/${query}?pageNumber=${pageNumber}&pageSize=10`
+//     );
+
+//     const nameData = await nameRes.json();
+
+//     // Fetch images for each person in the name data
+//     const namesWithImages = await Promise.all(
+//       (nameData.items || []).map(async (person) => {
+//         const imageUrl = await fetchImages(person.primaryName);
+//         return { ...person, imageUrl };
+//       })
+//     );
+
+//     setNames(namesWithImages);
+//     setTotalPages(nameData.numberPages || 1);
+//   } catch (error) {
+//     console.error("Error fetching name search results:", error);
+//   }
+// };
+
+// export const fetchNamesSearch = async (query, pageNumber, pageSize) => {
+//   const params = new URLSearchParams({
+//     query: query,
+//     pageNumber,
+//     pageSize,
+//   });
+//   try {
+//     console.log(`${baseURL}/Search/name/?${params.toString()}`);
+//     const response = await fetch(
+//       `${baseURL}/Search/name/?${params.toString()}`
+//     );
+//     return response.json();
+
+// // Fetch images for each person in the name data
+// const namesWithImages = await Promise.all(
+//   (nameData.items || []).map(async (person) => {
+//     const imageUrl = await fetchImages(person.primaryName); // Reuse your existing logic
+//     return { ...person, imageUrl };
+//   })
+// );
+
+//     // return { results: namesWithImages, totalPages: nameData.numberPages || 1 };
+//   } catch (error) {
+//     console.error("Error fetching name search results:", error);
+//     throw new Error(error.message); // Throw for handling in the calling code
+//   }
+// };
+
+export const fetchNamesSearch = async (query, pageNumber, pageSize) => {
+  const params = new URLSearchParams({
+    pageNumber,
+    pageSize,
+  });
+  try {
+    const response = await fetch(
+      `${baseURL}/Search/name/${query}?${params.toString()}`
+    );
+    const nameData = await response.json();
+
+    // Fetch images for each person in the name data
+    const namesWithImages = await Promise.all(
+      (nameData.items || []).map(async (person) => {
+        const imageUrl = await fetchImages(person.primaryName);
+        return { ...person, imageUrl };
+      })
+    );
+    console.log(nameData);
+    return {
+      items: namesWithImages,
+      numberPages: nameData.numberPages || 1,
+    };
+  } catch (error) {
+    console.error("Error fetching names with images:", error);
+    throw error;
+  }
+};
 
 export const fetchTitlesSearch = async (
   query,
+  filters,
+  sortBy,
   pageNumber,
-  setLoading,
-  setTitles,
-  setTotalPages
+  pageSize
 ) => {
-  setLoading(true);
-  try {
-    const titleRes = await fetch(
-      `${baseURL}/Search/title/${query}?pageNumber=${pageNumber}&pageSize=10`
-    );
-
-    const titleData = await titleRes.json();
-
-    setTitles(titleData.items || []);
-    setTotalPages(titleData.numberPages || 1);
-  } catch (error) {
-    console.error("Error fetching title search results:", error);
-  } finally {
-    setLoading(false);
-  }
-};
-
-//Fetch titles filtered by numvotes
-export const fetchTitlesByNumVotes = async (
-  query,
-  pageNumber,
-  setLoading,
-  setTitles,
-  setTotalPages,
-  titleType = null,
-  genre = null,
-  year = -1
-) => {
-  setLoading(true);
-  try {
-    const titleRes = await fetch(
-      `${baseURL}/Search/title/numvotes?searchTerm=${encodeURIComponent(
-        query
-      )}&searchTitleType=${titleType}&searchGenre=${genre}&searchYear=${year}&pageNumber=${pageNumber}&pageSize=10`
-    );
-    const titleData = await titleRes.json();
-    setTitles(titleData.items || []);
-    setTotalPages(titleData.numberPages || 1);
-  } catch (error) {
-    console.error("Error fetching title search results:", error);
-  } finally {
-    setLoading(false);
-  }
-};
-
-//Fetch titles filtered by rating
-export const fetchTitlesByRating = async (
-  query,
-  pageNumber,
-  setLoading,
-  setTitles,
-  setTotalPages,
-  titleType = null,
-  genre = null,
-  year = -1
-) => {
-  setLoading(true);
-  try {
-    const titleRes = await fetch(
-      `${baseURL}/Search/title/rating?searchTerm=${encodeURIComponent(
-        query
-      )}&searchTitleType=${titleType}&searchGenre=${genre}&searchYear=${year}&pageNumber=${pageNumber}&pageSize=10`
-    );
-    const titleData = await titleRes.json();
-    setTitles(titleData.items || []);
-    setTotalPages(titleData.numberPages || 1);
-  } catch (error) {
-    console.error("Error fetching title search results:", error);
-  } finally {
-    setLoading(false);
-  }
+  const params = new URLSearchParams({
+    query: query,
+    sortBy,
+    titleType: filters.titleType,
+    genre: filters.genre,
+    year: filters.year,
+    pageNumber,
+    pageSize,
+  });
+  const response = await fetch(
+    `http://localhost:5003/api/Search/title?${params.toString()}`
+  );
+  if (!response.ok) throw new Error("Failed to fetch search results");
+  return response.json();
 };
 
 //fetch all genres
@@ -202,38 +231,6 @@ export const fetchYears = async () => {
   } catch (error) {
     console.error("Error fetching years:", error);
     throw error;
-  }
-};
-
-export const fetchNamesSearch = async (
-  query,
-  pageNumber,
-  setLoading,
-  setNames,
-  setTotalPages
-) => {
-  setLoading(true);
-  try {
-    const nameRes = await fetch(
-      `${baseURL}/Search/name/${query}?pageNumber=${pageNumber}&pageSize=10`
-    );
-
-    const nameData = await nameRes.json();
-
-    // Fetch images for each person in the name data
-    const namesWithImages = await Promise.all(
-      (nameData.items || []).map(async (person) => {
-        const imageUrl = await fetchImages(person.primaryName);
-        return { ...person, imageUrl };
-      })
-    );
-
-    setNames(namesWithImages);
-    setTotalPages(nameData.numberPages || 1);
-  } catch (error) {
-    console.error("Error fetching name search results:", error);
-  } finally {
-    setLoading(false);
   }
 };
 

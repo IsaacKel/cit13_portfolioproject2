@@ -1,6 +1,11 @@
 /* Filters Column Container */
 .filters-column {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 1rem;
+  z-index: 1000; /* Adjust as needed */
   width: 100%;
+  height: fit-content;
   max-width: 300px;
   background-color: #f9f9f9;
   border-radius: 8px;

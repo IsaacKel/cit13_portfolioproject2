@@ -183,7 +183,7 @@ const IndividualName = () => {
               )}
             />
           </section>
-          <h2>Principals</h2>
+          <h2>Recently seen in..</h2>
           <section className="cast-crew-similar-titles">
             <CardList
               items={principals.slice(
@@ -197,9 +197,9 @@ const IndividualName = () => {
                   className="search-item-link"
                 >
                   <div className="card">
-                    {principal.imageUrl ? (
+                    {principal.poster ? (
                       <img
-                        src={principal.imageUrl}
+                        src={principal.poster}
                         alt={principal.title}
                         className="card-img"
                       />

@@ -104,7 +104,12 @@ const IndividualTitle = () => {
         </div>
         <div className="title-actions">
           {titleData.averageRating && (
-            <span className="rating">⭐ {titleData.averageRating}</span>
+            <div className="rating-container">
+              <span className="rating">⭐ {titleData.averageRating}</span>
+              <span className="num-votes">
+                {titleData.numVotes.toLocaleString()} ratings
+              </span>
+            </div>
           )}
           <button>+ Add Rating</button>
           <button onClick={() => setShowBookmarkModal(true)}>
@@ -151,7 +156,7 @@ const IndividualTitle = () => {
                 )}
                 <div className="card-details">
                   <p>{principal.name}</p>
-                  <p className="title-data">{principal.roles}</p>
+                  <p>{principal.roles}</p>
                 </div>
               </div>
             </Link>

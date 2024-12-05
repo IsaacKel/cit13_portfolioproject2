@@ -142,13 +142,15 @@
   text-decoration: underline;
 }
 
-.pagination {
+.search-pagination-container {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   margin: 20px 0;
 }
 
-.pagination button {
+.search-pagination-button {
   margin: 0 5px;
   padding: 0.5rem 1rem;
   border: none;
@@ -157,17 +159,22 @@
   cursor: pointer;
 }
 
-.pagination button.active {
+.search-pagination-button.active {
   background-color: #007bff;
   color: white;
 }
 
-.pagination button:hover {
+.search-pagination-button:hover {
   background-color: #0056b3;
   color: white;
 }
 
-.pagination button:disabled {
+.search-pagination-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.search-pagination-text {
+  margin-top: 8px;
+  text-align: center;
 }

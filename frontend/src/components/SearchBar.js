@@ -1,14 +1,23 @@
-import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setQuery, setCurrentPage } from "../redux/slices/searchSlice";
+import { setQuery as setNamesQuery } from "../redux/slices/namesSearchSlice";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Form, FormControl, Button } from "react-bootstrap";
 
 const SearchBar = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { query } = useSelector((state) => state.search);
+
+  const [searchQuery, setSearchQuery] = useState(query || "");
 
   const handleSearch = () => {
+    dispatch(setQuery(searchQuery));
+    dispatch(setNamesQuery(searchQuery));
+    dispatch(setCurrentPage(1));
     if (searchQuery.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      navigate(`/search?searchTerm=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -20,10 +29,10 @@ const SearchBar = () => {
   };
 
   return (
-    <Form inline className="d-flex w-75">
+    <Form className="d-flex w-75">
       <FormControl
         type="text"
-        placeholder="Search"
+        placeholder="Search for movies, shows, or people.."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         onKeyDown={handleKeyDown}

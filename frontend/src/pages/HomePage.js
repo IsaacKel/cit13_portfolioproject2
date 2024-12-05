@@ -1,9 +1,12 @@
-// Home Page
-
-import React, { useEffect, useState} from "react";
-import { Link } from "react-router-dom";
-import { fetchTop10Movies, fetchTop10TVShows, fetchTop10Actors, fetchImages } from "../services/apiService";
-import "./IndividualTitle.css";
+import React, { useEffect, useState } from "react";
+import {
+  fetchTop10Movies,
+  fetchTop10TVShows,
+  fetchTop10Actors,
+  fetchImages,
+} from "../services/apiService";
+import Carousel from "../components/Top10Carousel";
+import "./HomePage.css";
 
 const HomePage = () => {
   const [top10Movies, setTop10Movies] = useState([]);
@@ -45,43 +48,52 @@ const HomePage = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <>
-    <h1>Editors Choice</h1>
-    placeholder for editors choice
+    <div className="homepage">
+      <h1>Editor's Choice</h1>
+      <p>Placeholder for editor's choice</p>
+
       <h2>Top 10 Movies</h2>
-      <ul style={{ display: 'flex'}}>
-        {top10Movies.map((movie) => (
-          <li  className = 'card' key={movie.tConst} style={{ margin: '10px', width: '10%' }}>
-            <Link to={`/title/${movie.tConst}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <img src={movie.poster} alt={movie.primaryTitle} style={{ width: "100%", marginBottom: "10px" }} />
-              <div style={{ textAlign: 'center', wordWrap: 'break-word' }}>{movie.primaryTitle}</div>
-            </Link>
-          </li>
+      <Carousel
+        items={top10Movies.map((movie) => (
+          <div className="card" key={movie.tConst}>
+            <img
+              src={movie.poster}
+              alt={movie.primaryTitle}
+              className="card-img"
+            />
+            <p>{movie.primaryTitle}</p>
+          </div>
         ))}
-      </ul>
+      />
+
       <h2>Top 10 TV Shows</h2>
-      <ul style={{ display: 'flex'}}>
-        {top10TVShows.map((show) => (
-          <li className = 'card' key={show.tConst} style={{ margin: '10px', width: '10%' }}>
-            <Link to={`/title/${show.tConst}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <img src={show.poster} alt={show.primaryTitle} style={{ width: "100%", marginBottom: "10px" }} />
-              <div style={{ textAlign: 'center', wordWrap: 'break-word' }}>{show.primaryTitle}</div>
-            </Link>
-          </li>
+      <Carousel
+        items={top10TVShows.map((show) => (
+          <div className="card" key={show.tConst}>
+            <img
+              src={show.poster}
+              alt={show.primaryTitle}
+              className="card-img"
+            />
+            <p>{show.primaryTitle}</p>
+          </div>
         ))}
-      </ul>
+      />
+
       <h2>Top 10 Actors</h2>
-      <ul style={{ display: 'flex'}}>
-        {top10Actors.map((actor) => (
-          <li className = 'card' key={actor.nConst} style={{ margin: '10px', width: '10%' }}>
-            <Link to={`/name/${actor.nConst}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <img src={actor.image} alt={actor.primaryName} style={{ width: "100%", marginBottom: "10px" }} />
-              <div style={{ textAlign: 'center', wordWrap: 'break-word' }}>{actor.primaryName}</div>
-            </Link>
-          </li>
+      <Carousel
+        items={top10Actors.map((actor) => (
+          <div className="card" key={actor.nConst}>
+            <img
+              src={actor.image}
+              alt={actor.primaryName}
+              className="card-img"
+            />
+            <p>{actor.primaryName}</p>
+          </div>
         ))}
-      </ul>
-    </>
+      />
+    </div>
   );
 };
 

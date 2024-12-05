@@ -15,6 +15,7 @@ namespace DataLayer.Models
         public string? Name { get; set; }
         public string? Roles { get; set; }
         public string? Title { get; set; }
+        public string? Poster { get; set; }
     }
 
 }
