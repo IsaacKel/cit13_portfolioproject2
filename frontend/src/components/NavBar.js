@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar, Nav, Button, Row, Col, Modal } from "react-bootstrap";
 import "./NavBar.css";
 import Login from "../pages/Login";
@@ -7,6 +7,7 @@ import { logoutUser } from "../services/apiService";
 import SearchBar from "./SearchBar";
 
 const NavBar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
@@ -23,13 +24,24 @@ const NavBar = () => {
   const handleLogout = async () => {
   try {
       await logoutUser();
-    console.log("Logout successful");
-    // Redirect here (proberbly not needed)
+    setIsLoggedIn(false);
     handleCloseLogout();
   } catch (error) {
     console.error("Error logging out:", error);
   }
 };
+
+    useEffect(() => {
+        const cookieTokenExists = document.cookie.split("; ").some((cookie) => cookie.startsWith("auth_token_cookie="));
+        const localStorageTokenExists = Boolean(localStorage.getItem("token"));
+
+        setIsLoggedIn(cookieTokenExists || localStorageTokenExists);
+    }, []);
+
+    useEffect(() => {
+        console.log("Is the user logged In? :", isLoggedIn);
+    }, [isLoggedIn]);
+
   return (
     <Navbar bg="dark" expand="lg" className="p-3">
       <Row className="w-100 align-items-center">
