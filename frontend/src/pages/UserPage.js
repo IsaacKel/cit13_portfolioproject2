@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { fetchUserData, fetchUserBookmarks } from "../services/apiService";
+import { fetchUserData, fetchUserBookmarks, fetchUserRatings } from "../services/apiService";
 import { Link } from "react-router-dom";
 
 const UserPage = () => {
   const userID = 85;
   const [user, setUser] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
+  const [ratings, setRatings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [userData, userBookmarks] = await Promise.all([
+        const [userData, userBookmarks, userRatings] = await Promise.all([
           fetchUserData(userID),
           fetchUserBookmarks(userID),
+          fetchUserRatings(userID),
         ]);
         setUser(userData);
         setBookmarks(userBookmarks);
+        setRatings(userRatings);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -64,7 +67,20 @@ const UserPage = () => {
       ) : (
         <p>No bookmarks found.</p>
       )}
-      <h2>Ratings (not done)</h2>
+      <h2>Ratings</h2>
+      {ratings.items && ratings.items.length > 0 ? (
+        <ul>
+          {ratings.items.map((rating) => (
+            <li key={rating.id}>
+              <p><strong>Title:</strong> <Link to={`/title/${rating.tConst}`}>{rating.tConst}</Link></p>
+              <p><strong>Rating:</strong> {rating.rating}</p>
+              <p><strong>Date:</strong> {rating.createdAt}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No ratings found.</p>
+      )}
       <h2>Search History (not done)</h2>
     </div>
   );
