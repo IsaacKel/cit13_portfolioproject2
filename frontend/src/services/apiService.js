@@ -633,3 +633,22 @@ export const fetchUserRatings = async (userId) => {
     throw error;
   }
 }
+export const fetchUserSearchHistory = async (userId) => {
+  try {
+    const response = await fetch(`${baseURL}/SearchHistory/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user search history:", error);
+    throw error;
+  }
+}

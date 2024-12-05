@@ -98,10 +98,12 @@ namespace WebApi.Controllers
     {
       return new BookmarkDto
       {
+        Id = bookmark.Id,
         UserId = bookmark.UserId,
         TConst = bookmark.TConst,
         NConst = bookmark.NConst,
         Note = bookmark.Note,
+        CreatedAt = bookmark.CreatedAt,
         SelfLink = GetUrl(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id })
       };
     }
