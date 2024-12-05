@@ -180,14 +180,13 @@ namespace WebApi.Controllers
 
     // -- LOGOUT USER --
     [HttpPost("logout")]
-   [Authorize]
+    [Authorize]
     public IActionResult Logout()
     {
             Response.Cookies.Delete("auth_token_cookie");
 
-            Console.WriteLine("LOGGING OUT DONE");
 
-            return Ok(new { message = "SERVER SAY : Logout successful" });
+            return Ok(new { message = "Logout successful" });
     }
 
     // -- DELETE USER --

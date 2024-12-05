@@ -60,7 +60,7 @@ const SignUp = () => {
             });
 
 
-
+            localStorage.setItem("token", loginResponse.token); // Save token to local storage because only Fireox saves it in cookies
             console.log("Registration successful:", response);
             setSuccess(true);
         } catch (err) {

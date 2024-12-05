@@ -62,7 +62,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 {
                     context.Token = token;
                 }
-
+                // Since some browsers delete cookies, we also use tokens in local storage
+                else if (string.IsNullOrEmpty(token) && context.HttpContext.Request.Headers.ContainsKey("Authorization"))
+                {
+                    // Check if the token is available in the Authorization header (for localStorage tokens)
+                    var authHeader = context.HttpContext.Request.Headers["Authorization"].ToString();
+                    if (authHeader.StartsWith("Bearer "))
+                    {
+                        context.Token = authHeader.Substring("Bearer ".Length).Trim();
+                    }
+                }
                 return Task.CompletedTask;
             }
         };

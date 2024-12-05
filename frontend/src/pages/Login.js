@@ -16,8 +16,8 @@ const Login = () => {
 
     try {
       const response = await loginUser({ userName: username, password });
-      console.log("Login successful:", response);
-
+      
+        localStorage.setItem("token", response.token); // Save token to local storage because only Fireox saves it in cookies
 
       setSuccess("Login successful!");
     } catch (err) {

@@ -57,17 +57,19 @@ try {
 // Function to logout a user
 export const logoutUser = async () => {
   try {
+    const token = localStorage.getItem('token'); // Retrieve token from localStorage
+
     const response = await fetch(`${userBaseURL}/logout`, {
       method: "POST",
       credentials: "include",
+      headers: {
+        'Authorization': `Bearer ${token}`, // Include token in Authorization header
+        'Content-Type': 'application/json'
+      }
     });
 
     let responseData;
     const contentType = response.headers.get("content-type");
-
-    if (!response.ok) {
-      throw new Error(responseData.message || responseData || `Error: ${response.status}`);
-    }
 
     if (contentType && contentType.includes("application/json")) {
       responseData = await response.json();
@@ -75,7 +77,9 @@ export const logoutUser = async () => {
       responseData = await response.text();
     }
 
-    
+    if (!response.ok) {
+      throw new Error(responseData.message || responseData || `Error: ${response.status}`);
+    }
 
     return responseData;
   } catch (error) {
