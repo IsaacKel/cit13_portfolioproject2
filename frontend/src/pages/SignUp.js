@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-import { registerUser } from "../services/apiService";
-import { loginUser } from "../services/apiService";
+import { registerUser, loginUser } from "../services/apiService";
 import "./Login.css";
+import AuthContext from "../components/AuthContext";
 
 const SignUp = ({ onSignupSuccess }) => {
     const [formData, setFormData] = useState({
@@ -11,10 +11,12 @@ const SignUp = ({ onSignupSuccess }) => {
         email: "",
         password: "",
         confirmPassword: "",
-        role: "user", // Default to "user"
+        role: "user",
     });
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
+
+    const { login } = useContext(AuthContext);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,41 +38,32 @@ const SignUp = ({ onSignupSuccess }) => {
             return;
         }
 
-        console.log("Payload being sent:", {
-            name: formData.name,
-            username: formData.userName, 
-            email: formData.email,
-            password: formData.password,
-            role: formData.role,
-        });
-
         try {
-            const response = await registerUser({
+            await registerUser({
                 name: formData.name,
-                username: formData.userName, 
+                username: formData.userName,
                 email: formData.email,
                 password: formData.password,
                 role: formData.role,
             });
 
-            // Auto log-in the user after Sign-up
             const loginResponse = await loginUser({
                 userName: formData.userName,
                 password: formData.password,
             });
 
+            localStorage.setItem("token", loginResponse.token);
 
-            localStorage.setItem("token", loginResponse.token); // Save token to local storage because only Fireox saves it in cookies
-            console.log("Registration successful:", response);
+            login();
+
             setSuccess(true);
             if (onSignupSuccess) {
-                onSignupSuccess(); // Notify parent compponent (used to close the model in NavBar)
+                onSignupSuccess();
             }
         } catch (err) {
             setError(err.message);
         }
     };
-
 
     return (
         <Form className="login-form" onSubmit={handleSignUp}>
@@ -87,6 +80,7 @@ const SignUp = ({ onSignupSuccess }) => {
                 onChange={handleChange}
                 disabled={success}
             />
+
             <Form.Label className="login-label">Username:</Form.Label>
             <Form.Control
                 type="text"
@@ -97,6 +91,7 @@ const SignUp = ({ onSignupSuccess }) => {
                 onChange={handleChange}
                 disabled={success}
             />
+
             <Form.Label className="login-label">Email:</Form.Label>
             <Form.Control
                 type="email"
@@ -107,6 +102,7 @@ const SignUp = ({ onSignupSuccess }) => {
                 onChange={handleChange}
                 disabled={success}
             />
+
             <Form.Label className="login-label">Password:</Form.Label>
             <Form.Control
                 type="password"
@@ -117,6 +113,7 @@ const SignUp = ({ onSignupSuccess }) => {
                 onChange={handleChange}
                 disabled={success}
             />
+
             <Form.Label className="login-label">Confirm Password:</Form.Label>
             <Form.Control
                 type="password"
@@ -127,6 +124,7 @@ const SignUp = ({ onSignupSuccess }) => {
                 onChange={handleChange}
                 disabled={success}
             />
+
             <Button variant="primary" type="submit" className="login-submit" disabled={success}>
                 Sign Up
             </Button>

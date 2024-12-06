@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { loginUser } from "../services/apiService";
 import "./Login.css";
+import AuthContext from "../components/AuthContext";
 
 const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,13 +18,14 @@ const Login = ({ onLoginSuccess }) => {
 
     try {
       const response = await loginUser({ userName: username, password });
-      
-        localStorage.setItem("token", response.token); // Save token to local storage because only Fireox saves it in cookies
+      localStorage.setItem("token", response.token);
 
-        setSuccess("Login successful!");
-        if (onLoginSuccess) {
-            onLoginSuccess(); // Notify parent compponent (used to close the model in NavBar)
-        }
+      login();
+      
+      setSuccess("Login successful!");
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
     } catch (err) {
       setError(err.message);
     }

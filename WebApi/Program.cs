@@ -57,13 +57,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             OnMessageReceived = context =>
             {
                 // Look for the token in the cookies
-                var token = context.HttpContext.Request.Cookies["auth_token_cookie"];
-                if (!string.IsNullOrEmpty(token))
+                var cookie = context.HttpContext.Request.Cookies["auth_token_cookie"];
+                if (!string.IsNullOrEmpty(cookie))
                 {
-                    context.Token = token;
+                    context.Token = cookie;
                 }
                 // Since some browsers delete cookies, we also use tokens in local storage
-                else if (string.IsNullOrEmpty(token) && context.HttpContext.Request.Headers.ContainsKey("Authorization"))
+                else if (string.IsNullOrEmpty(cookie) && context.HttpContext.Request.Headers.ContainsKey("Authorization"))
                 {
                     // Check if the token is available in the Authorization header (for localStorage tokens)
                     var authHeader = context.HttpContext.Request.Headers["Authorization"].ToString();
