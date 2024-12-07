@@ -393,10 +393,6 @@ namespace DataLayer
                      .ToList();
     }
 
-    ////// FAKE list 
-    //private readonly List<User> _users = new List<User>         {
-    //  new User { Id = 1, Username = "user1", Password = "password1", Email = "dsad"}};
-
     // --Name-- (Actors, Directors, Writers)
     public NameBasic GetNameByNConst(string nconst)
     {
@@ -421,22 +417,6 @@ namespace DataLayer
                            .Where(tc => tc.NConst == nconst)
                            .ToList();
     }
-
-    // // --TITLE PRINCIPALS--
-    // public IList<TitlePrincipal> GetTitlePrincipalsByName(string nconst)
-    // {
-    //   return _context.TitlePrincipals
-    //                  .Where(tp => tp.NConst == nconst)
-    //                  .ToList();
-    // }
-    // public IList<TitlePrincipal> GetTitlePrincipalsByTitle(string tconst)
-    // {
-    //   return _context.TitlePrincipals
-    //                  .Where(tp => tp.TConst == tconst)
-    //                  .ToList();
-    // }
-
-
 
     // --KNOWN FOR TITLES--
     public IList<KnownForTitle> GetKnownForTitlesByName(string nconst)

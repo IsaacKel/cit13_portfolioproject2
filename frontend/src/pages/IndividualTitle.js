@@ -11,7 +11,7 @@ import Bookmark from "../components/Bookmark";
 import PaginationButtons from "../components/PaginationButtons";
 import CardList from "../components/CardList";
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 5;
 
 const IndividualTitle = () => {
   const { tConst } = useParams();
@@ -106,8 +106,8 @@ const IndividualTitle = () => {
           {titleData.averageRating && (
             <div className="rating-container">
               <span className="rating">⭐ {titleData.averageRating}</span>
-              <span className="num-votes">
-                {titleData.numVotes.toLocaleString()} ratings
+              <span className="meta-data">
+                {titleData.numVotes.toLocaleString()} rates
               </span>
             </div>
           )}

@@ -7,67 +7,68 @@ import {
   fetchKnownForTitles,
   fetchCoPlayers,
   fetchPrincipalsByName,
+  fetchBiography,
 } from "../services/apiService";
 import Bookmark from "../components/Bookmark";
 import PaginationButtons from "../components/PaginationButtons";
 import CardList from "../components/CardList";
-import { Card } from "react-bootstrap";
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 5;
 
 const IndividualName = () => {
   const { nConst } = useParams();
   const [nameData, setNameData] = useState(null);
   const [knownFor, setKnownFor] = useState([]);
-  const [knownForPage, setKnownForPage] = useState(0);
   const [coPlayers, setCoPlayers] = useState([]);
   const [principals, setPrincipals] = useState([]);
-  const [showBookmarkModal, setShowBookmarkModal] = useState(false);
   const [personImage, setPersonImage] = useState(null);
   const [coPlayersWithImages, setCoPlayersWithImages] = useState([]);
-  const [error, setError] = useState(null);
+  const [showBookmarkModal, setShowBookmarkModal] = useState(false);
+  const [pagination, setPagination] = useState({
+    knownForPage: 0,
+    coPlayersPage: 0,
+    principalsPage: 0,
+  });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Fetch main data (name, biography, known titles, co-stars, roles)
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [name, known, coPlayers, principals] = await Promise.all([
+        const [name, known, coPlayersData, principalsData] = await Promise.all([
           fetchNameData(nConst),
           fetchKnownForTitles(nConst, 1, ITEMS_PER_PAGE * 5),
-          fetchCoPlayers(nConst),
-          fetchPrincipalsByName(nConst),
+          fetchCoPlayers(nConst, 1, ITEMS_PER_PAGE * 5),
+          fetchPrincipalsByName(nConst, 1, ITEMS_PER_PAGE * 5),
         ]);
 
-        setNameData(name);
-        setKnownFor(known.items || []);
-        setCoPlayers(coPlayers || []);
-        setPrincipals(principals || []);
-
         const imageUrl = await fetchImages(name.actualName);
+        const bio = await fetchBiography(name.actualName);
+
+        setNameData({ ...name, bio });
         setPersonImage(imageUrl);
+        setKnownFor(known.items || []);
+        setCoPlayers(coPlayersData || []);
+        setPrincipals(principalsData.items || []);
       } catch (err) {
-        setError(err.message);
+        console.error(err);
+        setError("Failed to load data. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
-    setKnownForPage(0);
+    setPagination({ knownForPage: 0, coPlayersPage: 0, principalsPage: 0 });
     window.scrollTo(0, 0);
   }, [nConst]);
 
-  //fetch costar image
-
+  // Fetch images for co-stars
   useEffect(() => {
     const fetchCostarImages = async () => {
-      if (!coPlayers || !coPlayers.items || !coPlayers.items.length) {
-        console.log("coPlayers or items not ready yet");
-        return;
-      }
-      console.log("coPlayers", coPlayers);
-      console.log("coPlayers.items", coPlayers.items);
-      console.log("coPlayers.items.length", coPlayers.items.length);
+      if (!coPlayers.items || !coPlayers.items.length) return;
 
       try {
         const updatedCoPlayers = await Promise.all(
@@ -77,7 +78,6 @@ const IndividualName = () => {
           })
         );
         setCoPlayersWithImages(updatedCoPlayers);
-        console.log("updatedCoPlayers", updatedCoPlayers);
       } catch (err) {
         console.error("Error fetching coPlayer images:", err);
       }
@@ -86,22 +86,28 @@ const IndividualName = () => {
     fetchCostarImages();
   }, [coPlayers]);
 
-  console.log("coPlayersWithImages", coPlayersWithImages);
+  const handlePageChange = (field, value) => {
+    setPagination((prev) => ({
+      ...prev,
+      [field]: Math.max(0, prev[field] + value),
+    }));
+  };
 
   return (
-    <div className="IndividualName">
+    <div className="individual-title-container">
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
         <>
+          {/* Header Section */}
           <div className="title-header">
             <div className="title-data">
               <h1>{nameData.actualName}</h1>
               <div className="meta-data">
-                {nameData.birthYear && <span>{nameData.birthYear}</span>}
-                {nameData.deathYear && <span> - {nameData.deathYear}</span>}
+                {nameData.birthYear && <span>Born: {nameData.birthYear}</span>}
+                {nameData.deathYear && <span>Died: {nameData.deathYear}</span>}
               </div>
             </div>
             <div className="title-actions">
@@ -113,19 +119,26 @@ const IndividualName = () => {
               </button>
             </div>
           </div>
-          {personImage && (
-            <img
-              src={personImage}
-              alt={nameData.actualName}
-              className="poster"
-            />
-          )}
-          <h2>Known For</h2>
+          <div className="poster-plot-container">
+            {/* Person Image */}
+            {personImage && (
+              <img
+                src={personImage}
+                alt={nameData.actualName}
+                className="poster"
+              />
+            )}
+            {/* Biography */}
+            <p className="plot">{nameData.bio || "Biography not available."}</p>
+          </div>
+
+          {/* Known For Section */}
           <section className="cast-crew-similar-titles">
+            <h2>Known For</h2>
             <CardList
               items={knownFor.slice(
-                knownForPage * ITEMS_PER_PAGE,
-                (knownForPage + 1) * ITEMS_PER_PAGE
+                pagination.knownForPage * ITEMS_PER_PAGE,
+                (pagination.knownForPage + 1) * ITEMS_PER_PAGE
               )}
               renderItem={(title) => (
                 <Link
@@ -151,12 +164,14 @@ const IndividualName = () => {
               )}
             />
           </section>
-          <h2>Costars</h2>
+
+          {/* Co-stars Section */}
           <section className="cast-crew-similar-titles">
+            <h2>Co-stars</h2>
             <CardList
               items={coPlayersWithImages.slice(
-                knownForPage * ITEMS_PER_PAGE,
-                (knownForPage + 1) * ITEMS_PER_PAGE
+                pagination.coPlayersPage * ITEMS_PER_PAGE,
+                (pagination.coPlayersPage + 1) * ITEMS_PER_PAGE
               )}
               renderItem={(coPlayer) => (
                 <Link
@@ -182,18 +197,27 @@ const IndividualName = () => {
                 </Link>
               )}
             />
+            <PaginationButtons
+              currentPage={pagination.coPlayersPage}
+              totalItems={coPlayersWithImages.length}
+              itemsPerPage={ITEMS_PER_PAGE}
+              onNext={() => handlePageChange("coPlayersPage", 1)}
+              onPrevious={() => handlePageChange("coPlayersPage", -1)}
+            />
           </section>
-          <h2>Recently seen in..</h2>
+
+          {/* Roles Section */}
           <section className="cast-crew-similar-titles">
+            <h2>Recently Seen In</h2>
             <CardList
               items={principals.slice(
-                knownForPage * ITEMS_PER_PAGE,
-                (knownForPage + 1) * ITEMS_PER_PAGE
+                pagination.principalsPage * ITEMS_PER_PAGE,
+                (pagination.principalsPage + 1) * ITEMS_PER_PAGE
               )}
               renderItem={(principal) => (
                 <Link
-                  to={`/title/${principal.tConst}`}
-                  key={principals.tConst}
+                  to={`/title/${principal.tConst.split("/").pop()}`}
+                  key={principal.tConst}
                   className="search-item-link"
                 >
                   <div className="card">
@@ -208,13 +232,26 @@ const IndividualName = () => {
                     )}
                     <div className="card-details">
                       <p>{principal.title}</p>
-                      <p className="title-data">{principal.roles}</p>
+                      <p>{principal.roles}</p>
                     </div>
                   </div>
                 </Link>
               )}
             />
+            <PaginationButtons
+              currentPage={pagination.principalsPage}
+              totalItems={principals.length}
+              itemsPerPage={ITEMS_PER_PAGE}
+              onNext={() => handlePageChange("principalsPage", 1)}
+              onPrevious={() => handlePageChange("principalsPage", -1)}
+            />
           </section>
+
+          {/* Bookmark Modal */}
+          <Bookmark
+            show={showBookmarkModal}
+            onClose={() => setShowBookmarkModal(false)}
+          />
         </>
       )}
     </div>

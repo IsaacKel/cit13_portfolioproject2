@@ -417,11 +417,46 @@ export const fetchImages = async (personName) => {
   }
 };
 
+export const fetchBiography = async (personName) => {
+  try {
+    // API key for the movieDB
+    const apiKey = "003b3d8750e2856a2fc6e6414311d7eb";
+
+    // Find TMDB ID for the person via name
+    const response = await fetch(
+      `https://api.themoviedb.org/3/search/person?query=${personName}&api_key=${apiKey}`
+    );
+    const data = await response.json();
+
+    if (data.results.length === 0) {
+      return null;
+    }
+
+    const personID = data.results[0].id;
+
+    // Get biography of the person using the TMDB ID
+    const bioResponse = await fetch(
+      `https://api.themoviedb.org/3/person/${personID}?api_key=${apiKey}`
+    );
+    const bioData = await bioResponse.json();
+
+    // Return the biography
+    return bioData.biography || "Biography not available.";
+  } catch (error) {
+    console.error("Error fetching biography:", error);
+    return null;
+  }
+};
+
 //Fetch principals by name
-export const fetchPrincipalsByName = async (nConst) => {
+export const fetchPrincipalsByName = async (
+  nConst,
+  pageNumber = 1,
+  pageSize = 10
+) => {
   try {
     const response = await fetch(
-      `${baseURL}/TitlePrincipal/${nConst}/principals-name`,
+      `${baseURL}/TitlePrincipal/${nConst}/principals-name?pageNumber=${pageNumber}&pageSize=${pageSize}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -440,12 +475,15 @@ export const fetchPrincipalsByName = async (nConst) => {
 };
 
 //Fetch coplayers
-export const fetchCoPlayers = async (nConst) => {
+export const fetchCoPlayers = async (nConst, pageNumber = 1, pageSize = 10) => {
   try {
-    const response = await fetch(`${baseURL}/CoPlayers/${nConst}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      `${baseURL}/CoPlayers/${nConst}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Failed to fetch coplayers: ${response.status}`);

@@ -29,7 +29,6 @@ namespace WebApi.Controllers
             {
                 return NotFound();
             }
-
             var totalItems = coplayers.Count();
             var pagedCoPlayers = coplayers
                 .Skip((pageNumber - 1) * pageSize)
@@ -42,9 +41,7 @@ namespace WebApi.Controllers
                     name.NConst = new Uri($"{Request.Scheme}://{Request.Host}/api/NameBasic/{name.NConst}").ToString();
                 }
             }
-
             var response = CreatePagedResponse(pagedCoPlayers, pageNumber, pageSize, totalItems, "GetCoPlayers");
-
             return Ok(response);
         }
     }
