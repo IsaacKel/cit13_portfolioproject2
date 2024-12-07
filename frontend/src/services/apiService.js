@@ -576,12 +576,17 @@ export const fetchTop10Actors = async () => {
     throw error;
   }
 };
-export const fetchUserData = async (userId) => {
+
+// Function to fetch user data
+export const fetchUserData = async () => {
   try {
-    const response = await fetch(`${userBaseURL}/${userId}`, {
-      method: "GET",
+    const token = localStorage.getItem('token'); // Retrieve token from localStorage
+    const response = await fetch(`${userBaseURL}/profile`, {
+        method: "GET",
+        credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`, // Include token in Authorization header
       },
     });
 

@@ -30,10 +30,18 @@ namespace WebApi.Controllers
     }
 
     // -- GET USER by ID --
-    [HttpGet("{userId}")]
-    public IActionResult GetUser(int userId)
+    [HttpGet("profile")]
+    [Authorize]
+    public IActionResult GetUser()
     {
+      var userId = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+
+      Console.WriteLine("Controller profile ID Claims from user is : "+ userId);
+
+      if (userId == null) return Unauthorized();
+
       var user = _dataService.GetUser(userId);
+
       if (user == null) return NotFound();
 
       var userDto = user.Adapt<UserDTO>();
