@@ -13,7 +13,7 @@ const ResultsColumn = () => {
   }, [query, dispatch]);
 
   return (
-    <div className="results-column">
+    <div>
       <h2>Results for "{query}"</h2>
       <TitleResults />
       <NameResults />
