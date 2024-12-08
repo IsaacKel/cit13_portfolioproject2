@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:5003/api";
+const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -580,12 +580,15 @@ export const fetchUserData = async () => {
     throw error;
   }
 };
-export const fetchUserBookmarks = async (userId) => {
+export const fetchUserBookmarks = async () => {
   try {
-    const response = await fetch(`${baseURL}/Bookmark/user/${userId}`, {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${baseURL}/Bookmark/user`, {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -599,12 +602,15 @@ export const fetchUserBookmarks = async (userId) => {
     throw error;
   }
 };
-export const fetchUserRatings = async (userId) => {
+export const fetchUserRatings = async () => {
   try {
-    const response = await fetch(`${baseURL}/UserRating/${userId}`, {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${baseURL}/UserRating`, {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -618,12 +624,15 @@ export const fetchUserRatings = async (userId) => {
     throw error;
   }
 };
-export const fetchUserSearchHistory = async (userId) => {
+export const fetchUserSearchHistory = async () => {
   try {
-    const response = await fetch(`${baseURL}/SearchHistory/user/${userId}`, {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${baseURL}/SearchHistory/user/`, {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 

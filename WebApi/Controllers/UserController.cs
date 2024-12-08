@@ -34,18 +34,17 @@ namespace WebApi.Controllers
     [Authorize]
     public IActionResult GetUser()
     {
-      var userId = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+      var userId = int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value, out var userIdInt);
 
-      Console.WriteLine("Controller profile ID Claims from user is : "+ userId);
 
-      if (userId == null) return Unauthorized();
+      if (userIdInt == null) return Unauthorized();
 
-      var user = _dataService.GetUser(userId);
+      var user = _dataService.GetUser(userIdInt);
 
       if (user == null) return NotFound();
 
       var userDto = user.Adapt<UserDTO>();
-      userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userId });
+      userDto.SelfLink = GenerateSelfLink(nameof(GetUser), new { userIdInt });
 
       return Ok(userDto);
     }

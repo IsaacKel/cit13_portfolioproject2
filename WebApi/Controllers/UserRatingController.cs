@@ -1,4 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using DataLayer;
 using WebApi.DTOs;
 using Mapster;
@@ -8,6 +13,7 @@ namespace WebApi.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
+  [EnableCors("AllowReactApp")]
   public class UserRatingController : BaseController
   {
     private readonly IDataService _dataService;
@@ -19,27 +25,39 @@ namespace WebApi.Controllers
     }
 
     // Get paginated ratings for a user
-    [HttpGet("{userId}", Name = nameof(GetUserRatings))]
-    public IActionResult GetUserRatings(int userId, int pageNumber = 1, int pageSize = DefaultPageSize)
+    [HttpGet( Name = nameof(GetUserRatings))]
+    [Authorize]
+    public IActionResult GetUserRatings(int pageNumber = 1, int pageSize = DefaultPageSize)
     {
-      var totalRatings = _dataService.GetUserRatingCount(userId);
+      var userId = int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value, out var userIdInt);
+
+
+      if (userIdInt == null) return Unauthorized();
+
+      var totalRatings = _dataService.GetUserRatingCount(userIdInt);
       if (totalRatings == 0) return NotFound();
 
-      var userRatings = _dataService.GetUserRatings(userId, pageNumber, pageSize);
-      var userRatingDtos = userRatings.Select(r => r.Adapt<UserRatingDto>().WithSelfLink(GetUrl(nameof(GetUserRatingById), new { userId, ratingId = r.Id }))).ToList();
+      var userRatings = _dataService.GetUserRatings(userIdInt, pageNumber, pageSize);
+      var userRatingDtos = userRatings.Select(r => r.Adapt<UserRatingDto>().WithSelfLink(GetUrl(nameof(GetUserRatingById), new { userIdInt, ratingId = r.Id }))).ToList();
 
-      var paginatedResult = CreatePagingUser(nameof(GetUserRatings), userId, pageNumber, pageSize, totalRatings, userRatingDtos);
+      var paginatedResult = CreatePagingUser(nameof(GetUserRatings), userIdInt, pageNumber, pageSize, totalRatings, userRatingDtos);
       return Ok(paginatedResult);
     }
 
     // Get a specific rating by userId and ratingId
-    [HttpGet("{userId}/{ratingId}", Name = nameof(GetUserRatingById))]
-    public IActionResult GetUserRatingById(int userId, int ratingId)
+    [HttpGet("{ratingId}", Name = nameof(GetUserRatingById))]
+    [Authorize]
+    public IActionResult GetUserRatingById(int ratingId)
     {
+      var userId = int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value, out var userIdInt);
+
+
+      if (userIdInt == null) return Unauthorized();
+
       var userRating = _dataService.GetUserRating(ratingId);
       if (userRating == null) return NotFound();
 
-      var userRatingDto = userRating.Adapt<UserRatingDto>().WithSelfLink(GetUrl(nameof(GetUserRatingById), new { userId, ratingId }));
+      var userRatingDto = userRating.Adapt<UserRatingDto>().WithSelfLink(GetUrl(nameof(GetUserRatingById), new { userIdInt, ratingId }));
       return Ok(userRatingDto);
     }
 
@@ -83,11 +101,17 @@ namespace WebApi.Controllers
     }
 
     // Update a rating by ratingId
-    [HttpPut("{userId}/{ratingId}")]
-    public IActionResult UpdateUserRating(int userId, int ratingId, [FromBody] UserRatingDto userRatingDto)
+    [HttpPut("{ratingId}")]
+    [Authorize]
+    public IActionResult UpdateUserRating(int ratingId, [FromBody] UserRatingDto userRatingDto)
     {
+      var userId = int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value, out var userIdInt);
+
+
+      if (userIdInt == null) return Unauthorized();
+
       var existingRating = _dataService.GetUserRating(ratingId);
-      if (existingRating == null || existingRating.UserId != userId)
+      if (existingRating == null || existingRating.UserId != userIdInt)
       {
         return Forbid("User does not have permission to modify this rating.");
       }
@@ -96,7 +120,7 @@ namespace WebApi.Controllers
 
       if (_dataService.GetUserRating(ratingId) == null) return NotFound();
 
-      _dataService.UpdateUserRating(userId, ratingId, userRatingDto.Rating);
+      _dataService.UpdateUserRating(userIdInt, ratingId, userRatingDto.Rating);
       return NoContent();
     }
   }

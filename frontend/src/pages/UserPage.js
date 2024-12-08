@@ -16,9 +16,9 @@ const UserPage = () => {
       try {
         const [userData, userBookmarks, userRatings, userSearchHistory] = await Promise.all([
           fetchUserData(),
-          fetchUserBookmarks(userID),
-          fetchUserRatings(userID),
-          fetchUserSearchHistory(userID)
+          fetchUserBookmarks(),
+          fetchUserRatings(),
+          fetchUserSearchHistory()
         ]);
         setUser(userData);
         setBookmarks(userBookmarks);

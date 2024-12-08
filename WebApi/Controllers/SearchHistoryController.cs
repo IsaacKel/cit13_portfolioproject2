@@ -1,4 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using DataLayer.Models;
 using DataLayer;
 using WebApi.DTOs;
@@ -8,6 +13,7 @@ namespace WebApi.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
+  [EnableCors("AllowReactApp")]
   public class SearchHistoryController : BaseController
   {
     private readonly IDataService _dataService;
@@ -32,17 +38,23 @@ namespace WebApi.Controllers
     }
 
     // Get paginated search history entries for a user
-    [HttpGet("user/{userId}", Name = nameof(GetSearchHistoryByUser))]
-    public IActionResult GetSearchHistoryByUser(int userId, int pageNumber = 1, int pageSize = 10)
+    [HttpGet("user", Name = nameof(GetSearchHistoryByUser))]
+    [Authorize]
+    public IActionResult GetSearchHistoryByUser(int pageNumber = 1, int pageSize = 10)
     {
-      var searchHistories = _dataService.GetSearchHistoriesByUser(userId, pageNumber, pageSize);
+      var userId = int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value, out var userIdInt);
+
+
+      if (userIdInt == null) return Unauthorized();
+
+      var searchHistories = _dataService.GetSearchHistoriesByUser(userIdInt, pageNumber, pageSize);
       if (searchHistories == null || !searchHistories.Any()) return NotFound(new { message = "Search history not found." });
 
-      var totalItems = _dataService.GetSearchHistoryCountByUser(userId);
+      var totalItems = _dataService.GetSearchHistoryCountByUser(userIdInt);
       var searchHistoryDtos = searchHistories.Select(sh => sh.Adapt<SearchHistoryDTO>()).ToList();
       searchHistoryDtos.ForEach(dto => dto.SelfLink = GetUrl(nameof(GetSearchHistory), new { searchId = dto.Id }));
 
-      return Ok(CreatePagingUser(nameof(GetSearchHistoryByUser), userId, pageNumber, pageSize, totalItems, searchHistoryDtos));
+      return Ok(CreatePagingUser(nameof(GetSearchHistoryByUser), userIdInt, pageNumber, pageSize, totalItems, searchHistoryDtos));
     }
 
     // Add a new search history entry

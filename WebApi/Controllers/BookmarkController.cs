@@ -1,4 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using WebApi.DTOs;
 using DataLayer;
 using DataLayer.Models;
@@ -9,6 +14,7 @@ namespace WebApi.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
+  [EnableCors("AllowReactApp")]
   public class BookmarkController : BaseController
   {
     private readonly IDataService _dataService;
@@ -43,16 +49,21 @@ namespace WebApi.Controllers
     }
 
     // Get all Bookmarks for a User with Pagination
-    [HttpGet("user/{userId}", Name = nameof(GetBookmarks))]
-    public IActionResult GetBookmarks(int userId, int pageNumber = 1, int pageSize = 10)
+    [HttpGet("user", Name = nameof(GetBookmarks))]
+    [Authorize]
+    public IActionResult GetBookmarks(int pageNumber = 1, int pageSize = 10)
     {
-      var bookmarks = _dataService.GetBookmarks(userId, pageNumber, pageSize);
+      var userId = int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value, out var userIdInt);
+
+      if (userIdInt == null) return Unauthorized();
+
+      var bookmarks = _dataService.GetBookmarks(userIdInt, pageNumber, pageSize);
       if (bookmarks == null || !bookmarks.Any())
         return NotFound();
 
-      var totalItems = _dataService.GetBookmarkCountByUser(userId);
+      var totalItems = _dataService.GetBookmarkCountByUser(userIdInt);
       var bookmarkDtos = bookmarks.Select(MapToBookmarkDto).ToList();
-      var paginatedResult = CreatePagingUser(nameof(GetBookmarks), userId, pageNumber, pageSize, totalItems, bookmarkDtos);
+      var paginatedResult = CreatePagingUser(nameof(GetBookmarks), userIdInt, pageNumber, pageSize, totalItems, bookmarkDtos);
 
       return Ok(paginatedResult);
     }

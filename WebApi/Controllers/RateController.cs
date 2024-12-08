@@ -1,4 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using WebApi.DTOs;
 using DataLayer;
 using Mapster;
@@ -9,6 +14,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableCors("AllowReactApp")]
     public class RateController : BaseController
     {
         private readonly IDataService _dataService;
@@ -21,10 +27,16 @@ namespace WebApi.Controllers
 
 
         // --  --
-        [HttpGet("{tConst}/{rating}/{userId}")]
-       public ActionResult rate(string tConst, int rating, int userId)
+        [HttpGet("{tConst}/{rating}")]
+        [Authorize]
+       public ActionResult rate(string tConst, int rating)
         {
-            if (!_dataService.UserExists(userId))
+            var userId = int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value, out var userIdInt);
+
+
+            if (userIdInt == null) return Unauthorized();
+
+            if (!_dataService.UserExists(userIdInt))
             {
                 return NotFound(new { message = "User does not exist." });
             }
@@ -36,7 +48,7 @@ namespace WebApi.Controllers
             {
                 return BadRequest(new { message = "Rating must be between 1 and 10." });
             }
-            _dataService.rate(tConst, rating, userId);
+            _dataService.rate(tConst, rating, userIdInt);
             return Ok();
         }
     }
