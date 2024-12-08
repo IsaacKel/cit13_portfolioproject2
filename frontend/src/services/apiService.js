@@ -473,16 +473,18 @@ export const fetchCoPlayers = async (nConst, pageNumber = 1, pageSize = 10) => {
     throw error;
   }
 };
-
 // Function to add a bookmark
-export const addBookmark = async (userId, tConst, note) => {
+export const addBookmark = async (tConst, note) => {
   try {
+    const token = localStorage.getItem("token");
     const response = await fetch(`${baseURL}/bookmarks`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId, tConst, note }),
+      body: JSON.stringify({ tConst, note }),
     });
 
     if (!response.ok) {
@@ -495,6 +497,7 @@ export const addBookmark = async (userId, tConst, note) => {
     throw error;
   }
 };
+
 
 export const fetchTop10Movies = async () => {
   try {
