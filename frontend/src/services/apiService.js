@@ -138,7 +138,7 @@ export const fetchTitlesSearch = async (
     pageSize,
   });
   const response = await fetch(
-    `http://localhost:5003/api/Search/title?${params.toString()}`
+    `${baseURL}/Search/title?${params.toString()}`
   );
   if (!response.ok) throw new Error("Failed to fetch search results");
   return response.json();
