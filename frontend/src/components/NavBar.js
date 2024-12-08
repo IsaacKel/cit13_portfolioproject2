@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Navbar, Button, Row, Col, Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import "./NavBar.css";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
@@ -11,6 +12,7 @@ const NavBar = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
+  const navigate = useNavigate();
 
   const handleCloseLogin = () => setShowLogin(false);
   const handleShowLogin = () => setShowLogin(true);
@@ -23,12 +25,12 @@ const NavBar = () => {
 
   const handleLogout = async () => {
     try {
-      await logoutUser(); 
+      await logoutUser();
       // After a successful server-side logout call the context's logout to update state and clear tokens
       logout();
 
       // Notify other tabs
-      localStorage.setItem('logout', Date.now());
+      localStorage.setItem("logout", Date.now());
       localStorage.removeItem("token");
       handleCloseLogout();
     } catch (error) {
@@ -39,7 +41,7 @@ const NavBar = () => {
   // Synchronize logout across tabs
   useEffect(() => {
     const syncLogout = (event) => {
-      if (event.key === 'logout') {
+      if (event.key === "logout") {
         logout();
         handleCloseLogin();
         handleCloseSignUp();
@@ -47,15 +49,19 @@ const NavBar = () => {
       }
     };
 
-    window.addEventListener('storage', syncLogout);
+    window.addEventListener("storage", syncLogout);
     return () => {
-      window.removeEventListener('storage', syncLogout);
+      window.removeEventListener("storage", syncLogout);
     };
   }, [logout]);
 
   useEffect(() => {
     console.log("Is the user logged In? :", isLoggedIn);
   }, [isLoggedIn]);
+
+  const handleUserPage = () => {
+    navigate("/user");
+  };
 
   return (
     <Navbar bg="dark" expand="lg" className="p-3">
@@ -70,7 +76,7 @@ const NavBar = () => {
             />
           </Navbar.Brand>
         </Col>
-        
+
         {/* Column 2: Search bar */}
         <Col xs={6}>
           <Row className="align-items-center">
@@ -101,13 +107,22 @@ const NavBar = () => {
             </>
           )}
           {isLoggedIn && (
-            <Button
-              variant="outline-danger"
-              className="ml-2"
-              onClick={handleShowLogout}
-            >
-              Log Out
-            </Button>
+            <>
+              <Button
+                variant="outline-danger"
+                className="ml-2"
+                onClick={handleShowLogout}
+              >
+                Log Out
+              </Button>
+              <Button
+                variant="outline-info"
+                className="ml-2"
+                onClick={handleUserPage}
+              >
+                Profile
+              </Button>
+            </>
           )}
         </Col>
       </Row>
@@ -135,11 +150,7 @@ const NavBar = () => {
           <Modal.Title>Are you sure you want to log out?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Button
-            variant="danger"
-            className="mr-3"
-            onClick={handleLogout}
-          >
+          <Button variant="danger" className="mr-3" onClick={handleLogout}>
             Yes, Log Out
           </Button>
           <Button variant="secondary" onClick={handleCloseLogout}>
