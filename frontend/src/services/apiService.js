@@ -1,4 +1,4 @@
-const baseURL = "https://localhost:5003/api";
+const baseURL = "http://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -474,29 +474,40 @@ export const fetchCoPlayers = async (nConst, pageNumber = 1, pageSize = 10) => {
   }
 };
 
-// Function to add a bookmark
 export const addBookmark = async (tConst, note) => {
-    try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(`${baseURL}/bookmarks`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ tConst, note }),
-        });
+  const token = localStorage.getItem("token");
+  const payload = { tConst, note };
 
-        if (!response.ok) {
-            throw new Error("Failed to add bookmark");
-        }
+  console.log("Adding bookmark with payload:", payload);
 
-        return await response.json();
-    } catch (error) {
-        console.error("Error adding bookmark:", error);
-        throw error;
+  try {
+    const response = await fetch(`${baseURL}/Bookmark`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(
+        "Failed to add bookmark, response:",
+        response.status,
+        errorText
+      );
+      throw new Error("Failed to add bookmark");
     }
+
+    const data = await response.json();
+    console.log("Successfully added bookmark:", data);
+    return data;
+  } catch (error) {
+    console.error("Error adding bookmark:", error);
+    throw error;
+  }
 };
 
 export const fetchTop10Movies = async () => {

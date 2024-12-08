@@ -25,27 +25,35 @@ namespace WebApi.Controllers
       _dataService = dataService;
     }
 
-    // Add Bookmark
     [HttpPost]
     public IActionResult AddBookmark(BookmarkDto dto)
     {
-      // Check if a bookmark with the same TConst or NConst already exists for this user
-      var existingBookmark = _dataService.GetBookmarks(dto.UserId)
-                                         .FirstOrDefault(b => b.TConst == dto.TConst && b.NConst == dto.NConst);
+      // Log the incoming request details
+      Console.WriteLine("Received bookmark request:");
+      Console.WriteLine($"UserId: {dto.UserId}, TConst: {dto.TConst}, Note: {dto.Note}");
 
-      if (existingBookmark != null)
-      {
-        return Conflict(new { message = "Bookmark already exists for this title and user." });
-      }
-
+      // Validate the user ID
       if (!_dataService.UserExists(dto.UserId))
       {
+        Console.WriteLine($"User with ID {dto.UserId} does not exist.");
         return NotFound(new { message = "User does not exist." });
       }
 
+      // Check for existing bookmark
+      var existingBookmark = _dataService.GetBookmarks(dto.UserId)
+          .FirstOrDefault(b => b.TConst == dto.TConst && b.NConst == dto.NConst);
+
+      if (existingBookmark != null)
+      {
+        Console.WriteLine($"Bookmark already exists for UserId: {dto.UserId}, TConst: {dto.TConst}");
+        return Conflict(new { message = "Bookmark already exists for this title and user." });
+      }
+
+      // Add the bookmark
       var bookmark = _dataService.AddBookmark(dto.UserId, dto.TConst, dto.NConst, dto.Note);
-      var bookmarkDto = MapToBookmarkDto(bookmark);
-      return CreatedAtAction(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id }, bookmarkDto);
+      Console.WriteLine($"Bookmark added successfully: {bookmark.Id}");
+
+      return CreatedAtAction(nameof(GetBookmark), new { id = bookmark.Id }, bookmark);
     }
 
     // Get all Bookmarks for a User with Pagination

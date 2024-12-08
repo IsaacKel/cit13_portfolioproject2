@@ -52,11 +52,6 @@ namespace WebApi.Controllers
                     title.TConst = new Uri($"{Request.Scheme}://{Request.Host}/api/TitleBasic/{title.TConst}").ToString();
                 }
             }
-
-            foreach (var title in pagedTitles)
-            {
-                Console.WriteLine($"Title: {title.Title}, Roles: {title.Roles}");
-            }
             var response = CreatePagedResponse(pagedTitles, pageNumber, pageSize, totalItems, "GetTitlePrincipalsName");
             return Ok(response);
         }

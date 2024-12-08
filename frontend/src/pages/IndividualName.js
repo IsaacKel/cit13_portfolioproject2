@@ -44,7 +44,7 @@ const IndividualName = () => {
           fetchPrincipalsByName(nConst, 1, ITEMS_PER_PAGE * 5),
         ]);
 
-        const imageUrl = await fetchImages(name.actualName);
+        const imageUrl = await fetchImages(name.nConst);
         const bio = await fetchBiography(name.actualName);
 
         setNameData({ ...name, bio });
@@ -93,6 +93,8 @@ const IndividualName = () => {
       [field]: Math.max(0, prev[field] + value),
     }));
   };
+
+  console.log("PERSON IMAGE", personImage);
 
   return (
     <div className="individual-title-container">

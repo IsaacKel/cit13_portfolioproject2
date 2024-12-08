@@ -1,22 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { addBookmark } from "../services/apiService";
+import AuthContext from "./AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Bookmark = ({ show, onClose }) => {
   const [note, setNote] = useState("");
-
-  // Retrieve user data from localStorage
-  const userData = JSON.parse(localStorage.getItem("user"));
-  const userId = userData ? userData.id : null;
-
-  // Check if user is logged in
-  const isLoggedIn = userId !== null && userId !== undefined;
+  const isLoggedIn = useContext(AuthContext);
 
   // Get tConst from URL parameters
   const { tConst } = useParams();
-
+  if (!tConst) {
+    console.error("tConst is missing from the URL parameters.");
+  }
   const handleBookmark = async () => {
     if (!isLoggedIn) {
       alert("You need to be logged in to bookmark titles.");
@@ -24,10 +21,11 @@ const Bookmark = ({ show, onClose }) => {
     }
 
     try {
-      await addBookmark(userId, tConst, note);
+      await addBookmark(tConst, note);
       alert("Bookmark added successfully!");
       onClose();
     } catch (err) {
+      console.error("Error adding bookmark:", err);
       alert("Failed to add bookmark.");
     }
   };

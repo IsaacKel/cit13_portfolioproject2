@@ -109,18 +109,18 @@ const NavBar = () => {
           {isLoggedIn && (
             <>
               <Button
-                variant="outline-danger"
-                className="ml-2"
-                onClick={handleShowLogout}
-              >
-                Log Out
-              </Button>
-              <Button
                 variant="outline-info"
                 className="ml-2"
                 onClick={handleUserPage}
               >
                 Profile
+              </Button>
+              <Button
+                variant="outline-danger"
+                className="ml-2"
+                onClick={handleShowLogout}
+              >
+                Log Out
               </Button>
             </>
           )}
