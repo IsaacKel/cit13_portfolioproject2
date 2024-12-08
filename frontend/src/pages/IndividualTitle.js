@@ -57,7 +57,7 @@ const IndividualTitle = () => {
       if (!principals.length) return;
       const updatedPrincipals = await Promise.all(
         principals.map(async (principal) => {
-          const imageUrl = await fetchImages(principal.name);
+          const imageUrl = await fetchImages(principal.nConst);
           return { ...principal, imageUrl };
         })
       );

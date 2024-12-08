@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { loginUser } from "../services/apiService";
 import "./Login.css";
+import AuthContext from "../components/AuthContext";
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,10 +18,14 @@ const Login = () => {
 
     try {
       const response = await loginUser({ userName: username, password });
-      console.log("Login successful:", response);
+      localStorage.setItem("token", response.token);
 
-
+      login();
+      
       setSuccess("Login successful!");
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
     } catch (err) {
       setError(err.message);
     }

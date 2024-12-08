@@ -41,17 +41,41 @@ builder.Services.AddSingleton(new Hashing());
 var secret = builder.Configuration.GetSection("Auth:Secret").Value;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(opt =>
-    opt.TokenValidationParameters = new TokenValidationParameters
+    .AddJwtBearer(options =>
     {
-      ValidateIssuer = false,
-      ValidateAudience = false,
-      ValidateIssuerSigningKey = true,
-      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
-      ClockSkew = TimeSpan.Zero
-    }
-    );
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+            ClockSkew = TimeSpan.Zero
+        };
 
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                // Look for the token in the cookies
+                var cookie = context.HttpContext.Request.Cookies["auth_token_cookie"];
+                if (!string.IsNullOrEmpty(cookie))
+                {
+                    context.Token = cookie;
+                }
+                // Since some browsers delete cookies, we also use tokens in local storage
+                else if (string.IsNullOrEmpty(cookie) && context.HttpContext.Request.Headers.ContainsKey("Authorization"))
+                {
+                    // Check if the token is available in the Authorization header (for localStorage tokens)
+                    var authHeader = context.HttpContext.Request.Headers["Authorization"].ToString();
+                    if (authHeader.StartsWith("Bearer "))
+                    {
+                        context.Token = authHeader.Substring("Bearer ".Length).Trim();
+                    }
+                }
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 
 // added CORS-service to apllow requests from React-app (localhost:5173)
@@ -100,5 +124,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-

@@ -73,7 +73,8 @@ const IndividualName = () => {
       try {
         const updatedCoPlayers = await Promise.all(
           coPlayers.items.map(async (coPlayer) => {
-            const imageUrl = await fetchImages(coPlayer.primaryName);
+            const nConst = coPlayer.nConst.split("/").pop();
+            const imageUrl = await fetchImages(nConst);
             return { ...coPlayer, imageUrl };
           })
         );

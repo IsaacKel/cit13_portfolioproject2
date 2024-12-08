@@ -6,6 +6,8 @@ namespace WebApi.DTOs
   public class BookmarkDto
   {
     [Required]
+    public int Id { get; set; }
+    [Required]
     public int UserId { get; set; }
 
     public string? TConst { get; set; }

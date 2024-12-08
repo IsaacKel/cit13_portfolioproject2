@@ -136,5 +136,30 @@ namespace WebApi.Controllers
 
             return titleType;
         }
+
+        [HttpGet("title/year")]
+        public ActionResult<PagedResponse<SearchTitleYear>> GetSearchTitlesYear(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1, int pageNumber = 1, int pageSize = DefaultPageSize)
+        {
+            var titles = _dataService.GetSearchTitlesYear(searchTerm, searchTitleType, searchGenre, searchYear);
+            if (titles == null || !titles.Any())
+            {
+                return NotFound();
+            }
+            var totalItems = titles.Count();
+            var pagedTitles = titles
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            foreach (var title in pagedTitles)
+            {
+                if (title.TConst != null)
+                {
+                    title.TConst = new Uri($"{Request.Scheme}://{Request.Host}/api/Title/{title.TConst}").ToString();
+                }
+            }
+            var response = CreatePagedResponse(pagedTitles, pageNumber, pageSize, totalItems, "GetSearchTitlesYear");
+            return Ok(response);
+        }
     }
 }

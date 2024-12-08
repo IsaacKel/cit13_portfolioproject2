@@ -36,81 +36,61 @@ export const loginUser = async (loginData) => {
       credentials: "include",
     });
 
+    let responseData;
+    if (response.headers.get("content-type")?.includes("application/json")) {
+      responseData = await response.json();
+    } else {
+      responseData = await response.text();
+    }
+
     if (!response.ok) {
-      // To make cookies work I had to attempt to parse text aswell as JSON
-      let errorData;
-      try {
-        errorData = await response.json();
-      } catch (e) {
-        errorData = await response.text();
-      }
       throw new Error(
-        errorData.message || errorData || `Error: ${response.status}`
+        responseData.message || responseData || `Error: ${response.status}`
       );
     }
 
-    return await response.json();
+    return responseData;
   } catch (error) {
     console.error("Error logging in user:", error);
     throw error;
   }
 };
 
-// export const fetchNamesSearch = async (
-//   query,
-//   pageNumber,
-//   setNames,
-//   setTotalPages
-// ) => {
-//   try {
-//     const nameRes = await fetch(
-//       `${baseURL}/Search/name/${query}?pageNumber=${pageNumber}&pageSize=10`
-//     );
+// Function to logout a user
+export const logoutUser = async () => {
+  try {
+    const token = localStorage.getItem("token"); // Retrieve token from localStorage
 
-//     const nameData = await nameRes.json();
+    const response = await fetch(`${userBaseURL}/logout`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`, // Include token in Authorization header
+        "Content-Type": "application/json",
+      },
+    });
 
-//     // Fetch images for each person in the name data
-//     const namesWithImages = await Promise.all(
-//       (nameData.items || []).map(async (person) => {
-//         const imageUrl = await fetchImages(person.primaryName);
-//         return { ...person, imageUrl };
-//       })
-//     );
+    let responseData;
+    const contentType = response.headers.get("content-type");
 
-//     setNames(namesWithImages);
-//     setTotalPages(nameData.numberPages || 1);
-//   } catch (error) {
-//     console.error("Error fetching name search results:", error);
-//   }
-// };
+    if (contentType && contentType.includes("application/json")) {
+      responseData = await response.json();
+    } else {
+      responseData = await response.text();
+    }
 
-// export const fetchNamesSearch = async (query, pageNumber, pageSize) => {
-//   const params = new URLSearchParams({
-//     query: query,
-//     pageNumber,
-//     pageSize,
-//   });
-//   try {
-//     console.log(`${baseURL}/Search/name/?${params.toString()}`);
-//     const response = await fetch(
-//       `${baseURL}/Search/name/?${params.toString()}`
-//     );
-//     return response.json();
+    if (!response.ok) {
+      throw new Error(
+        responseData.message || responseData || `Error: ${response.status}`
+      );
+    }
 
-// // Fetch images for each person in the name data
-// const namesWithImages = await Promise.all(
-//   (nameData.items || []).map(async (person) => {
-//     const imageUrl = await fetchImages(person.primaryName); // Reuse your existing logic
-//     return { ...person, imageUrl };
-//   })
-// );
-
-//     // return { results: namesWithImages, totalPages: nameData.numberPages || 1 };
-//   } catch (error) {
-//     console.error("Error fetching name search results:", error);
-//     throw new Error(error.message); // Throw for handling in the calling code
-//   }
-// };
+    return responseData;
+  } catch (error) {
+    console.error("Error logging out user:", error);
+    throw error;
+  }
+};
 
 export const fetchNamesSearch = async (query, pageNumber, pageSize) => {
   const params = new URLSearchParams({
@@ -259,7 +239,7 @@ export const fetchSearchResults = async (
     // Fetch images for each person in the name data
     const namesWithImages = await Promise.all(
       (nameData.items || []).map(async (person) => {
-        const imageUrl = await fetchImages(person.primaryName);
+        const imageUrl = await fetchImages(person.nConst);
         return { ...person, imageUrl };
       })
     );
@@ -385,23 +365,21 @@ export const fetchKnownForTitles = async (
 };
 
 // Function to get images of people using themovieDB API
-export const fetchImages = async (personName) => {
+export const fetchImages = async (nConst) => {
   try {
     // API key for the movieDB
     const apiKey = "003b3d8750e2856a2fc6e6414311d7eb";
 
     // Find TMDB ID for the person via name
     const response = await fetch(
-      `https://api.themoviedb.org/3/search/person?query=${personName}&api_key=${apiKey}`
+      `https://api.themoviedb.org/3/find/${nConst}?external_source=imdb_id&api_key=${apiKey}`
     );
     const data = await response.json();
-
-    if (data.results.length === 0) {
+    if (data.person_results.length === 0) {
       return null;
     }
 
-    const personID = data.results[0].id;
-
+    const personID = data.person_results[0].id;
     // Get images of the person using the TMDB ID
     const imageResponse = await fetch(
       `https://api.themoviedb.org/3/person/${personID}/images?api_key=${apiKey}`
@@ -575,6 +553,87 @@ export const fetchTop10Actors = async () => {
     return data;
   } catch (error) {
     console.error("Error fetching top 10 actors:", error);
+    throw error;
+  }
+};
+
+// Function to fetch user data
+export const fetchUserData = async () => {
+  try {
+    const token = localStorage.getItem("token"); // Retrieve token from localStorage
+    const response = await fetch(`${userBaseURL}/profile`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Include token in Authorization header
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error;
+  }
+};
+export const fetchUserBookmarks = async (userId) => {
+  try {
+    const response = await fetch(`${baseURL}/Bookmark/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user bookmarks:", error);
+    throw error;
+  }
+};
+export const fetchUserRatings = async (userId) => {
+  try {
+    const response = await fetch(`${baseURL}/UserRating/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user ratings:", error);
+    throw error;
+  }
+};
+export const fetchUserSearchHistory = async (userId) => {
+  try {
+    const response = await fetch(`${baseURL}/SearchHistory/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user search history:", error);
     throw error;
   }
 };
