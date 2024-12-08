@@ -133,38 +133,39 @@ const IndividualName = () => {
           </div>
 
           {/* Known For Section */}
-          <section className="cast-crew-similar-titles">
-            <h2>Known For</h2>
-            <CardList
-              items={knownFor.slice(
-                pagination.knownForPage * ITEMS_PER_PAGE,
-                (pagination.knownForPage + 1) * ITEMS_PER_PAGE
-              )}
-              renderItem={(title) => (
-                <Link
-                  to={`/title/${title.knownForTitles.split("/").pop()}`}
-                  key={title.knownForTitles}
-                  className="search-item-link"
-                >
-                  <div className="card">
-                    {title.poster ? (
-                      <img
-                        src={title.poster}
-                        alt={title.primaryTitle}
-                        className="card-img"
-                      />
-                    ) : (
-                      <div className="card-img placeholder"></div>
-                    )}
-                    <div className="card-details">
-                      <p>{title.primaryTitle}</p>
+          {knownFor && knownFor.length > 0 && (
+            <section className="cast-crew-similar-titles">
+              <h2>Known For</h2>
+              <CardList
+                items={knownFor.slice(
+                  pagination.knownForPage * ITEMS_PER_PAGE,
+                  (pagination.knownForPage + 1) * ITEMS_PER_PAGE
+                )}
+                renderItem={(title) => (
+                  <Link
+                    to={`/title/${title.knownForTitles.split("/").pop()}`}
+                    key={title.knownForTitles}
+                    className="search-item-link"
+                  >
+                    <div className="card">
+                      {title.poster ? (
+                        <img
+                          src={title.poster}
+                          alt={title.primaryTitle}
+                          className="card-img"
+                        />
+                      ) : (
+                        <div className="card-img placeholder"></div>
+                      )}
+                      <div className="card-details">
+                        <p>{title.primaryTitle}</p>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              )}
-            />
-          </section>
-
+                  </Link>
+                )}
+              />
+            </section>
+          )}
           {/* Co-stars Section */}
           <section className="cast-crew-similar-titles">
             <h2>Co-stars</h2>
