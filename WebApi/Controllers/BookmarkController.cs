@@ -26,54 +26,27 @@ namespace WebApi.Controllers
     }
 
     // Add Bookmark
-[HttpPost]
-[Authorize]
-public IActionResult AddBookmark([FromBody] CreateBookmarkDto dto)
-{
-    // Extract userId from token claims
-    var userIdClaim = User.FindFirst("Id");
-    if (userIdClaim == null)
+    [HttpPost]
+    public IActionResult AddBookmark(BookmarkDto dto)
     {
-        return Unauthorized("User ID not found in token.");
-    }
+      // Check if a bookmark with the same TConst or NConst already exists for this user
+      var existingBookmark = _dataService.GetBookmarks(dto.UserId)
+                                         .FirstOrDefault(b => b.TConst == dto.TConst && b.NConst == dto.NConst);
 
-    if (!int.TryParse(userIdClaim.Value, out var userId))
-    {
-        return Unauthorized("Invalid user ID in token.");
-    }
-
-    // Now that you have userId from the token, proceed
-    // Check if bookmark already exists
-    var existingBookmark = _dataService.GetBookmarks(userId)
-        .FirstOrDefault(b => b.TConst == dto.TConst && b.NConst == dto.NConst);
-
-    if (existingBookmark != null)
-    {
+      if (existingBookmark != null)
+      {
         return Conflict(new { message = "Bookmark already exists for this title and user." });
-    }
+      }
 
-    if (!_dataService.UserExists(userId))
-    {
+      if (!_dataService.UserExists(dto.UserId))
+      {
         return NotFound(new { message = "User does not exist." });
+      }
+
+      var bookmark = _dataService.AddBookmark(dto.UserId, dto.TConst, dto.NConst, dto.Note);
+      var bookmarkDto = MapToBookmarkDto(bookmark);
+      return CreatedAtAction(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id }, bookmarkDto);
     }
-
-    var bookmark = _dataService.AddBookmark(userId, dto.TConst, dto.NConst, dto.Note);
-
-    // If you still want to return a DTO that includes the userId, you can map it here:
-    var bookmarkDto = new BookmarkDto
-    {
-        Id = bookmark.Id,
-        UserId = bookmark.UserId,
-        TConst = bookmark.TConst,
-        NConst = bookmark.NConst,
-        Note = bookmark.Note,
-        CreatedAt = bookmark.CreatedAt,
-        SelfLink = GenerateSelfLink(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id })
-    };
-
-    return CreatedAtAction(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id }, bookmarkDto);
-}
-
 
     // Get all Bookmarks for a User with Pagination
     [HttpGet("user", Name = nameof(GetBookmarks))]
