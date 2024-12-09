@@ -442,5 +442,9 @@ namespace DataLayer
     {
         return _context.GetTitleTypeData.FromSqlInterpolated($"select * from get_distinct_title_types()").ToList();
     }
+    public IList<SearchName> GetSearchNamesSorted(string searchTerm, string sortType)
+    {
+            return _context.SearchNames.FromSqlInterpolated($"select * from search_names_by_text_sorted({searchTerm},{sortType})").ToList();
+    }
   }
 }

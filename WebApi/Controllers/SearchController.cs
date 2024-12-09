@@ -23,9 +23,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("name/{searchTerm}")]
-        public ActionResult<PagedResponse<SearchName>> GetSearchNames(string searchTerm, int pageNumber = 1, int pageSize = DefaultPageSize)
+        public ActionResult<PagedResponse<SearchName>> GetSearchNamesSorted(string searchTerm, string sortType = "popularity", int pageNumber = 1, int pageSize = DefaultPageSize)
         {
-            var names = _dataService.GetSearchNames(searchTerm);
+            var names = _dataService.GetSearchNamesSorted(searchTerm, sortType);
             if (names == null || !names.Any())
             {
                 return NotFound();
@@ -46,7 +46,7 @@ namespace WebApi.Controllers
                 }
             }
 
-            var response = CreatePagedResponse(pagedNames, pageNumber, pageSize, totalItems, "GetSearchNames");
+            var response = CreatePagedResponse(pagedNames, pageNumber, pageSize, totalItems, "GetSearchNamesSorted");
 
             return Ok(response);
         }
