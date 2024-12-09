@@ -10,6 +10,7 @@ import {
 import Bookmark from "../components/Bookmark";
 import PaginationButtons from "../components/PaginationButtons";
 import CardList from "../components/CardList";
+import { useBookmarks } from "../context/BookmarkContext";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -84,6 +85,8 @@ const IndividualTitle = () => {
     setter((prev) => Math.max(0, prev + value));
   };
 
+  const { isBookmarked } = useBookmarks();
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -112,9 +115,13 @@ const IndividualTitle = () => {
             </div>
           )}
           <button>+ Add Rating</button>
-          <button onClick={() => setShowBookmarkModal(true)}>
-            + Add to Bookmarks
-          </button>
+          {isBookmarked(titleData.tConst) ? (
+            <span>Bookmarked</span>
+          ) : (
+            <button onClick={() => setShowBookmarkModal(true)}>
+              + Add to Bookmarks
+            </button>
+          )}
         </div>
       </div>
 

@@ -22,7 +22,16 @@
 .login-submit {
   width: 90%;
   margin-top: 30px;
+  border-radius: 5px;
   transition: background-color 0.3s ease;
+  background-color: #00c8a8;
+  color: black;
+  border: none;
+  padding: 5px;
+}
+
+.login-submit:hover {
+  background-color: #00997f;
 }
 
 .login-input {

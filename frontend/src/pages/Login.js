@@ -21,7 +21,7 @@ const Login = ({ onLoginSuccess }) => {
       localStorage.setItem("token", response.token);
 
       login();
-      
+
       setSuccess("Login successful!");
       if (onLoginSuccess) {
         onLoginSuccess();
@@ -53,14 +53,9 @@ const Login = ({ onLoginSuccess }) => {
         onChange={(e) => setPassword(e.target.value)}
         disabled={success}
       />
-      <Button
-        variant="primary"
-        type="submit"
-        className="login-submit"
-        disabled={success}
-      >
+      <button type="submit" className="login-submit" disabled={success}>
         Log In
-      </Button>
+      </button>
     </Form>
   );
 };

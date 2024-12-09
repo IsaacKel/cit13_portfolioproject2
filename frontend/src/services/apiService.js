@@ -1,4 +1,4 @@
-const baseURL = "https://localhost:5003/api";
+const baseURL = "http://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -137,9 +137,7 @@ export const fetchTitlesSearch = async (
     pageNumber,
     pageSize,
   });
-  const response = await fetch(
-    `${baseURL}/Search/title?${params.toString()}`
-  );
+  const response = await fetch(`${baseURL}/Search/title?${params.toString()}`);
   if (!response.ok) throw new Error("Failed to fetch search results");
   return response.json();
 };
@@ -473,7 +471,6 @@ export const fetchCoPlayers = async (nConst, pageNumber = 1, pageSize = 10) => {
     throw error;
   }
 };
-// Function to add a bookmark
 export const addBookmark = async (tConst, note) => {
   try {
     const token = localStorage.getItem("token");
@@ -487,6 +484,11 @@ export const addBookmark = async (tConst, note) => {
       body: JSON.stringify({ tConst, note }),
     });
 
+    if (response.status === 409) {
+      console.error("Bookmark already exists");
+      throw new Error("Bookmark already exists");
+    }
+
     if (!response.ok) {
       throw new Error("Failed to add bookmark");
     }
@@ -497,7 +499,6 @@ export const addBookmark = async (tConst, note) => {
     throw error;
   }
 };
-
 
 export const fetchTop10Movies = async () => {
   try {
@@ -583,26 +584,37 @@ export const fetchUserData = async () => {
     throw error;
   }
 };
-export const fetchUserBookmarks = async () => {
+
+export const fetchBookmarks = async (pageNumber = 1, pageSize = 10) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await fetch(`${baseURL}/Bookmark/user`, {
+    const response = await fetch(`${baseURL}/bookmark/user`, {
       method: "GET",
-      credentials: "include",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error("Failed to fetch bookmarks");
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log("Fetched Bookmarks Data:", data);
+    return data;
   } catch (error) {
-    console.error("Error fetching user bookmarks:", error);
+    console.error("Error fetching bookmarks:", error);
     throw error;
+  }
+};
+
+export const isTitleBookmarked = async (tConst) => {
+  try {
+    const bookmarksData = await fetchBookmarks();
+    const bookmarks = bookmarksData.items || [];
+    return bookmarks.some((bookmark) => bookmark.tConst === tConst);
+  } catch (error) {
+    console.error("Error checking if title is bookmarked:", error);
+    return false;
   }
 };
 export const fetchUserRatings = async () => {

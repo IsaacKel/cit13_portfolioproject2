@@ -4,11 +4,12 @@ import { useParams } from "react-router-dom";
 import { addBookmark } from "../services/apiService";
 import AuthContext from "./AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./Bookmark.css"; // Import custom CSS
+import "./Bookmark.css";
 
 const Bookmark = ({ show, onClose }) => {
   const [note, setNote] = useState("");
   const { isLoggedIn } = useContext(AuthContext);
+
   const { tConst } = useParams();
 
   const handleBookmark = async () => {

@@ -8,12 +8,13 @@
 }
 
 .filters-column {
-  background: lightgray;
+  background: #242424;
   border-radius: 6px;
   padding: 1.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 2rem;
+  color: white;
 }
 
 .filters-column h4 {
@@ -31,10 +32,11 @@
 }
 
 .results-column {
-  background: lightgray;
+  background: #242424;
   border-radius: 6px;
   padding: 1.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: white;
 }
 
 .search-results-container {
@@ -58,7 +60,7 @@
   border-radius: 8px;
   text-align: left;
   height: 6rem;
-  background-color: lightgray;
+  background-color: darkgrey;
 }
 
 .search-item:hover {
@@ -129,7 +131,7 @@
 }
 
 .add-to-bookmarks-button:hover {
-  background-color: #e8ce6e;
+  background-color: #d1b85f;
 }
 
 .star {

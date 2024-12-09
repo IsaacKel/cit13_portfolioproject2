@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Navbar, Button, Row, Col, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "./NavBar.css";
+import "../pages/IndividualTitle.css";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import { logoutUser } from "../services/apiService";
@@ -64,7 +65,7 @@ const NavBar = () => {
   };
 
   return (
-    <Navbar expand="lg" className="p-3 navbar-dark">
+    <Navbar expand="lg" className="p-3">
       <Row className="w-100 align-items-center">
         {/* Column 1: Logo */}
         <Col xs={3} className="d-flex align-items-center">
@@ -88,24 +89,20 @@ const NavBar = () => {
 
         {/* Column 3: Auth Buttons */}
         <Col xs={3} className="d-flex justify-content-end">
-          {!isLoggedIn ? (
+          {!isLoggedIn && (
             <>
-              <Button
-                variant="outline-light"
-                className="mr-2"
+              <button
+                className="navbar-button-outline"
                 onClick={handleShowLogin}
               >
                 Log In
-              </Button>
-              <Button
-                variant="light"
-                className="ml-2"
-                onClick={handleShowSignUp}
-              >
+              </button>
+              <button className="navbar-button" onClick={handleShowSignUp}>
                 Sign Up
-              </Button>
+              </button>
             </>
-          ) : (
+          )}
+          {isLoggedIn && (
             <>
               <Button
                 variant="outline-info"
@@ -126,8 +123,7 @@ const NavBar = () => {
         </Col>
       </Row>
 
-      {/* Modals */}
-      <Modal show={showLogin} onHide={handleCloseLogin} className="dark-modal">
+      <Modal show={showLogin} onHide={handleCloseLogin}>
         <Modal.Header closeButton>
           <Modal.Title>Log In</Modal.Title>
         </Modal.Header>
@@ -136,11 +132,7 @@ const NavBar = () => {
         </Modal.Body>
       </Modal>
 
-      <Modal
-        show={showSignUp}
-        onHide={handleCloseSignUp}
-        className="dark-modal"
-      >
+      <Modal show={showSignUp} onHide={handleCloseSignUp}>
         <Modal.Header closeButton>
           <Modal.Title>Sign Up</Modal.Title>
         </Modal.Header>
@@ -149,20 +141,16 @@ const NavBar = () => {
         </Modal.Body>
       </Modal>
 
-      <Modal
-        show={showLogout}
-        onHide={handleCloseLogout}
-        className="dark-modal"
-      >
+      <Modal show={showLogout} onHide={handleCloseLogout}>
         <Modal.Header closeButton>
           <Modal.Title>Are you sure you want to log out?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Button variant="danger" className="mr-3" onClick={handleLogout}>
-            Yes, Log Out
-          </Button>
           <Button variant="secondary" onClick={handleCloseLogout}>
             Cancel
+          </Button>
+          <Button variant="danger" className="mr-3" onClick={handleLogout}>
+            Yes, Log Out
           </Button>
         </Modal.Body>
       </Modal>

@@ -11,6 +11,7 @@
   font-size: 1.5rem;
   color: lightgray;
   margin-left: 3rem;
+  margin-bottom: 0px;
 }
 
 /* Grid Layout */
@@ -18,16 +19,17 @@
   display: flex;
   width: 100%;
   gap: 1rem;
-  padding: 5px 0; /* Add padding to ensure space for shadows */
+  padding: 0px 0;
 }
 
 /* Card Styles */
 .home-card {
   display: block;
-  overflow: visible; /* Ensure overflow is visible */
+  overflow: visible;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 0px;
 }
 
 .home-card:hover {
@@ -54,7 +56,7 @@
 
 .carousel-button {
   transition: background-color 0.3s;
-  background-color: #007bff;
+  background-color: #00c8a8;
   border: none;
   border-radius: 50%;
   padding: 10px;
@@ -63,12 +65,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: black;
   font-size: 20px;
   cursor: pointer;
 }
 .carousel-button:hover {
-  background-color: #0056b3;
+  background-color: #00997f;
 }
 
 /* Responsive Design */

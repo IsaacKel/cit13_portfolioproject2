@@ -7,14 +7,17 @@ import { Provider } from "react-redux";
 import store from "./redux/stores";
 
 import { AuthProvider } from "./components/AuthContext";
+import { BookmarkProvider } from "./context/BookmarkContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <React.StrictMode>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <BookmarkProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </BookmarkProvider>
     </React.StrictMode>
   </Provider>
 );

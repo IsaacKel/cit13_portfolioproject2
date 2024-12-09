@@ -1,12 +1,29 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Bookmark from "../components/Bookmark";
+import { useBookmarks } from "../context/BookmarkContext";
 
 const SearchItem = ({ item, type }) => {
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
   const handleBookmarkClick = () => {
     setShowBookmarkModal(true);
   };
+
+  const extractConstFromUrl = (url) => {
+    const urlParts = url.split("/");
+    return urlParts[urlParts.length - 1];
+  };
+
+  const constValue = extractConstFromUrl(
+    type === "title" ? item.tConst : item.nConst
+  );
+
+  console.log("CONST", constValue);
+
+  const { isBookmarked } = useBookmarks();
+
+  console.log(isBookmarked(constValue));
+
   return (
     <div className="search-item">
       <Link
@@ -48,9 +65,16 @@ const SearchItem = ({ item, type }) => {
           </div>
         )}
       </Link>
-      <button className="add-to-bookmarks-button" onClick={handleBookmarkClick}>
-        + Add to Bookmarks
-      </button>
+      {isBookmarked(constValue) ? (
+        <p className="already-bookmarked">Already Bookmarked</p>
+      ) : (
+        <button
+          className="add-to-bookmarks-button"
+          onClick={handleBookmarkClick}
+        >
+          + Add to Bookmarks
+        </button>
+      )}
       <Bookmark
         show={showBookmarkModal}
         onClose={() => setShowBookmarkModal(false)}

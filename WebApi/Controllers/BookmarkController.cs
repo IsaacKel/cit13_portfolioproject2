@@ -29,48 +29,48 @@ namespace WebApi.Controllers
     [Authorize]
     public IActionResult AddBookmark([FromBody] CreateBookmarkDto dto)
     {
-        // Extract userId from token claims
-        var userIdClaim = User.FindFirst("Id");
-        if (userIdClaim == null)
-        {
-            return Unauthorized("User ID not found in token.");
-        }
+      // Extract userId from token claims
+      var userIdClaim = User.FindFirst("Id");
+      if (userIdClaim == null)
+      {
+        return Unauthorized("User ID not found in token.");
+      }
 
-        if (!int.TryParse(userIdClaim.Value, out var userId))
-        {
-            return Unauthorized("Invalid user ID in token.");
-        }
+      if (!int.TryParse(userIdClaim.Value, out var userId))
+      {
+        return Unauthorized("Invalid user ID in token.");
+      }
 
 
-        // Check if bookmark already exists
-        var existingBookmark = _dataService.GetBookmarks(userId)
-            .FirstOrDefault(b => b.TConst == dto.TConst && b.NConst == dto.NConst);
+      // Check if bookmark already exists
+      var existingBookmark = _dataService.GetBookmarks(userId)
+          .FirstOrDefault(b => b.TConst == dto.TConst && b.NConst == dto.NConst);
 
-        if (existingBookmark != null)
-        {
-            return Conflict(new { message = "Bookmark already exists for this title and user." });
-        }
+      if (existingBookmark != null)
+      {
+        return Conflict(new { message = "Bookmark already exists for this title and user." });
+      }
 
-        if (!_dataService.UserExists(userId))
-        {
-            return NotFound(new { message = "User does not exist." });
-        }
+      if (!_dataService.UserExists(userId))
+      {
+        return NotFound(new { message = "User does not exist." });
+      }
 
-        var bookmark = _dataService.AddBookmark(userId, dto.TConst, dto.NConst, dto.Note);
+      var bookmark = _dataService.AddBookmark(userId, dto.TConst, dto.NConst, dto.Note);
 
-      
-        var bookmarkDto = new BookmarkDto
-        {
-            Id = bookmark.Id,
-            UserId = bookmark.UserId,
-            TConst = bookmark.TConst,
-            NConst = bookmark.NConst,
-            Note = bookmark.Note,
-            CreatedAt = bookmark.CreatedAt,
-            SelfLink = GenerateSelfLink(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id })
-        };
 
-        return CreatedAtAction(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id }, bookmarkDto);
+      var bookmarkDto = new BookmarkDto
+      {
+        Id = bookmark.Id,
+        UserId = bookmark.UserId,
+        TConst = bookmark.TConst,
+        NConst = bookmark.NConst,
+        Note = bookmark.Note,
+        CreatedAt = bookmark.CreatedAt,
+        SelfLink = GenerateSelfLink(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id })
+      };
+
+      return CreatedAtAction(nameof(GetBookmark), new { userId = bookmark.UserId, bookmarkId = bookmark.Id }, bookmarkDto);
     }
 
     // Get all Bookmarks for a User with Pagination

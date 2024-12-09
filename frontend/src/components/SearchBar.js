@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Form, FormControl, Button } from "react-bootstrap";
 import "./SearchBar.css";
+import "./NavBar.css";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
@@ -37,11 +38,15 @@ const SearchBar = () => {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="mr-2 flex-grow-1"
+        className="mr-8 flex-grow-1"
       />
-      <Button onClick={handleSearch} className="custom-button">
+      <button
+        onClick={handleSearch}
+        className="navbar-button
+      "
+      >
         Search
-      </Button>
+      </button>
     </Form>
   );
 };
