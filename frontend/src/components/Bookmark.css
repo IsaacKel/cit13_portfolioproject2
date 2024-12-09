@@ -1,53 +1,76 @@
-.bookmark-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.bookmark-content {
-  background: white;
-  padding: 20px;
-  border-radius: 5px;
-  width: 300px;
-  text-align: center;
-}
-
-.bookmark-content h2 {
-  margin-bottom: 20px;
-}
-
-.bookmark-content form {
-  display: flex;
-  flex-direction: column;
-}
-
-.bookmark-content label {
-  margin-bottom: 5px;
-}
-
-.bookmark-content input {
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.bookmark-content button {
-  padding: 10px;
+/* Overall modal styling */
+.bookmark-modal .modal-content {
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   border: none;
-  border-radius: 5px;
-  background: #007bff;
-  color: white;
-  cursor: pointer;
+  background-color: #f9f9f9;
 }
 
-.bookmark-content .close-button {
-  margin-top: 10px;
-  background: #dc3545;
+/* Header styling */
+.bookmark-title {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* Body styling */
+.bookmark-message {
+  text-align: center;
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.bookmark-label {
+  font-weight: 600;
+  color: #555;
+}
+
+.bookmark-input {
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  min-height: 100px;
+  max-height: 300px;
+  line-height: 1.5;
+}
+
+/* Footer buttons */
+.bookmark-cancel-button {
+  background-color: transparent;
+  color: #555;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.bookmark-cancel-button:hover {
+  background-color: #f1f1f1;
+}
+
+.bookmark-save-button {
+  background-color: #007bff;
+  color: white;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.bookmark-save-button:hover {
+  background-color: #0056b3;
+}
+
+/* Modal animation */
+.bookmark-modal .modal-dialog {
+  transform: translateY(-20px);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.bookmark-modal.show .modal-dialog {
+  transform: translateY(0);
+  opacity: 1;
 }

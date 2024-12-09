@@ -1,3 +1,11 @@
+.modal-header {
+  margin-top: 0;
+}
+
+.modal-body {
+  padding-top: 0;
+}
+
 .login-form {
   width: 90%;
   margin: 0 auto;
@@ -8,31 +16,34 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: left;
 }
 
 .login-submit {
-    width: 90%;
-    margin-top: 30px;
-    transition: background-color 0.3s ease;
+  width: 90%;
+  margin-top: 30px;
+  transition: background-color 0.3s ease;
 }
 
 .login-input {
   width: 90%;
+  margin: 0 auto;
 }
 
 .login-label {
   margin-bottom: 10px;
   margin-top: 10px;
+  width: 90%;
 }
 
 .login-input:disabled {
-    background-color: #e0e0e0;
-    color: #a0a0a0;
-    cursor: not-allowed;
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
 }
 
 .login-submit:disabled {
-    background-color: #cccccc;
-    color: white;
-    cursor: not-allowed;
+  background-color: #cccccc;
+  color: white;
+  cursor: not-allowed;
 }

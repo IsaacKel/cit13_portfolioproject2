@@ -49,12 +49,13 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
-      <div className="editors-choice">
-        <h1>Editor's Choice</h1>
-      </div>
-      <Carousel title="Top 10 Movies" items={top10Movies} itemType="title" />
-      <Carousel title="Top 10 TV Shows" items={top10TVShows} itemType="title" />
-      <Carousel title="Top 10 Actors" items={top10Actors} itemType="name" />
+      <Carousel title="Popular Movies.." items={top10Movies} itemType="title" />
+      <Carousel
+        title="Popular TV Shows.."
+        items={top10TVShows}
+        itemType="title"
+      />
+      <Carousel title="Popular Actors.." items={top10Actors} itemType="name" />
     </div>
   );
 };

@@ -64,7 +64,7 @@ const NavBar = () => {
   };
 
   return (
-    <Navbar bg="dark" expand="lg" className="p-3">
+    <Navbar expand="lg" className="p-3 navbar-dark">
       <Row className="w-100 align-items-center">
         {/* Column 1: Logo */}
         <Col xs={3} className="d-flex align-items-center">
@@ -88,25 +88,24 @@ const NavBar = () => {
 
         {/* Column 3: Auth Buttons */}
         <Col xs={3} className="d-flex justify-content-end">
-          {!isLoggedIn && (
+          {!isLoggedIn ? (
             <>
               <Button
-                variant="outline-primary"
+                variant="outline-light"
                 className="mr-2"
                 onClick={handleShowLogin}
               >
                 Log In
               </Button>
               <Button
-                variant="primary"
+                variant="light"
                 className="ml-2"
                 onClick={handleShowSignUp}
               >
                 Sign Up
               </Button>
             </>
-          )}
-          {isLoggedIn && (
+          ) : (
             <>
               <Button
                 variant="outline-info"
@@ -127,7 +126,8 @@ const NavBar = () => {
         </Col>
       </Row>
 
-      <Modal show={showLogin} onHide={handleCloseLogin}>
+      {/* Modals */}
+      <Modal show={showLogin} onHide={handleCloseLogin} className="dark-modal">
         <Modal.Header closeButton>
           <Modal.Title>Log In</Modal.Title>
         </Modal.Header>
@@ -136,7 +136,11 @@ const NavBar = () => {
         </Modal.Body>
       </Modal>
 
-      <Modal show={showSignUp} onHide={handleCloseSignUp}>
+      <Modal
+        show={showSignUp}
+        onHide={handleCloseSignUp}
+        className="dark-modal"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Sign Up</Modal.Title>
         </Modal.Header>
@@ -145,7 +149,11 @@ const NavBar = () => {
         </Modal.Body>
       </Modal>
 
-      <Modal show={showLogout} onHide={handleCloseLogout}>
+      <Modal
+        show={showLogout}
+        onHide={handleCloseLogout}
+        className="dark-modal"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Are you sure you want to log out?</Modal.Title>
         </Modal.Header>

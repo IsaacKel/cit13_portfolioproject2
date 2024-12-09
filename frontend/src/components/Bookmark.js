@@ -4,16 +4,13 @@ import { useParams } from "react-router-dom";
 import { addBookmark } from "../services/apiService";
 import AuthContext from "./AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./Bookmark.css"; // Import custom CSS
 
 const Bookmark = ({ show, onClose }) => {
   const [note, setNote] = useState("");
-  const isLoggedIn = useContext(AuthContext);
-
-  // Get tConst from URL parameters
+  const { isLoggedIn } = useContext(AuthContext);
   const { tConst } = useParams();
-  if (!tConst) {
-    console.error("tConst is missing from the URL parameters.");
-  }
+
   const handleBookmark = async () => {
     if (!isLoggedIn) {
       alert("You need to be logged in to bookmark titles.");
@@ -31,34 +28,43 @@ const Bookmark = ({ show, onClose }) => {
   };
 
   return (
-    <Modal show={show} onHide={onClose}>
+    <Modal show={show} onHide={onClose} className="bookmark-modal">
       <Modal.Header closeButton>
-        <Modal.Title>Add to Bookmarks</Modal.Title>
+        <Modal.Title className="bookmark-title">Add Bookmark</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {!isLoggedIn ? (
-          <p>You must be logged in to add a bookmark.</p>
+          <p className="bookmark-message">
+            You must be logged in to add a bookmark.
+          </p>
         ) : (
           <Form>
             <Form.Group controlId="note">
-              <Form.Label>Note:</Form.Label>
               <Form.Control
-                type="text"
+                as="textarea"
+                rows={4}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
+                className="bookmark-input"
+                placeholder="Write something..."
               />
             </Form.Group>
           </Form>
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button
+          variant="outline-secondary"
+          onClick={onClose}
+          className="bookmark-cancel-button"
+        >
           Cancel
         </Button>
         <Button
           variant="primary"
           onClick={handleBookmark}
           disabled={!isLoggedIn}
+          className="bookmark-save-button"
         >
           Save
         </Button>

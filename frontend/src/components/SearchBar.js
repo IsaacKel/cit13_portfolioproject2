@@ -4,6 +4,7 @@ import { setQuery as setNamesQuery } from "../redux/slices/namesSearchSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Form, FormControl, Button } from "react-bootstrap";
+import "./SearchBar.css";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const SearchBar = () => {
         onKeyDown={handleKeyDown}
         className="mr-2 flex-grow-1"
       />
-      <Button variant="outline-success" onClick={handleSearch}>
+      <Button onClick={handleSearch} className="custom-button">
         Search
       </Button>
     </Form>

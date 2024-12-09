@@ -8,20 +8,9 @@
 /* Section Titles */
 .editors-choice h1,
 .media-list h2 {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #222;
-}
-
-/* Editor's Choice Placeholder */
-.editors-choice-placeholder {
-  background-color: #f7f7f7;
-  border: 1px dashed #ccc;
-  padding: 50px;
-  border-radius: 8px;
-  margin: 0 auto;
-  max-width: 600px;
+  font-size: 1.5rem;
+  color: lightgray;
+  margin-left: 3rem;
 }
 
 /* Grid Layout */
@@ -29,7 +18,7 @@
   display: flex;
   width: 100%;
   gap: 1rem;
-  padding: 10px 0; /* Add padding to ensure space for shadows */
+  padding: 5px 0; /* Add padding to ensure space for shadows */
 }
 
 /* Card Styles */
@@ -49,7 +38,7 @@
 /* Card Images */
 .home-card-img {
   width: 9.35rem;
-  height: 14.0625rem; /* 225px converted to rem */
+  height: 14.0625rem;
   object-fit: cover;
   border-radius: 12px;
 }
@@ -60,7 +49,7 @@
   position: relative;
   width: 100%;
   margin: 20px 0;
-  padding: 10px 0; /* Add padding to ensure space for buttons */
+  padding: 10px 0;
 }
 
 .carousel-button {
