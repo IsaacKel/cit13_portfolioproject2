@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:5003/api";
+const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -477,7 +477,7 @@ export const fetchCoPlayers = async (nConst, pageNumber = 1, pageSize = 10) => {
 export const addBookmark = async (tConst, note) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await fetch(`${baseURL}/bookmarks`, {
+    const response = await fetch(`${baseURL}/bookmark`, {
       method: "POST",
       credentials: "include",
       headers: {
