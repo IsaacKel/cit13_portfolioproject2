@@ -599,7 +599,6 @@ export const fetchBookmarks = async (pageNumber = 1, pageSize = 10) => {
     }
 
     const data = await response.json();
-    console.log("Fetched Bookmarks Data:", data);
     return data;
   } catch (error) {
     console.error("Error fetching bookmarks:", error);

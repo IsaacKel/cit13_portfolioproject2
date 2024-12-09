@@ -33,7 +33,6 @@ export const BookmarkProvider = ({ children }) => {
   const isBookmarked = async (tConst) => {
     try {
       const result = await isTitleBookmarkedFromApi(tConst);
-      console.log("Checking if bookmarked:", tConst, "Result:", result);
       return result;
     } catch (err) {
       console.error("Error checking if title is bookmarked:", err);

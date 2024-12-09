@@ -115,7 +115,7 @@ const IndividualTitle = () => {
             </div>
           )}
           <button>+ Add Rating</button>
-          {isBookmarked(titleData.tConst) ? (
+          {isBookmarked(titleData.tConst) === false ? (
             <span>Bookmarked</span>
           ) : (
             <button onClick={() => setShowBookmarkModal(true)}>

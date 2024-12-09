@@ -18,11 +18,9 @@ const SearchItem = ({ item, type }) => {
     type === "title" ? item.tConst : item.nConst
   );
 
-  console.log("CONST", constValue);
-
   const { isBookmarked } = useBookmarks();
 
-  console.log(isBookmarked(constValue));
+  console.log("IS BOOKMARKED", isBookmarked(constValue));
 
   return (
     <div className="search-item">
@@ -65,7 +63,7 @@ const SearchItem = ({ item, type }) => {
           </div>
         )}
       </Link>
-      {isBookmarked(constValue) ? (
+      {isBookmarked(constValue) === false ? (
         <p className="already-bookmarked">Already Bookmarked</p>
       ) : (
         <button
