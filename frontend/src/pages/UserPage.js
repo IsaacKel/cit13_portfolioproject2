@@ -1,19 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   fetchUserData,
   fetchBookmarks,
   fetchUserRatings,
   fetchUserSearchHistory,
 } from "../services/apiService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "../components/AuthContext";
 
 const UserPage = () => {
+  const navigate = useNavigate();
+  const { isLoggedIn, logout } = useContext(AuthContext);
   const [user, setUser] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
   const [ratings, setRatings] = useState([]);
   const [searchHistory, setSearchHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+   useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login"); // Redirect to the login page if not logged in
+    }
+  }, [isLoggedIn, navigate]);
+
 
   useEffect(() => {
     const fetchData = async () => {
