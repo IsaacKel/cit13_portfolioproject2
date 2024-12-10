@@ -26,7 +26,7 @@ namespace WebApi.Controllers
         }
 
 
-        // --  --
+        // --ADD RATING--
         [HttpGet("{tConst}/{rating}")]
         [Authorize]
        public ActionResult rate(string tConst, int rating)

@@ -8,6 +8,7 @@ import {
   fetchTitlePrincipals,
 } from "../services/apiService";
 import Bookmark from "../components/Bookmark";
+import Rate from "../components/Rate";
 import PaginationButtons from "../components/PaginationButtons";
 import CardList from "../components/CardList";
 import { useBookmarks } from "../context/BookmarkContext";
@@ -23,6 +24,7 @@ const IndividualTitle = () => {
   const [crewPage, setCrewPage] = useState(0);
   const [similarTitlesPage, setSimilarTitlesPage] = useState(0);
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
+  const [showRateModal, setShowRateModal] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isBookmarkedStatus, setIsBookmarkedStatus] = useState(null);
@@ -126,7 +128,12 @@ const IndividualTitle = () => {
               </span>
             </div>
           )}
-          <button className="bookmark-style">+ Add Rating</button>
+            <button
+              className="bookmark-style" 
+              onClick={() => setShowRateModal(true)}
+            >
+              + Add Rating
+             </button>
           {isBookmarkedStatus ? (
             <span className="bookmark-style">Bookmarked</span>
           ) : (
@@ -236,6 +243,10 @@ const IndividualTitle = () => {
       <Bookmark
         show={showBookmarkModal}
         onClose={() => setShowBookmarkModal(false)}
+      />
+      <Rate
+        show={showRateModal}
+        onClose={() => setShowRateModal(false)}
       />
     </div>
   );

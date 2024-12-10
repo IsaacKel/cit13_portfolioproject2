@@ -1,4 +1,5 @@
 const baseURL = "http://localhost:5003/api";
+const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -639,6 +640,40 @@ export const isTitleBookmarked = async (tConst) => {
     return false;
   }
 };
+
+
+export const addRating = async (tConst, rating) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${baseURL}/Rate/${tConst}/${rating}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      let responseData;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        responseData = await response.json();
+      } else {
+        responseData = await response.text();
+      }
+      const errorMessage =
+        (responseData && responseData.message) ||
+        responseData ||
+        `Failed to add rating: ${response.status}`;
+      throw new Error(errorMessage);
+    }
+    return true;
+  } catch (error) {
+    console.error("Error adding rating:", error);
+    throw error;
+  }
+};
+
+
 export const fetchUserRatings = async () => {
   try {
     const token = localStorage.getItem("token");
