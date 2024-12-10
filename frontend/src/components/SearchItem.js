@@ -31,8 +31,6 @@ const SearchItem = ({ item, type }) => {
     checkBookmarkStatus();
   }, [constValue, isBookmarked]);
 
-  console.log("IS BOOKMARKED", isBookmarkedState);
-
   return (
     <div className="search-item">
       <Link
@@ -75,7 +73,7 @@ const SearchItem = ({ item, type }) => {
         )}
       </Link>
       {isBookmarkedState ? (
-        <p className="already-bookmarked">Already Bookmarked</p>
+        <span className="add-to-bookmarks-button">Already Bookmarked</span>
       ) : (
         <button
           className="add-to-bookmarks-button"

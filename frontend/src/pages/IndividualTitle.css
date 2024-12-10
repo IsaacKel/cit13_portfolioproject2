@@ -61,7 +61,7 @@
   align-items: center;
 }
 
-.title-actions button {
+.title-actions .bookmark-style {
   padding: 8px 16px;
   background-color: #00c8a8;
   color: black;

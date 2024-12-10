@@ -25,6 +25,7 @@ const IndividualTitle = () => {
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isBookmarkedStatus, setIsBookmarkedStatus] = useState(null);
 
   // Fetch main title data, similar titles, and cast/crew
   useEffect(() => {
@@ -87,6 +88,17 @@ const IndividualTitle = () => {
 
   const { isBookmarked } = useBookmarks();
 
+  // Check bookmark status
+  useEffect(() => {
+    const checkBookmarkStatus = async () => {
+      if (titleData?.tConst) {
+        const result = await isBookmarked(titleData.tConst);
+        setIsBookmarkedStatus(result);
+      }
+    };
+    checkBookmarkStatus();
+  }, [titleData, isBookmarked]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -114,11 +126,14 @@ const IndividualTitle = () => {
               </span>
             </div>
           )}
-          <button>+ Add Rating</button>
-          {isBookmarked(titleData.tConst) === false ? (
-            <span>Bookmarked</span>
+          <button className="bookmark-style">+ Add Rating</button>
+          {isBookmarkedStatus ? (
+            <span className="bookmark-style">Bookmarked</span>
           ) : (
-            <button onClick={() => setShowBookmarkModal(true)}>
+            <button
+              className="bookmark-style"
+              onClick={() => setShowBookmarkModal(true)}
+            >
               + Add to Bookmarks
             </button>
           )}
