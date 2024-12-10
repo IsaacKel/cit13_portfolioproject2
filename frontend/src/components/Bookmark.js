@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { addBookmark } from "../services/apiService";
 import AuthContext from "./AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -12,13 +12,9 @@ const Bookmark = ({ show, onClose }) => {
   const { isLoggedIn } = useContext(AuthContext);
 
   const { tConst } = useParams();
+  const navigate = useNavigate();
 
   const handleBookmark = async () => {
-    if (!isLoggedIn) {
-      alert("You need to be logged in to bookmark titles.");
-      return;
-    }
-
     try {
       await addBookmark(tConst, note);
       alert("Bookmark added successfully!");
@@ -26,6 +22,14 @@ const Bookmark = ({ show, onClose }) => {
     } catch (err) {
       console.error("Error adding bookmark:", err);
       alert("Failed to add bookmark.");
+    }
+  };
+
+  const handleButtonClick = () => {
+    if (isLoggedIn) {
+      handleBookmark();
+    } else {
+      navigate("/login");
     }
   };
 
@@ -59,11 +63,10 @@ const Bookmark = ({ show, onClose }) => {
           Cancel
         </Button>
         <button
-          onClick={handleBookmark}
-          disabled={!isLoggedIn}
+          onClick={handleButtonClick}
           className="navbar-button"
         >
-          Save
+          {isLoggedIn ? "Save" : "Log in"}
         </button>
       </Modal.Footer>
     </Modal>
