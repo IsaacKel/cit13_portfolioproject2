@@ -1,6 +1,5 @@
 .navbar {
   background-color: #242424;
-  border-bottom: 1px solid rgba(0, 106, 88, 0.25);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

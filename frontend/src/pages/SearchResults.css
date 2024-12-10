@@ -134,6 +134,9 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .add-to-bookmarks-button:hover {
@@ -154,7 +157,7 @@
   justify-content: flex-end;
 }
 .see-more-text {
-  color: #007bff;
+  color: #00c8a8;
   cursor: pointer;
 }
 
@@ -180,12 +183,12 @@
 }
 
 .search-pagination-button.active {
-  background-color: #007bff;
+  background-color: #00c8a8;
   color: white;
 }
 
 .search-pagination-button:hover {
-  background-color: #0056b3;
+  background-color: #00997f;
   color: white;
 }
 
