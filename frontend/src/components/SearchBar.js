@@ -15,18 +15,25 @@ const SearchBar = () => {
 
   const [searchQuery, setSearchQuery] = useState(query || "");
 
+  const isAuthenticated = !!localStorage.getItem("token");
+
   const handleSearch = async () => {
     try {
       if (!searchQuery || typeof searchQuery !== "string") {
         throw new Error("Invalid search query");
       }
 
-      await logSearchHistory(searchQuery);
+      // Log the search query to search history if the user is authenticated
+      if (isAuthenticated) {
+        await logSearchHistory(searchQuery);
+      }
 
+      // Dispatch actions to update the state
       dispatch(setQuery(searchQuery));
       dispatch(setNamesQuery(searchQuery));
       dispatch(setCurrentPage(1));
 
+      // Navigate to the search results page if the query is not empty
       if (searchQuery.trim()) {
         navigate(`/search?searchTerm=${encodeURIComponent(searchQuery)}`);
       }
