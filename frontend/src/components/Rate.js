@@ -6,6 +6,7 @@ import { addRating } from "../services/apiService";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Bookmark.css";
 import "./NavBar.css";
+import StarRating from "./StarRating";
 
 const Rate = ({ show, onClose }) => {
     const [rating, setRating] = useState("");
@@ -43,20 +44,12 @@ const Rate = ({ show, onClose }) => {
                         You must be logged in to rate this title.
                     </p>
                 ) : (
-                    <Form>
-                        <Form.Group controlId="rating">
-                            <Form.Label>Rating (1 to 10)</Form.Label>
-                            <Form.Control
-                                type="number"
-                                min="1"
-                                max="10"
-                                value={rating}
-                                onChange={(e) => setRating(e.target.value)}
-                                className="bookmark-input"
-                                placeholder="Enter your rating"
-                            />
-                        </Form.Group>
-                    </Form>
+                   <Form>
+                    <Form.Group controlId="rating">
+                      <Form.Label>Select your rating (1 to 10)</Form.Label>
+                      <StarRating rating={rating} setRating={setRating} />
+                    </Form.Group>
+                  </Form>
                 )}
             </Modal.Body>
             <Modal.Footer>
