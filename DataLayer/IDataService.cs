@@ -88,7 +88,7 @@ namespace DataLayer
         IEnumerable<TitlePrincipal> GetTitlePrincipals(string tConst);
         IList<TitlePrincipal> GetTitlePrincipalsName(string nconst);
 
-
+        IList<SearchName> GetSearchNamesSorted(string searchTerm, string sortType);
 
     }
 }
