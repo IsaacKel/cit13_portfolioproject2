@@ -5,6 +5,7 @@ import { addBookmark } from "../services/apiService";
 import AuthContext from "./AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Bookmark.css";
+import "./NavBar.css";
 
 const Bookmark = ({ show, onClose }) => {
   const [note, setNote] = useState("");
@@ -33,7 +34,7 @@ const Bookmark = ({ show, onClose }) => {
       <Modal.Header closeButton>
         <Modal.Title className="bookmark-title">Add Bookmark</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="mt-3">
         {!isLoggedIn ? (
           <p className="bookmark-message">
             You must be logged in to add a bookmark.
@@ -54,21 +55,16 @@ const Bookmark = ({ show, onClose }) => {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="outline-secondary"
-          onClick={onClose}
-          className="bookmark-cancel-button"
-        >
+        <Button variant="secondary" onClick={onClose}>
           Cancel
         </Button>
-        <Button
-          variant="primary"
+        <button
           onClick={handleBookmark}
           disabled={!isLoggedIn}
-          className="bookmark-save-button"
+          className="navbar-button"
         >
           Save
-        </Button>
+        </button>
       </Modal.Footer>
     </Modal>
   );

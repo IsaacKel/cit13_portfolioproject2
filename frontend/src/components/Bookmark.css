@@ -35,35 +35,6 @@
   line-height: 1.5;
 }
 
-/* Footer buttons */
-.bookmark-cancel-button {
-  background-color: transparent;
-  color: #555;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease;
-}
-
-.bookmark-cancel-button:hover {
-  background-color: #f1f1f1;
-}
-
-.bookmark-save-button {
-  background-color: #007bff;
-  color: white;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  border: none;
-  transition: background-color 0.3s ease;
-}
-
-.bookmark-save-button:hover {
-  background-color: #0056b3;
-}
-
 /* Modal animation */
 .bookmark-modal .modal-dialog {
   transform: translateY(-20px);

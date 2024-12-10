@@ -104,13 +104,12 @@ const NavBar = () => {
           )}
           {isLoggedIn && (
             <>
-              <Button
-                variant="outline-info"
-                className="ml-2"
+              <button
+                className="navbar-button-outline"
                 onClick={handleUserPage}
               >
                 Profile
-              </Button>
+              </button>
               <Button
                 variant="outline-danger"
                 className="ml-2"
@@ -145,13 +144,19 @@ const NavBar = () => {
         <Modal.Header closeButton>
           <Modal.Title>Are you sure you want to log out?</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Button variant="secondary" onClick={handleCloseLogout}>
-            Cancel
-          </Button>
-          <Button variant="danger" className="mr-3" onClick={handleLogout}>
-            Yes, Log Out
-          </Button>
+        <Modal.Body className="mt-3">
+          <div className="d-flex justify-content-end">
+            <Button
+              variant="secondary"
+              onClick={handleCloseLogout}
+              className="mr-2"
+            >
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={handleLogout}>
+              Yes, Log Out
+            </Button>
+          </div>
         </Modal.Body>
       </Modal>
     </Navbar>

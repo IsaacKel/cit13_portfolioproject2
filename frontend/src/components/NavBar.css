@@ -65,6 +65,10 @@ button {
   text-align: center;
 }
 
+.login-modal .modal-body {
+  margin-top: 10px;
+}
+
 /* Hide extra padding and adjust button spacing on smaller screens */
 @media (max-width: 768px) {
   .navbar {

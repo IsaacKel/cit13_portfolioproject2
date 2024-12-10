@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Bookmark from "../components/Bookmark";
 import { useBookmarks } from "../context/BookmarkContext";
 
 const SearchItem = ({ item, type }) => {
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
+  const [isBookmarkedState, setIsBookmarkedState] = useState(false);
+
   const handleBookmarkClick = () => {
     setShowBookmarkModal(true);
   };
@@ -20,7 +22,16 @@ const SearchItem = ({ item, type }) => {
 
   const { isBookmarked } = useBookmarks();
 
-  console.log("IS BOOKMARKED", isBookmarked(constValue));
+  useEffect(() => {
+    const checkBookmarkStatus = async () => {
+      const result = await isBookmarked(constValue);
+      setIsBookmarkedState(result);
+    };
+
+    checkBookmarkStatus();
+  }, [constValue, isBookmarked]);
+
+  console.log("IS BOOKMARKED", isBookmarkedState);
 
   return (
     <div className="search-item">
@@ -63,7 +74,7 @@ const SearchItem = ({ item, type }) => {
           </div>
         )}
       </Link>
-      {isBookmarked(constValue) === false ? (
+      {isBookmarkedState ? (
         <p className="already-bookmarked">Already Bookmarked</p>
       ) : (
         <button
