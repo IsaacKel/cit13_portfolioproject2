@@ -43,6 +43,12 @@ const SignUp = ({ onSignupSuccess }) => {
       return;
       }
 
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+      setError("Please enter a valid email address");
+      return;
+      }
+
       if (!formData.password) {
       setError("Password is required");
       return;
