@@ -86,42 +86,42 @@ namespace WebApi.Controllers
       {
         return BadRequest(ModelState);
       }
-
+                                                                           
             if (_dataService.GetUser(dto.Username) != null)
             {
-                return BadRequest("User already exists");
+                return BadRequest(new { message = "User already exists"});
             }
             if (_dataService.GetUserByEmail(dto.Email) != null)
             {
-                return BadRequest("Email already exists");
+                return BadRequest(new { message = "Email already exists"});
             }
             if (string.IsNullOrEmpty(dto.Password))
             {
-                return BadRequest("No password");
+                return BadRequest(new { message = "No password"});
             }
             if (dto.Password.Length < 8)
             {
-                return BadRequest("Password must be at least 8 characters long.");
+                return BadRequest(new { message = "Password must be at least 8 characters long."});
             }
 
             if (!dto.Password.Any(char.IsUpper))
             {
-                return BadRequest("Password must contain at least one uppercase letter.");
+                return BadRequest(new { message = "Password must contain at least one uppercase letter."});
             }
 
             if (!dto.Password.Any(ch => !char.IsLetterOrDigit(ch)))
             {
-                return BadRequest("Password must contain at least one special character.");
+                return BadRequest(new { message = "Password must contain at least one special character."});
             }
 
             if (!dto.Password.Any(char.IsDigit))
             {
-                return BadRequest("Password must contain at least one digit.");
+                return BadRequest(new { message = "Password must contain at least one digit."});
             }
 
             if (string.IsNullOrEmpty(dto.Email))
             {
-                return BadRequest("No email");
+                return BadRequest(new { message = "No email"});
             }
 
 
