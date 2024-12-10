@@ -28,12 +28,33 @@ const SignUp = ({ onSignupSuccess }) => {
     setError(null);
     setSuccess(false);
 
-    if (!formData.name) {
+      if (!formData.name) {
       setError("Name is required");
       return;
-    }
+      }
 
-    if (formData.password !== formData.confirmPassword) {
+      if (!formData.userName) {
+      setError("Username is required");
+      return;
+      }
+
+      if (!formData.email) {
+      setError("Email is required");
+      return;
+      }
+
+      if (!formData.password) {
+      setError("Password is required");
+      return;
+      }
+
+      if (!formData.confirmPassword) {
+      setError("Please confirm password");
+      return;
+      }
+
+
+      if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
