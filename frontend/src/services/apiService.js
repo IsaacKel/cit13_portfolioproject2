@@ -500,6 +500,29 @@ export const addBookmark = async (tConst, note) => {
   }
 };
 
+export const logSearchHistory = async (searchQuery) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${baseURL}/searchHistory`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ searchQuery }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to log search history");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error logging search history:", error);
+    throw error;
+  }
+};
+
 export const fetchTop10Movies = async () => {
   try {
     const response = await fetch(`${baseURL}/Top10/movies`, {

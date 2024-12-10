@@ -57,18 +57,26 @@ namespace WebApi.Controllers
       return Ok(CreatePagingUser(nameof(GetSearchHistoryByUser), userIdInt, pageNumber, pageSize, totalItems, searchHistoryDtos));
     }
 
-    // Add a new search history entry
+    //Add search history
     [HttpPost]
+    [Authorize]
     public IActionResult AddSearchHistory([FromBody] SearchHistoryDTO searchHistoryDto)
     {
-      if (!ModelState.IsValid) return BadRequest(ModelState);
-
-      if (!_dataService.UserExists(searchHistoryDto.UserId))
+      // Extract userId from token claims
+      var userIdClaim = User.FindFirst("Id");
+      if (userIdClaim == null)
       {
-        return NotFound(new { message = "User does not exist." });
+        return Unauthorized("User ID not found in token.");
       }
 
-      var searchHistory = _dataService.AddSearchHistory(searchHistoryDto.UserId, searchHistoryDto.SearchQuery);
+      if (!int.TryParse(userIdClaim.Value, out var userId))
+      {
+        return Unauthorized("Invalid user ID in token.");
+      }
+
+      // Add search history
+      var searchHistory = _dataService.AddSearchHistory(userId, searchHistoryDto.SearchQuery);
+
       var dto = searchHistory.Adapt<SearchHistoryDTO>();
       dto.SelfLink = GetUrl(nameof(GetSearchHistory), new { searchId = searchHistory.Id });
 

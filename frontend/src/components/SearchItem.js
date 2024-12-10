@@ -73,7 +73,7 @@ const SearchItem = ({ item, type }) => {
         )}
       </Link>
       {isBookmarkedState ? (
-        <span className="add-to-bookmarks-button">Already Bookmarked</span>
+        <span className="add-to-bookmarks-button">Bookmarked</span>
       ) : (
         <button
           className="add-to-bookmarks-button"

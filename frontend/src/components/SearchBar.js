@@ -3,9 +3,10 @@ import { setQuery, setCurrentPage } from "../redux/slices/searchSlice";
 import { setQuery as setNamesQuery } from "../redux/slices/namesSearchSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Form, FormControl, Button } from "react-bootstrap";
+import { Form, FormControl } from "react-bootstrap";
 import "./SearchBar.css";
 import "./NavBar.css";
+import { logSearchHistory } from "../services/apiService";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
@@ -14,12 +15,23 @@ const SearchBar = () => {
 
   const [searchQuery, setSearchQuery] = useState(query || "");
 
-  const handleSearch = () => {
-    dispatch(setQuery(searchQuery));
-    dispatch(setNamesQuery(searchQuery));
-    dispatch(setCurrentPage(1));
-    if (searchQuery.trim()) {
-      navigate(`/search?searchTerm=${encodeURIComponent(searchQuery)}`);
+  const handleSearch = async () => {
+    try {
+      if (!searchQuery || typeof searchQuery !== "string") {
+        throw new Error("Invalid search query");
+      }
+
+      await logSearchHistory(searchQuery);
+
+      dispatch(setQuery(searchQuery));
+      dispatch(setNamesQuery(searchQuery));
+      dispatch(setCurrentPage(1));
+
+      if (searchQuery.trim()) {
+        navigate(`/search?searchTerm=${encodeURIComponent(searchQuery)}`);
+      }
+    } catch (error) {
+      console.error("Error during search:", error);
     }
   };
 
@@ -41,9 +53,11 @@ const SearchBar = () => {
         className="mr-8 flex-grow-1"
       />
       <button
-        onClick={handleSearch}
-        className="navbar-button
-      "
+        onClick={(e) => {
+          e.preventDefault();
+          handleSearch();
+        }}
+        className="navbar-button"
       >
         Search
       </button>
