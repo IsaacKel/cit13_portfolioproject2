@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:5003/api";
+//const baseURL = "http://localhost:5003/api";
 const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
@@ -718,3 +718,60 @@ export const fetchUserSearchHistory = async () => {
     throw error;
   }
 };
+  export const deleteRating = async (userId, ratingId) => {
+    try {
+      const response = await fetch(`${baseURL}/UserRating/${userId}/${ratingId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete rating');
+      }
+  
+      return response;
+    } catch (error) {
+      console.error('Error deleting rating:', error);
+      throw error;
+    }
+  };
+  export const deleteBookmark = async (bookmarkId) => {
+    try {
+      const response = await fetch(`${baseURL}/Bookmark/${bookmarkId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete bookmark');
+      }
+  
+      return response;
+    } catch (error) {
+      console.error('Error deleting bookmark:', error);
+      throw error;
+    }
+  };
+  export const deleteSearchHistory = async (searchHistoryId) => {
+    try {
+      const response = await fetch(`${baseURL}/SearchHistory/${searchHistoryId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete search history');
+      }
+  
+      return response;
+    } catch (error) {
+      console.error('Error deleting search history:', error);
+      throw error;
+    }
+  }

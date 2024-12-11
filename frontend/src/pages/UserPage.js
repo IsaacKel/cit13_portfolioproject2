@@ -7,6 +7,9 @@ import {
   fetchTitleData,
   fetchNameData,
   fetchImages,
+  deleteRating,
+  deleteBookmark,
+  deleteSearchHistory,
 } from "../services/apiService";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../components/AuthContext";
@@ -40,12 +43,13 @@ const UserPage = () => {
           ]);
   
         setUser(userData || {});
+  
         const bookmarksWithTitles = await Promise.all(
           userBookmarks.items.map(async (bookmark) => {
             if (bookmark.tConst) {
               const titleData = await fetchTitleData(bookmark.tConst);
               return { ...bookmark, title: titleData };
-            }else if (bookmark.nConst) {
+            } else if (bookmark.nConst) {
               const nameData = await fetchNameData(bookmark.nConst);
               const nameImage = await fetchImages(bookmark.nConst);
               return { ...bookmark, name: nameData, image: nameImage };
@@ -53,25 +57,65 @@ const UserPage = () => {
             return bookmark;
           })
         );
-        console.log(bookmarksWithTitles);
         setBookmarks({ items: bookmarksWithTitles });
+      } catch (err) {
+        console.error(err);
+      }
+  
+      try {
+        const userRatings = await fetchUserRatings();
         const ratingsWithTitles = await Promise.all(
           userRatings.items.map(async (rating) => {
             const titleData = await fetchTitleData(rating.tConst);
             return { ...rating, title: titleData };
           })
         );
+        //console.log(ratingsWithTitles);
         setRatings(ratingsWithTitles || []);
-        setSearchHistory(userSearchHistory || []);
       } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+        setRatings([]);
       }
+  
+      try {
+        const userSearchHistory = await fetchUserSearchHistory();
+        setSearchHistory(userSearchHistory || []);
+        //console.log(userSearchHistory);
+      } catch (err) {
+        setSearchHistory([]);
+      }
+  
+      setLoading(false);
     };
   
     fetchData();
   }, []);
+
+  const handleDeleteRating = async (userId, ratingId) => {
+    try {
+      await deleteRating(userId, ratingId);
+      setRatings((prevRatings) => prevRatings.filter((r) => r.id !== ratingId));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  const handleDeleteBookmark = async (bookmarkId) => {
+    try {
+      await deleteBookmark(bookmarkId);
+      setBookmarks((prevBookmarks) => ({
+        items: prevBookmarks.items.filter((b) => b.id !== bookmarkId)
+      }));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  const handleDeleteSearchHistory = async (searchHistoryId) => {
+    try {
+      await deleteSearchHistory(searchHistoryId);
+      setSearchHistory((prevSearchHistory) => ({ items: prevSearchHistory.items.filter((s) => s.id !== searchHistoryId) }));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -146,6 +190,7 @@ const UserPage = () => {
               <p>
                 <strong>ID:</strong> {bookmark.id}
               </p>
+              <button onClick={() => handleDeleteBookmark(bookmark.id)}> Delete Bookmark</button>
             </li>
           ))}
         </ul>
@@ -181,6 +226,7 @@ const UserPage = () => {
               <p>
                 <strong>Poster: </strong>{<img src={rating.title.poster} alt="poster" style={{ width: '100px', height: 'auto' }} />}
               </p>
+              <button onClick={() => handleDeleteRating(rating.userId, rating.id)}> Delete Rating</button>
             </li>
           ))}
         </ul>
@@ -206,6 +252,7 @@ const UserPage = () => {
                 <strong>Date:</strong>{" "}
                 {new Date(historyItem.createdAt).toLocaleDateString("en-GB")}
               </p>
+              <button onClick={() => handleDeleteSearchHistory(historyItem.id)}> Delete Search History</button>
             </li>
           ))}
         </ul>
