@@ -1,5 +1,4 @@
 const baseURL = "http://localhost:5003/api";
-const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -472,9 +471,14 @@ export const fetchCoPlayers = async (nConst, pageNumber = 1, pageSize = 10) => {
     throw error;
   }
 };
-export const addBookmark = async (tConst, note) => {
+export const addBookmark = async (identifier, note) => {
   try {
     const token = localStorage.getItem("token");
+    const isTConst = identifier.startsWith("tt");
+    const body = isTConst
+      ? { tConst: identifier, note }
+      : { nConst: identifier, note };
+
     const response = await fetch(`${baseURL}/bookmark`, {
       method: "POST",
       credentials: "include",
@@ -482,7 +486,7 @@ export const addBookmark = async (tConst, note) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ tConst, note }),
+      body: JSON.stringify(body),
     });
 
     if (response.status === 409) {
@@ -641,7 +645,6 @@ export const isTitleBookmarked = async (tConst) => {
   }
 };
 
-
 export const addRating = async (tConst, rating) => {
   try {
     const token = localStorage.getItem("token");
@@ -672,7 +675,6 @@ export const addRating = async (tConst, rating) => {
     throw error;
   }
 };
-
 
 export const fetchUserRatings = async () => {
   try {

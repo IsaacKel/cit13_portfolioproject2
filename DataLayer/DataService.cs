@@ -106,7 +106,7 @@ namespace DataLayer
     {
       ValidateUserExists(userId);
 
-      if ((tconst == null && nconst == null) || (tconst != null && nconst != null))
+      if ((string.IsNullOrEmpty(tconst) && string.IsNullOrEmpty(nconst)) || (!string.IsNullOrEmpty(tconst) && !string.IsNullOrEmpty(nconst)))
         throw new ArgumentException("Specify either tconst or nconst, not both.");
 
       var bookmark = new Bookmark
@@ -345,19 +345,19 @@ namespace DataLayer
     {
       return _context.SearchTitles.FromSqlInterpolated($"select * from string_search({searchTerm})").ToList();
     }
-        public IList<SearchTitleNumvote> GetSearchTitlesNumvote(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1)
-        {
-            return _context.SearchTitleNumvotes.FromSqlInterpolated($"select * from filtered_search_numvotes({searchTerm},{searchTitleType},{searchGenre},{searchYear})").ToList();
-        }
-        public IList<SearchTitleRating> GetSearchTitlesRating(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1)
-        {
-            return _context.SearchTitleRatings.FromSqlInterpolated($"select * from filtered_search_avgrating({searchTerm},{searchTitleType},{searchGenre},{searchYear})").ToList();
-        }
-        public IList<SearchTitleYear> GetSearchTitlesYear(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1)
-        {
-            return _context.SearchTitleYears.FromSqlInterpolated($"select * from filtered_search_years({searchTerm},{searchTitleType},{searchGenre},{searchYear})").ToList();
-        }
-        public void rate(string tConst, int rating, int userId)
+    public IList<SearchTitleNumvote> GetSearchTitlesNumvote(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1)
+    {
+      return _context.SearchTitleNumvotes.FromSqlInterpolated($"select * from filtered_search_numvotes({searchTerm},{searchTitleType},{searchGenre},{searchYear})").ToList();
+    }
+    public IList<SearchTitleRating> GetSearchTitlesRating(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1)
+    {
+      return _context.SearchTitleRatings.FromSqlInterpolated($"select * from filtered_search_avgrating({searchTerm},{searchTitleType},{searchGenre},{searchYear})").ToList();
+    }
+    public IList<SearchTitleYear> GetSearchTitlesYear(string? searchTerm = "null", string? searchTitleType = "null", string? searchGenre = "null", int? searchYear = -1)
+    {
+      return _context.SearchTitleYears.FromSqlInterpolated($"select * from filtered_search_years({searchTerm},{searchTitleType},{searchGenre},{searchYear})").ToList();
+    }
+    public void rate(string tConst, int rating, int userId)
     {
       _context.Database.ExecuteSqlInterpolated($"CALL rate({tConst}, {rating}, {userId})");
     }
@@ -431,20 +431,20 @@ namespace DataLayer
                      .ToList();
     }
     public IList<GetGenreData> GetGenreData()
-        {
-            return _context.GetGenreData.FromSqlInterpolated($"select * from get_distinct_genres()").ToList();
-        }
+    {
+      return _context.GetGenreData.FromSqlInterpolated($"select * from get_distinct_genres()").ToList();
+    }
     public IList<GetYearData> GetYearData()
     {
-        return _context.GetYearData.FromSqlInterpolated($"select * from get_distinct_start_years()").ToList();
+      return _context.GetYearData.FromSqlInterpolated($"select * from get_distinct_start_years()").ToList();
     }
     public IList<GetTitleTypeData> GetTitleTypeData()
     {
-        return _context.GetTitleTypeData.FromSqlInterpolated($"select * from get_distinct_title_types()").ToList();
+      return _context.GetTitleTypeData.FromSqlInterpolated($"select * from get_distinct_title_types()").ToList();
     }
     public IList<SearchName> GetSearchNamesSorted(string searchTerm, string sortType)
     {
-            return _context.SearchNames.FromSqlInterpolated($"select * from search_names_by_text_sorted({searchTerm},{sortType})").ToList();
+      return _context.SearchNames.FromSqlInterpolated($"select * from search_names_by_text_sorted({searchTerm},{sortType})").ToList();
     }
   }
 }

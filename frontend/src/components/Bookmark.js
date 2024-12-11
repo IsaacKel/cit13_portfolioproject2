@@ -7,16 +7,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./Bookmark.css";
 import "./NavBar.css";
 
-const Bookmark = ({ show, onClose }) => {
+const Bookmark = ({ show, onClose, identifier }) => {
   const [note, setNote] = useState("");
   const { isLoggedIn } = useContext(AuthContext);
-
-  const { tConst } = useParams();
   const navigate = useNavigate();
 
   const handleBookmark = async () => {
     try {
-      await addBookmark(tConst, note);
+      await addBookmark(identifier, note);
       alert("Bookmark added successfully!");
       onClose();
     } catch (err) {
@@ -62,10 +60,7 @@ const Bookmark = ({ show, onClose }) => {
         <Button variant="secondary" onClick={onClose}>
           Cancel
         </Button>
-        <button
-          onClick={handleButtonClick}
-          className="navbar-button"
-        >
+        <button onClick={handleButtonClick} className="navbar-button">
           {isLoggedIn ? "Save" : "Log in"}
         </button>
       </Modal.Footer>

@@ -67,7 +67,7 @@ const SearchItem = ({ item, type }) => {
         )}
         {(item.rating || item.nRating) && (
           <div className="search-item-rating">
-            <span className="star">⭐</span>
+            <span className="star-search">⭐</span>
             <p className="title-rating">{item.rating || item.nRating}</p>
           </div>
         )}
@@ -85,6 +85,7 @@ const SearchItem = ({ item, type }) => {
       <Bookmark
         show={showBookmarkModal}
         onClose={() => setShowBookmarkModal(false)}
+        identifier={constValue}
       />
     </div>
   );
