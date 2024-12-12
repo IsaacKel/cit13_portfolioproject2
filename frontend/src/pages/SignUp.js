@@ -1,10 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Form, Alert } from "react-bootstrap";
 import { registerUser, loginUser } from "../services/apiService";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../components/AuthContext";
 
 const SignUp = ({ onSignupSuccess, isFullPage }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     userName: "",
@@ -15,8 +17,13 @@ const SignUp = ({ onSignupSuccess, isFullPage }) => {
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const { login, isLoggedIn } = useContext(AuthContext);
 
-  const { login } = useContext(AuthContext);
+    useEffect(() => {
+    if (isFullPage && isLoggedIn) {
+        navigate("/"); // Redirect to the home page if already logged in ( Only for full page SignUp, since users should'nt be redirected if they are viewing a title or name) 
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

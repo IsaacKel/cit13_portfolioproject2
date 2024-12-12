@@ -1,15 +1,25 @@
-import React, { useState, useContext } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import React, { useState, useContext, useEffect } from "react";
+import { Form, Alert } from "react-bootstrap";
 import { loginUser } from "../services/apiService";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../components/AuthContext";
 
 const Login = ({ onLoginSuccess, isFullPage }) => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const { login } = useContext(AuthContext);
+  const { login, isLoggedIn } = useContext(AuthContext);
+
+
+    useEffect(() => {
+        if (isFullPage && isLoggedIn) {
+        navigate("/"); // Redirect to the home page if already logged in ( Only for full page loginsince users should'nt be redirected if they are viewing a title or name) 
+    }
+  }, [isLoggedIn, navigate]);
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
