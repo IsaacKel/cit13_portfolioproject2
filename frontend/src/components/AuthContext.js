@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        // Clear tokens
+        localStorage.removeItem('token');
         setIsLoggedIn(false);
     };
 
