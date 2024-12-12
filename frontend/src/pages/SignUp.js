@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import { registerUser, loginUser } from "../services/apiService";
 import "./Login.css";
 import AuthContext from "../components/AuthContext";
 
-const SignUp = ({ onSignupSuccess }) => {
+const SignUp = ({ onSignupSuccess, isFullPage }) => {
   const [formData, setFormData] = useState({
     name: "",
     userName: "",
@@ -28,39 +28,38 @@ const SignUp = ({ onSignupSuccess }) => {
     setError(null);
     setSuccess(false);
 
-      if (!formData.name) {
+    if (!formData.name) {
       setError("Name is required");
       return;
-      }
+    }
 
-      if (!formData.userName) {
+    if (!formData.userName) {
       setError("Username is required");
       return;
-      }
+    }
 
-      if (!formData.email) {
+    if (!formData.email) {
       setError("Email is required");
       return;
-      }
+    }
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email)) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
       setError("Please enter a valid email address");
       return;
-      }
+    }
 
-      if (!formData.password) {
+    if (!formData.password) {
       setError("Password is required");
       return;
-      }
+    }
 
-      if (!formData.confirmPassword) {
+    if (!formData.confirmPassword) {
       setError("Please confirm password");
       return;
-      }
+    }
 
-
-      if (formData.password !== formData.confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
@@ -92,7 +91,7 @@ const SignUp = ({ onSignupSuccess }) => {
     }
   };
 
-  return (
+  const form = (
     <Form className="login-form" onSubmit={handleSignUp}>
       {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">Registration successful!</Alert>}
@@ -156,6 +155,14 @@ const SignUp = ({ onSignupSuccess }) => {
         Sign Up
       </button>
     </Form>
+  );
+
+  return isFullPage ? (
+    <div className="full-page-form-container">
+      <div className="full-page-form">{form}</div>
+    </div>
+  ) : (
+    form
   );
 };
 

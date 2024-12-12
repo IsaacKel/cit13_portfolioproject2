@@ -1,3 +1,43 @@
+.full-page-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #36454F;
+}
+
+.full-page-form {
+  width: 400px;
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.full-page-form input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.full-page-form button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #00c8a8;
+  color: black;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.full-page-form button:hover {
+  background-color: #00997f;
+}
+
 .navbar {
   background-color: #242424;
   display: flex;
