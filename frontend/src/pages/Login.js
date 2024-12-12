@@ -4,7 +4,7 @@ import { loginUser } from "../services/apiService";
 import "./Login.css";
 import AuthContext from "../components/AuthContext";
 
-const Login = ({ onLoginSuccess, isFullPage }) => {
+const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -31,7 +31,7 @@ const Login = ({ onLoginSuccess, isFullPage }) => {
     }
   };
 
-  const form = (
+  return (
     <Form className="login-form" onSubmit={handleLogin}>
       {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
@@ -57,14 +57,6 @@ const Login = ({ onLoginSuccess, isFullPage }) => {
         Log In
       </button>
     </Form>
-  );
-
-  return isFullPage ? (
-    <div className="full-page-form-container">
-      <div className="full-page-form">{form}</div>
-    </div>
-  ) : (
-    form
   );
 };
 

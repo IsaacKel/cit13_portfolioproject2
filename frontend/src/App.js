@@ -21,8 +21,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/search" element={<SearchResults />} />
-            <Route path="/login" element={<Login isFullPage={true} />} />
-            <Route path="/signup" element={<SignUp isFullPage={true} />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/title/:tConst" element={<IndividualTitle />} />
             <Route path="/name/:nConst" element={<IndividualName />} />
             <Route path="/User" element={<UserPage />} />
