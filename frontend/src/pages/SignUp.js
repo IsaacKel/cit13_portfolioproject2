@@ -16,11 +16,12 @@ const SignUp = ({ onSignupSuccess, isFullPage }) => {
     role: "user",
   });
   const [error, setError] = useState(null);
+  const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { login, isLoggedIn } = useContext(AuthContext);
+  const { login, loadingAuth, isLoggedIn } = useContext(AuthContext);
 
     useEffect(() => {
-    if (isFullPage && isLoggedIn) {
+    if (!loadingAuth && isFullPage && isLoggedIn) {
         navigate("/"); // Redirect to the home page if already logged in ( Only for full page SignUp, since users should'nt be redirected if they are viewing a title or name) 
     }
   }, [isLoggedIn, navigate]);
@@ -85,7 +86,11 @@ const SignUp = ({ onSignupSuccess, isFullPage }) => {
         password: formData.password,
       });
 
-      localStorage.setItem("token", loginResponse.token);
+      if (stayLoggedIn) {
+        localStorage.setItem("token", loginResponse.token);
+      } else {
+        sessionStorage.setItem("token", loginResponse.token);
+      }
 
       login();
 
@@ -157,7 +162,15 @@ const SignUp = ({ onSignupSuccess, isFullPage }) => {
         onChange={handleChange}
         disabled={success}
       />
-
+      <Form.Group className="login-label mt-3">
+      <Form.Check
+        type="checkbox"
+        label="Stay Logged In?"
+        checked={stayLoggedIn}
+        onChange={(e) => setStayLoggedIn(e.target.checked)}
+        disabled={success}
+        />
+      </Form.Group>
       <button className="login-submit" disabled={success}>
         Sign Up
       </button>

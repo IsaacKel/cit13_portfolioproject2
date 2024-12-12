@@ -60,7 +60,8 @@ export const loginUser = async (loginData) => {
 // Function to logout a user
 export const logoutUser = async () => {
   try {
-    const token = localStorage.getItem("token"); // Retrieve token from localStorage
+    const token = 
+      localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
 
     const response = await fetch(`${userBaseURL}/logout`, {
       method: "POST",
@@ -474,7 +475,8 @@ export const fetchCoPlayers = async (nConst, pageNumber = 1, pageSize = 10) => {
 };
 export const addBookmark = async (identifier, note) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = 
+      localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const isTConst = identifier.startsWith("tt");
     const body = isTConst
       ? { tConst: identifier, note }
@@ -508,7 +510,8 @@ export const addBookmark = async (identifier, note) => {
 
 export const logSearchHistory = async (searchQuery) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = 
+      localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${baseURL}/searchHistory`, {
       method: "POST",
       headers: {
@@ -593,7 +596,8 @@ export const fetchTop10Actors = async () => {
 // Function to fetch user data
 export const fetchUserData = async () => {
   try {
-    const token = localStorage.getItem("token"); // Retrieve token from localStorage
+    const token = 
+      localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${userBaseURL}/profile`, {
       method: "GET",
       credentials: "include",
@@ -616,7 +620,8 @@ export const fetchUserData = async () => {
 
 export const fetchBookmarks = async (pageNumber = 1, pageSize = 10) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = 
+      localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${baseURL}/bookmark/user`, {
       method: "GET",
       headers: {
@@ -648,7 +653,8 @@ export const isTitleBookmarked = async (tConst) => {
 
 export const addRating = async (tConst, rating) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = 
+      localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${baseURL}/Rate/${tConst}/${rating}`, {
       method: "GET",
       credentials: "include",
@@ -679,7 +685,8 @@ export const addRating = async (tConst, rating) => {
 
 export const fetchUserRatings = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = 
+      localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${baseURL}/UserRating`, {
       method: "GET",
       credentials: "include",
@@ -701,7 +708,8 @@ export const fetchUserRatings = async () => {
 };
 export const fetchUserSearchHistory = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = 
+      localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${baseURL}/SearchHistory/user/`, {
       method: "GET",
       credentials: "include",

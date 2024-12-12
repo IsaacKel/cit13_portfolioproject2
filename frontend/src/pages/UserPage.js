@@ -16,7 +16,7 @@ import AuthContext from "../components/AuthContext";
 
 const UserPage = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, logout } = useContext(AuthContext);
+  const { isLoggedIn, loadingAuth, logout } = useContext(AuthContext);
   const [user, setUser] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
   const [ratings, setRatings] = useState([]);
@@ -25,7 +25,7 @@ const UserPage = () => {
   const [error, setError] = useState(null);
 
    useEffect(() => {
-    if (!isLoggedIn) {
+    if (!loadingAuth && !isLoggedIn) {
       navigate("/login"); // Redirect to the login page if not logged in
     }
   }, [isLoggedIn, navigate]);

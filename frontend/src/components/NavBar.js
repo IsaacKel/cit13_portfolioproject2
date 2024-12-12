@@ -33,6 +33,7 @@ const NavBar = () => {
       // Notify other tabs
       localStorage.setItem("logout", Date.now());
       localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
       handleCloseLogout();
     } catch (error) {
       console.error("Error logging out:", error);
