@@ -128,12 +128,12 @@ const IndividualTitle = () => {
               </span>
             </div>
           )}
-            <button
-              className="bookmark-style" 
-              onClick={() => setShowRateModal(true)}
-            >
-              + Add Rating
-             </button>
+          <button
+            className="bookmark-style"
+            onClick={() => setShowRateModal(true)}
+          >
+            + Add Rating
+          </button>
           {isBookmarkedStatus ? (
             <span className="bookmark-style">Bookmarked</span>
           ) : (
@@ -243,11 +243,9 @@ const IndividualTitle = () => {
       <Bookmark
         show={showBookmarkModal}
         onClose={() => setShowBookmarkModal(false)}
+        identifier={tConst}
       />
-      <Rate
-        show={showRateModal}
-        onClose={() => setShowRateModal(false)}
-      />
+      <Rate show={showRateModal} onClose={() => setShowRateModal(false)} />
     </div>
   );
 };

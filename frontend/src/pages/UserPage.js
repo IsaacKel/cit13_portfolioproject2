@@ -196,32 +196,36 @@ const UserPage = () => {
               <div className="user-card-grid">
                 {bookmarks.items.map((bookmark) => (
                   <div className="user-card" key={bookmark.id}>
-                    {bookmark.tConst ? (
-                      <>
-                        <p>
-                          <Link to={`/title/${bookmark.tConst}`}>
-                            {bookmark.title.primaryTitle}
-                          </Link>
-                        </p>
-                        <img src={bookmark.title.poster} alt="poster" />
-                      </>
-                    ) : (
-                      <>
-                        <p>
-                          <Link to={`/name/${bookmark.nConst}`}>
-                            {bookmark.name.actualName}
-                          </Link>
-                        </p>
-                        <img src={bookmark.image} alt="person" />
-                      </>
-                    )}
-                    <p>
-                      <strong>Note:</strong> {bookmark.note}
-                    </p>
-                    <p>
-                      <strong>Date:</strong>{" "}
-                      {new Date(bookmark.createdAt).toLocaleDateString("en-GB")}
-                    </p>
+                    <div className="user-card-content">
+                      {bookmark.tConst ? (
+                        <Link to={`/title/${bookmark.tConst}`}>
+                          <>
+                            <div className="user-card-title">
+                              <p>{bookmark.title.primaryTitle}</p>
+                            </div>
+                            <img src={bookmark.title.poster} alt="poster" />
+                          </>
+                        </Link>
+                      ) : (
+                        <Link to={`/name/${bookmark.nConst}`}>
+                          <>
+                            <div className="user-card-title">
+                              <p>{bookmark.name.actualName}</p>
+                            </div>
+                            <img src={bookmark.image} alt="person" />
+                          </>
+                        </Link>
+                      )}
+                      <p>
+                        <strong>Note:</strong> {bookmark.note}
+                      </p>
+                      <p>
+                        <strong>Date:</strong>{" "}
+                        {new Date(bookmark.createdAt).toLocaleDateString(
+                          "en-GB"
+                        )}
+                      </p>
+                    </div>
                     <button onClick={() => handleDeleteBookmark(bookmark.id)}>
                       Delete Bookmark
                     </button>

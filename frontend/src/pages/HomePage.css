@@ -45,7 +45,7 @@
   height: auto;
   object-fit: cover;
   border-radius: 12px;
-  aspect-ratio: 9 / 16; /* Maintain a 16:9 aspect ratio */
+  aspect-ratio: 9 / 16;
 }
 
 .carousel {
@@ -103,7 +103,7 @@
   }
 
   .home-card {
-    flex: 1 1 calc(33.33% - 1rem);
+    flex: 1 1 calc(20% - 1rem);
   }
 
   .home-card-img {
@@ -117,7 +117,7 @@
   }
 
   .home-card {
-    flex: 1 1 calc(17.5% - 1rem);
+    flex: 1 1 calc(12.5% - 1rem);
   }
 
   .home-card-img {

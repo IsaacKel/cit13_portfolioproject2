@@ -117,8 +117,10 @@ const IndividualName = () => {
               {nameData.nRating && (
                 <span className="rating">⭐ {nameData.nRating}</span>
               )}
-              <button className="bookmark-style"
-              onClick={() => setShowBookmarkModal(true)}>
+              <button
+                className="bookmark-style"
+                onClick={() => setShowBookmarkModal(true)}
+              >
                 + Add to Bookmarks
               </button>
             </div>
@@ -256,6 +258,7 @@ const IndividualName = () => {
           <Bookmark
             show={showBookmarkModal}
             onClose={() => setShowBookmarkModal(false)}
+            identifier={nConst}
           />
         </>
       )}

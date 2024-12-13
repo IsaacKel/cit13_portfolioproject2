@@ -18,8 +18,8 @@ const Carousel = ({ title, items, itemType }) => {
   const getItemsPerPage = () => {
     const width = window.innerWidth;
     if (width < 768) return 2;
-    if (width < 1200) return 3;
-    return 5;
+    if (width < 1200) return 5;
+    return 7;
   };
 
   const handleLeftClick = () => {
