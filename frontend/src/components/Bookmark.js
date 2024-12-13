@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { addBookmark } from "../services/apiService";
 import AuthContext from "./AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -9,14 +9,18 @@ import "./NavBar.css";
 
 const Bookmark = ({ show, onClose, identifier }) => {
   const [note, setNote] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const { isLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleBookmark = async () => {
     try {
       await addBookmark(identifier, note);
-      alert("Bookmark added successfully!");
-      onClose();
+      setSuccessMessage("Bookmark added successfully!");
+      setTimeout(() => {
+        onClose();
+        setSuccessMessage("");
+      }, 1500);
     } catch (err) {
       console.error("Error adding bookmark:", err);
       alert("Failed to add bookmark.");
@@ -41,6 +45,8 @@ const Bookmark = ({ show, onClose, identifier }) => {
           <p className="bookmark-message">
             You must be logged in to add a bookmark.
           </p>
+        ) : successMessage ? (
+          <p className="bookmark-message">{successMessage}</p>
         ) : (
           <Form>
             <Form.Group controlId="note">
@@ -57,12 +63,16 @@ const Bookmark = ({ show, onClose, identifier }) => {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Cancel
-        </Button>
-        <button onClick={handleButtonClick} className="navbar-button">
-          {isLoggedIn ? "Save" : "Log in"}
-        </button>
+        {!successMessage && (
+          <>
+            <Button variant="secondary" onClick={onClose}>
+              Cancel
+            </Button>
+            <button onClick={handleButtonClick} className="navbar-button">
+              {isLoggedIn ? "Save" : "Log in"}
+            </button>
+          </>
+        )}
       </Modal.Footer>
     </Modal>
   );

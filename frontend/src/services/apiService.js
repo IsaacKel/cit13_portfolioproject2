@@ -478,6 +478,7 @@ export const addBookmark = async (identifier, note) => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const isTConst = identifier.startsWith("tt");
+
     const body = isTConst
       ? { tConst: identifier, note }
       : { nConst: identifier, note };
@@ -621,21 +622,40 @@ export const fetchUserData = async () => {
 export const fetchBookmarks = async (pageNumber = 1, pageSize = 10) => {
   try {
     const token =
-      localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
-    const response = await fetch(`${baseURL}/bookmark/user`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      throw new Error("Failed to fetch bookmarks");
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+
+    console.log("Token:", token);
+    let allBookmarks = [];
+    let currentPage = 1;
+    let totalPages = 1;
+
+    while (currentPage <= totalPages) {
+      const response = await fetch(
+        `${baseURL}/bookmark/user?pageNumber=${currentPage}&pageSize=${pageSize}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch bookmarks");
+      }
+
+      const data = await response.json();
+      console.log(`Fetched Bookmarks for page ${currentPage}:`, data.items);
+      allBookmarks = allBookmarks.concat(data.items);
+
+      totalPages = data.numberPages;
+      currentPage++;
     }
 
-    const data = await response.json();
-    return data;
+    console.log("All Fetched Bookmarks:", allBookmarks);
+    return { items: allBookmarks };
   } catch (error) {
-    console.error("Error fetching bookmarks:", error);
+    console.error("Error fetching all bookmarks:", error);
     throw error;
   }
 };
