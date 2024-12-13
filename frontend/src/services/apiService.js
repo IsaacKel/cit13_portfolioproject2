@@ -1,5 +1,5 @@
-//const baseURL = "http://localhost:5003/api";
-const baseURL = "https://localhost:5003/api";
+const baseURL = "http://localhost:5003/api";
+// const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -60,7 +60,7 @@ export const loginUser = async (loginData) => {
 // Function to logout a user
 export const logoutUser = async () => {
   try {
-    const token = 
+    const token =
       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
 
     const response = await fetch(`${userBaseURL}/logout`, {
@@ -475,7 +475,7 @@ export const fetchCoPlayers = async (nConst, pageNumber = 1, pageSize = 10) => {
 };
 export const addBookmark = async (identifier, note) => {
   try {
-    const token = 
+    const token =
       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const isTConst = identifier.startsWith("tt");
     const body = isTConst
@@ -510,7 +510,7 @@ export const addBookmark = async (identifier, note) => {
 
 export const logSearchHistory = async (searchQuery) => {
   try {
-    const token = 
+    const token =
       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${baseURL}/searchHistory`, {
       method: "POST",
@@ -596,7 +596,7 @@ export const fetchTop10Actors = async () => {
 // Function to fetch user data
 export const fetchUserData = async () => {
   try {
-    const token = 
+    const token =
       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${userBaseURL}/profile`, {
       method: "GET",
@@ -620,7 +620,7 @@ export const fetchUserData = async () => {
 
 export const fetchBookmarks = async (pageNumber = 1, pageSize = 10) => {
   try {
-    const token = 
+    const token =
       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${baseURL}/bookmark/user`, {
       method: "GET",
@@ -653,7 +653,7 @@ export const isTitleBookmarked = async (tConst) => {
 
 export const addRating = async (tConst, rating) => {
   try {
-    const token = 
+    const token =
       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${baseURL}/Rate/${tConst}/${rating}`, {
       method: "GET",
@@ -685,7 +685,7 @@ export const addRating = async (tConst, rating) => {
 
 export const fetchUserRatings = async () => {
   try {
-    const token = 
+    const token =
       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${baseURL}/UserRating`, {
       method: "GET",
@@ -708,7 +708,7 @@ export const fetchUserRatings = async () => {
 };
 export const fetchUserSearchHistory = async () => {
   try {
-    const token = 
+    const token =
       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
     const response = await fetch(`${baseURL}/SearchHistory/user/`, {
       method: "GET",

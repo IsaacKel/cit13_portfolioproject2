@@ -1,24 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Carousel = ({ title, items, itemType }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerPage(getItemsPerPage());
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const getItemsPerPage = () => {
+    const width = window.innerWidth;
+    if (width < 768) return 2;
+    if (width < 1200) return 3;
+    return 5;
+  };
+
   const handleLeftClick = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + 10) % 10);
+    setCurrentIndex((prevIndex) => {
+      const newIndex = prevIndex - 1;
+      return newIndex < 0 ? items.length - 1 : newIndex;
+    });
   };
 
   const handleRightClick = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % 10);
+    setCurrentIndex((prevIndex) => {
+      const newIndex = prevIndex + 1;
+      return newIndex >= items.length ? 0 : newIndex;
+    });
   };
 
   const getVisibleItems = () => {
-    const visibleItems = [];
-    for (let i = 0; i < 8; i++) {
-      visibleItems.push(items[(currentIndex + i) % 10]);
+    const endIndex = currentIndex + itemsPerPage;
+    if (endIndex <= items.length) {
+      return items.slice(currentIndex, endIndex);
+    } else {
+      return items
+        .slice(currentIndex)
+        .concat(items.slice(0, endIndex - items.length));
     }
-    return visibleItems;
   };
+
+  const [itemsPerPage, setItemsPerPage] = useState(getItemsPerPage());
 
   return (
     <div className="media-list">

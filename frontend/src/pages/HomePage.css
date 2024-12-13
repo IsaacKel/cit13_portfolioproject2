@@ -17,6 +17,8 @@
 /* Grid Layout */
 .card-grid {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   width: 100%;
   gap: 1rem;
   padding: 0px 0;
@@ -39,8 +41,8 @@
 
 /* Card Images */
 .home-card-img {
-  width: 9.35rem;
-  height: 14.0625rem;
+  width: 100%;
+  height: auto;
   object-fit: cover;
   border-radius: 12px;
 }
@@ -69,6 +71,7 @@
   font-size: 20px;
   cursor: pointer;
 }
+
 .carousel-button:hover {
   background-color: #00997f;
 }
@@ -81,14 +84,42 @@
   }
 
   .card-grid {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
   }
 
   .home-card {
-    flex: 0 0 25%; /* 100% / 4 items for smaller screens */
+    flex: 1 1 calc(50% - 1rem); /* Full width on smaller screens */
   }
 
   .home-card-img {
-    height: 11.25rem; /* 180px converted to rem */
+    height: 11.25rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .card-grid {
+    flex-wrap: wrap;
+  }
+
+  .home-card {
+    flex: 1 1 calc(33.33% - 1rem);
+  }
+
+  .home-card-img {
+    height: 18rem;
+  }
+}
+
+@media (min-width: 1201px) {
+  .card-grid {
+    flex-wrap: wrap;
+  }
+
+  .home-card {
+    flex: 1 1 calc(17.5% - 1rem);
+  }
+
+  .home-card-img {
+    height: 22.5rem;
   }
 }
