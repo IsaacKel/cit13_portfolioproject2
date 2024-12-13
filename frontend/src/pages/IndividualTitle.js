@@ -136,7 +136,7 @@ const IndividualTitle = () => {
             + Add Rating
           </button>
           {isBookmarkedStatus ? (
-            <span className="bookmark-style">Bookmarked</span>
+            <span className="bookmark-style disabled"disabled>Bookmarked</span>
           ) : (
             <button
               className="bookmark-style"

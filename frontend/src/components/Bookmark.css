@@ -45,3 +45,9 @@
   transform: translateY(0);
   opacity: 1;
 }
+
+.bookmark-style.disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+}

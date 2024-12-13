@@ -12,9 +12,9 @@ export const BookmarkProvider = ({ children }) => {
 
   const fetchBookmarks = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");;
       if (!token) {
-        console.log("No token found in localStorage");
+        console.log("No token found in localStorage or sessionStorage");
         return;
       }
 
