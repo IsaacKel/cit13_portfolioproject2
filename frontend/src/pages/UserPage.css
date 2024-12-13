@@ -1,0 +1,82 @@
+.container-fluid {
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar {
+  background-color: #1f1f1f;
+  color: #fff;
+  width: 250px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  padding: 20px;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.sidebar .nav-link {
+  color: #ccc;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.sidebar .nav-link.active {
+  color: #fff;
+  font-weight: bold;
+}
+
+.sidebar .nav-link:hover {
+  color: #ffffff;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  color: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.user-card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.user-card {
+  background-color: #1f1f1f;
+  border-radius: 10px;
+  padding: 20px;
+  width: calc(20% - 20px);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.user-card:hover {
+  transform: scale(1.02);
+}
+
+.user-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.user-card p {
+  margin: 10px 0;
+}
+
+.user-card button {
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.user-card button:hover {
+  background-color: #ff1c1c;
+}
