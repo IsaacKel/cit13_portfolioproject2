@@ -660,7 +660,7 @@ export const fetchBookmarks = async (pageNumber = 1, pageSize = 10) => {
   }
 };
 
-export const isTitleBookmarked = async (tConst) => {
+export const isBookmarked = async (tConst) => {
   try {
     const bookmarksData = await fetchBookmarks();
     const bookmarks = bookmarksData.items || [];

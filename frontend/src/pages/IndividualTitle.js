@@ -6,6 +6,7 @@ import {
   fetchTitleData,
   fetchSimilarTitles,
   fetchTitlePrincipals,
+  formatTitleType,
 } from "../services/apiService";
 import Bookmark from "../components/Bookmark";
 import Rate from "../components/Rate";
@@ -242,7 +243,10 @@ const IndividualTitle = () => {
 
       <Bookmark
         show={showBookmarkModal}
-        onClose={() => setShowBookmarkModal(false)}
+        onClose={() => {
+          setShowBookmarkModal(false);
+          setIsBookmarkedStatus(true);
+        }}
         identifier={tConst}
       />
       <Rate show={showRateModal} onClose={() => setShowRateModal(false)} />

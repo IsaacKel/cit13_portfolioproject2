@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import {
   fetchBookmarks as fetchBookmarksFromApi,
-  isTitleBookmarked as isTitleBookmarkedFromApi,
+  isBookmarked as isBookmarkedFromApi,
   addBookmark as addBookmarkToApi,
 } from "../services/apiService";
 
@@ -30,9 +30,9 @@ export const BookmarkProvider = ({ children }) => {
     }
   };
 
-  const isBookmarked = async (tConst) => {
+  const isBookmarked = async (identifier) => {
     try {
-      const result = await isTitleBookmarkedFromApi(tConst);
+      const result = await isBookmarkedFromApi(identifier);
       return result;
     } catch (err) {
       console.error("Error checking if title is bookmarked:", err);
