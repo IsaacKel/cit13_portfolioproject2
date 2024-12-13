@@ -20,11 +20,13 @@ export const BookmarkProvider = ({ children }) => {
 
       const userBookmarks = await fetchBookmarksFromApi();
 
-      const tConstSet = new Set(
-        userBookmarks.items.map((bookmark) => bookmark.tConst)
+      const identifierSet = new Set(
+        userBookmarks.items.map((bookmark) =>
+          bookmark.tConst ? bookmark.tConst : bookmark.nConst
+        )
       );
 
-      setBookmarks(tConstSet);
+      setBookmarks(identifierSet);
     } catch (err) {
       console.error("Error fetching bookmarks in Context:", err);
     }

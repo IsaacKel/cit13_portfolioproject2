@@ -660,17 +660,20 @@ export const fetchBookmarks = async (pageNumber = 1, pageSize = 10) => {
   }
 };
 
-export const isBookmarked = async (tConst) => {
+export const isBookmarked = async (identifier) => {
   try {
     const bookmarksData = await fetchBookmarks();
     const bookmarks = bookmarksData.items || [];
-    return bookmarks.some((bookmark) => bookmark.tConst === tConst);
+    const isTConst = identifier.startsWith("tt");
+
+    return bookmarks.some((bookmark) =>
+      isTConst ? bookmark.tConst === identifier : bookmark.nConst === identifier
+    );
   } catch (error) {
     console.error("Error checking if title is bookmarked:", error);
     return false;
   }
 };
-
 export const addRating = async (tConst, rating) => {
   try {
     const token =

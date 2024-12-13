@@ -12,6 +12,7 @@ import {
 import Bookmark from "../components/Bookmark";
 import PaginationButtons from "../components/PaginationButtons";
 import CardList from "../components/CardList";
+import { useBookmarks } from "../context/BookmarkContext";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -31,8 +32,8 @@ const IndividualName = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isBookmarkedStatus, setIsBookmarkedStatus] = useState(null);
 
-  // Fetch main data (name, biography, known titles, co-stars, roles)
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -94,7 +95,17 @@ const IndividualName = () => {
     }));
   };
 
-  console.log("PERSON IMAGE", personImage);
+  const { isBookmarked } = useBookmarks();
+
+  useEffect(() => {
+    const checkBookmarkedStatus = async () => {
+      if (!nConst) return;
+      const status = await isBookmarked(nConst);
+      setIsBookmarkedStatus(status);
+    };
+
+    checkBookmarkedStatus();
+  }, [nConst, isBookmarked]);
 
   return (
     <div className="individual-title-container">
@@ -117,12 +128,16 @@ const IndividualName = () => {
               {nameData.nRating && (
                 <span className="rating">⭐ {nameData.nRating}</span>
               )}
-              <button
-                className="bookmark-style"
-                onClick={() => setShowBookmarkModal(true)}
-              >
-                + Add to Bookmarks
-              </button>
+              {isBookmarkedStatus ? (
+                <span className="bookmark-style">Bookmarked</span>
+              ) : (
+                <button
+                  className="bookmark-style"
+                  onClick={() => setShowBookmarkModal(true)}
+                >
+                  + Add to Bookmarks
+                </button>
+              )}
             </div>
           </div>
           <div className="poster-plot-container">
@@ -257,7 +272,10 @@ const IndividualName = () => {
           {/* Bookmark Modal */}
           <Bookmark
             show={showBookmarkModal}
-            onClose={() => setShowBookmarkModal(false)}
+            onClose={() => {
+              setShowBookmarkModal(false);
+              setIsBookmarkedStatus(true);
+            }}
             identifier={nConst}
           />
         </>

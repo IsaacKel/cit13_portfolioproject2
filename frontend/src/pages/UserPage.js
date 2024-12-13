@@ -237,36 +237,30 @@ const UserPage = () => {
             )}
           </>
         )}
-
         {selectedSection === "ratings" && (
           <>
             <h2>Ratings</h2>
             {ratings && ratings.length > 0 ? (
-              <ul>
+              <div className="user-card-grid">
                 {ratings.map((rating) => (
-                  <li key={rating.id}>
-                    <p>
+                  <div className="user-card" key={rating.id}>
+                    <div className="user-card-content">
                       <Link to={`/title/${rating.tConst}`}>
-                        {rating.title.primaryTitle}
+                        <>
+                          <div className="user-card-title">
+                            <p>{rating.title.primaryTitle}</p>
+                          </div>
+                          <img src={rating.title.poster} alt="poster" />
+                        </>
                       </Link>
-                    </p>
-                    <p>
-                      <strong>Rating:</strong> {rating.rating}
-                    </p>
-                    <p>
-                      <strong>Date:</strong>{" "}
-                      {new Date(rating.createdAt).toLocaleDateString("en-GB")}
-                    </p>
-                    <p>
-                      <strong>Title Type:</strong> {rating.title.titleType}
-                    </p>
-                    <p>
-                      <img
-                        src={rating.title.poster}
-                        alt="poster"
-                        style={{ width: "100px", height: "auto" }}
-                      />
-                    </p>
+                      <p>
+                        <strong>Rating:</strong> {rating.rating}
+                      </p>
+                      <p>
+                        <strong>Date:</strong>{" "}
+                        {new Date(rating.createdAt).toLocaleDateString("en-GB")}
+                      </p>
+                    </div>
                     <button
                       onClick={() =>
                         handleDeleteRating(rating.userId, rating.id)
@@ -274,9 +268,9 @@ const UserPage = () => {
                     >
                       Delete Rating
                     </button>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             ) : (
               <p>No ratings found.</p>
             )}
