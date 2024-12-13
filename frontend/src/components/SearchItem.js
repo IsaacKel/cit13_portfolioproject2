@@ -6,6 +6,7 @@ import { useBookmarks } from "../context/BookmarkContext";
 const SearchItem = ({ item, type }) => {
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
   const [isBookmarkedState, setIsBookmarkedState] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const handleBookmarkClick = () => {
     setShowBookmarkModal(true);
@@ -41,11 +42,12 @@ const SearchItem = ({ item, type }) => {
           .pop()}`}
         className="search-item-link"
       >
-        {item.poster || item.imageUrl ? (
+        {item.poster && !imageError ? (
           <img
-            src={item.poster || item.imageUrl}
+            src={item.poster}
             alt={item.primaryTitle || item.primaryName}
             className="search-item-img"
+            onError={() => setImageError(true)}
           />
         ) : (
           <div className="search-item-img placeholder"></div>

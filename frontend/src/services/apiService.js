@@ -624,7 +624,6 @@ export const fetchBookmarks = async (pageNumber = 1, pageSize = 10) => {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
 
-    console.log("Token:", token);
     let allBookmarks = [];
     let currentPage = 1;
     let totalPages = 1;
@@ -645,14 +644,12 @@ export const fetchBookmarks = async (pageNumber = 1, pageSize = 10) => {
       }
 
       const data = await response.json();
-      console.log(`Fetched Bookmarks for page ${currentPage}:`, data.items);
       allBookmarks = allBookmarks.concat(data.items);
 
       totalPages = data.numberPages;
       currentPage++;
     }
 
-    console.log("All Fetched Bookmarks:", allBookmarks);
     return { items: allBookmarks };
   } catch (error) {
     console.error("Error fetching all bookmarks:", error);
