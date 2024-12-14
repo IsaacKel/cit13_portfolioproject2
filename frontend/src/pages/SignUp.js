@@ -179,7 +179,11 @@ const SignUp = ({ onSignupSuccess, isFullPage }) => {
 
   return isFullPage ? (
     <div className="full-page-form-container">
-      <div className="full-page-form">{form}</div>
+      <div className="full-page-form">
+         <div className="full-page-form-header">
+           <h3>Sign Up</h3>
+         </div>
+      {form}</div>
     </div>
   ) : (
     form

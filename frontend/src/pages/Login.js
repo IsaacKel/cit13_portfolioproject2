@@ -86,7 +86,12 @@ const Login = ({ onLoginSuccess, isFullPage }) => {
 
   return isFullPage ? (
     <div className="full-page-form-container">
-      <div className="full-page-form">{form}</div>
+      <div className="full-page-form">
+        <div className="full-page-form-header">
+           <h3>Log In</h3>
+         </div>
+         {form}
+      </div>
     </div>
   ) : (
     form
