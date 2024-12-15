@@ -74,6 +74,12 @@ namespace WebApi.Controllers
         return Unauthorized("Invalid user ID in token.");
       }
 
+      var existingSearchHistory = _dataService.GetSearchHistoriesByUser(userId, 1, int.MaxValue);
+      if (existingSearchHistory.Any(sh => sh.SearchQuery == searchHistoryDto.SearchQuery))
+            {
+                return Ok(new { message = "Search query already exists" });
+            }
+
       // Add search history
       var searchHistory = _dataService.AddSearchHistory(userId, searchHistoryDto.SearchQuery);
 
