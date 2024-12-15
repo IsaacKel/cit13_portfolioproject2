@@ -17,7 +17,7 @@ const Login = ({ onLoginSuccess, isFullPage }) => {
 
     useEffect(() => {
         if (!loadingAuth && isFullPage && isLoggedIn) {
-        navigate("/"); // Redirect to the home page if already logged in ( Only for full page loginsince users should'nt be redirected if they are viewing a title or name) 
+        navigate("/"); // Redirect to the home page if already logged in ( Only for full-page login since users should'nt be redirected if they are viewing a title or name) 
     }
   }, [isLoggedIn, navigate]);
 
@@ -86,7 +86,12 @@ const Login = ({ onLoginSuccess, isFullPage }) => {
 
   return isFullPage ? (
     <div className="full-page-form-container">
-      <div className="full-page-form">{form}</div>
+      <div className="full-page-form">
+        <div className="full-page-form-header">
+           <h3>Log In</h3>
+         </div>
+         {form}
+      </div>
     </div>
   ) : (
     form
