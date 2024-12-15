@@ -90,9 +90,9 @@ const UserPage = () => {
     fetchData();
   }, []);
 
-  const handleDeleteRating = async (userId, ratingId) => {
+  const handleDeleteRating = async (ratingId) => {
     try {
-      await deleteRating(userId, ratingId);
+      await deleteRating(ratingId);
       setRatings((prevRatings) => prevRatings.filter((r) => r.id !== ratingId));
     } catch (err) {
       setError(err.message);
@@ -280,7 +280,7 @@ const UserPage = () => {
                     </div>
                     <button
                       onClick={() =>
-                        handleDeleteRating(rating.userId, rating.id)
+                        handleDeleteRating(rating.id)
                       }
                     >
                       Delete

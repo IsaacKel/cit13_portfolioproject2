@@ -361,7 +361,10 @@ namespace DataLayer
     {
       _context.Database.ExecuteSqlInterpolated($"CALL rate({tConst}, {rating}, {userId})");
     }
-
+    public void rateDelete(int userRatingId, int userId)
+        {
+            _context.Database.ExecuteSqlInterpolated($"CALL rateDelete({userRatingId}, {userId})");
+        }
     public IEnumerable<TitlePrincipal> GetTitlePrincipals(string tConst)
     {
       var results = new List<TitlePrincipal>();

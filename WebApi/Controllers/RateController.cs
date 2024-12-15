@@ -51,5 +51,16 @@ namespace WebApi.Controllers
             _dataService.rate(tConst, rating, userIdInt);
             return Ok();
         }
+
+        [HttpGet("Delete/{userRatingId}")]
+        public ActionResult rateDelete(int userRatingId)
+        {
+            var userId = int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value, out var userIdInt);
+
+            if (userIdInt == null) return Unauthorized();
+
+            _dataService.rateDelete(userRatingId, userIdInt);
+            return Ok();
+        }
     }
 }

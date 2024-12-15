@@ -1,5 +1,5 @@
-const baseURL = "http://localhost:5003/api";
-// const baseURL = "https://localhost:5003/api";
+//const baseURL = "http://localhost:5003/api";
+const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -749,18 +749,17 @@ export const fetchUserSearchHistory = async () => {
     throw error;
   }
 };
-export const deleteRating = async (userId, ratingId) => {
+export const deleteRating = async (ratingId) => {
   try {
-    const response = await fetch(
-      `${baseURL}/UserRating/${userId}/${ratingId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    const response = await fetch(`${baseURL}/Rate/Delete/${ratingId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+    });
 
     if (!response.ok) {
       throw new Error("Failed to delete rating");

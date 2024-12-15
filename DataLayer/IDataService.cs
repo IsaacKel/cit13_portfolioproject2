@@ -69,6 +69,7 @@ namespace DataLayer
         IList<GetYearData> GetYearData();
         IList<GetTitleTypeData> GetTitleTypeData();
         void rate(string tConst, int rating, int userId);
+        void rateDelete(int userRatingId, int userId);
         // --Name--
         NameBasic GetNameByNConst(string nconst);
         IList<NameBasic> GetAllNames(int pageNumber = 1, int pageSize = 10);
