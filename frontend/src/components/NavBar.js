@@ -8,6 +8,8 @@ import SignUp from "../pages/SignUp";
 import { logoutUser } from "../services/apiService";
 import SearchBar from "./SearchBar";
 import AuthContext from "./AuthContext";
+import rmdbLogo from "../images/rmdb_logo.png";
+
 const NavBar = () => {
   const { isLoggedIn, logout } = useContext(AuthContext);
   const [showLogin, setShowLogin] = useState(false);
@@ -71,11 +73,7 @@ const NavBar = () => {
         {/* Column 1: Logo */}
         <Col xs={3} className="d-flex align-items-center">
           <Navbar.Brand href="/" className="pl-3">
-            <img
-              src={require("../images/tmdbLogo.svg").default}
-              alt="Logo"
-              style={{ height: "4rem" }}
-            />
+            <img src={rmdbLogo} alt="RMDB Logo" style={{ height: "4rem" }} />
           </Navbar.Brand>
         </Col>
 

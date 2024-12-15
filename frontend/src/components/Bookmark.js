@@ -20,7 +20,7 @@ const Bookmark = ({ show, onClose, identifier }) => {
       setTimeout(() => {
         onClose();
         setSuccessMessage("");
-      }, 1500);
+      }, 1000);
     } catch (err) {
       console.error("Error adding bookmark:", err);
       alert("Failed to add bookmark.");

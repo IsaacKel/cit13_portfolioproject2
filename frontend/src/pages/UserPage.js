@@ -14,6 +14,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../components/AuthContext";
 import "./UserPage.css";
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 const UserPage = () => {
   const navigate = useNavigate();
@@ -120,6 +121,24 @@ const UserPage = () => {
     }
   };
 
+  const getStarRating = (rating) => {
+    const stars = [];
+    const maxStars = 5;
+    const halfRating = rating / 2;
+
+    for (let i = 1; i <= maxStars; i++) {
+      if (i <= halfRating) {
+        stars.push(<FaStar key={i} />);
+      } else if (i - 0.5 === halfRating) {
+        stars.push(<FaStarHalfAlt key={i} />);
+      } else {
+        stars.push(<FaRegStar key={i} />);
+      }
+    }
+
+    return stars;
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -216,7 +235,7 @@ const UserPage = () => {
                           </>
                         </Link>
                       )}
-                      <p>
+                      <p className="note">
                         <strong>Note:</strong> {bookmark.note}
                       </p>
                       <p>
@@ -227,7 +246,7 @@ const UserPage = () => {
                       </p>
                     </div>
                     <button onClick={() => handleDeleteBookmark(bookmark.id)}>
-                      Delete Bookmark
+                      Delete
                     </button>
                   </div>
                 ))}
@@ -253,9 +272,7 @@ const UserPage = () => {
                           <img src={rating.title.poster} alt="poster" />
                         </>
                       </Link>
-                      <p>
-                        <strong>Rating:</strong> {rating.rating}
-                      </p>
+                      <p>{getStarRating(rating.rating)}</p>
                       <p>
                         <strong>Date:</strong>{" "}
                         {new Date(rating.createdAt).toLocaleDateString("en-GB")}
@@ -266,7 +283,7 @@ const UserPage = () => {
                         handleDeleteRating(rating.userId, rating.id)
                       }
                     >
-                      Delete Rating
+                      Delete
                     </button>
                   </div>
                 ))}
@@ -280,29 +297,29 @@ const UserPage = () => {
           <>
             <h2>Search History</h2>
             {searchHistory.items && searchHistory.items.length > 0 ? (
-              <ul>
+              <ul className="search-history">
                 {searchHistory.items.map((historyItem) => (
                   <li key={historyItem.id}>
-                    <p>
-                      <strong>Query:</strong>{" "}
+                    <p className="query">
                       <Link
                         to={`/search?searchTerm=${encodeURIComponent(
                           historyItem.searchQuery
                         )}`}
                       >
-                        {historyItem.searchQuery}
+                        <strong>Query:</strong> {historyItem.searchQuery}
                       </Link>
                     </p>
-                    <p>
+                    <p className="date">
                       <strong>Date:</strong>{" "}
                       {new Date(historyItem.createdAt).toLocaleDateString(
                         "en-GB"
                       )}
                     </p>
                     <button
+                      className="delete-button"
                       onClick={() => handleDeleteSearchHistory(historyItem.id)}
                     >
-                      Delete Search History
+                      Delete
                     </button>
                   </li>
                 ))}

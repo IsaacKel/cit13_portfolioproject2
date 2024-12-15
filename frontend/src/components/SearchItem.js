@@ -86,7 +86,10 @@ const SearchItem = ({ item, type }) => {
       )}
       <Bookmark
         show={showBookmarkModal}
-        onClose={() => setShowBookmarkModal(false)}
+        onClose={() => {
+          setShowBookmarkModal(false);
+          setIsBookmarkedState(true);
+        }}
         identifier={constValue}
       />
     </div>
