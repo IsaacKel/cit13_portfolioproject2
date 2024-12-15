@@ -12,7 +12,7 @@ import {
   deleteSearchHistory,
 } from "../services/apiService";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../components/AuthContext";
+import AuthContext from "../context/AuthContext";
 import "./UserPage.css";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 

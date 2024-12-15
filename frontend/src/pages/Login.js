@@ -3,7 +3,7 @@ import { Form, Alert } from "react-bootstrap";
 import { loginUser } from "../services/apiService";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../components/AuthContext";
+import AuthContext from "../context/AuthContext";
 
 const Login = ({ onLoginSuccess, isFullPage }) => {
   const navigate = useNavigate();

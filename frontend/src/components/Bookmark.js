@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { addBookmark } from "../services/apiService";
-import AuthContext from "./AuthContext";
+import AuthContext from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Bookmark.css";
 import "./NavBar.css";

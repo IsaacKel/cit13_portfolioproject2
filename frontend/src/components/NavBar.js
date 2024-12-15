@@ -7,7 +7,7 @@ import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import { logoutUser } from "../services/apiService";
 import SearchBar from "./SearchBar";
-import AuthContext from "./AuthContext";
+import AuthContext from "../context/AuthContext";
 import rmdbLogo from "../images/rmdb_logo.png";
 
 const NavBar = () => {
