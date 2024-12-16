@@ -14,16 +14,21 @@ const NameResults = () => {
   const dispatch = useDispatch();
   const [seeMore, setSeeMore] = useState(false);
   const [itemsToShow, setItemsToShow] = useState(3);
-  const { query, results, currentPage, pageSize, totalPages } = useSelector(
-    (state) => state.namesSearch
-  );
+  const { query, sortBy, results, currentPage, pageSize, totalPages } =
+    useSelector((state) => state.namesSearch);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       dispatch(setLoading(true));
       try {
-        const data = await fetchNamesSearch(query, currentPage, pageSize);
+        const data = await fetchNamesSearch(
+          query,
+          sortBy,
+          currentPage,
+          pageSize
+        );
+        console.log("SortBy from Redux:", sortBy);
         dispatch(setResults(data));
       } catch (error) {
         dispatch(setError(error.message));
@@ -35,7 +40,7 @@ const NameResults = () => {
     };
 
     if (query) fetchData();
-  }, [query, currentPage, pageSize, dispatch]);
+  }, [query, sortBy, currentPage, pageSize, dispatch]);
 
   const handleToggleClick = () => {
     setSeeMore(!seeMore);

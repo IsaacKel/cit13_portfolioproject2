@@ -94,8 +94,9 @@ export const logoutUser = async () => {
   }
 };
 
-export const fetchNamesSearch = async (query, pageNumber, pageSize) => {
+export const fetchNamesSearch = async (query, sortBy, pageNumber, pageSize) => {
   const params = new URLSearchParams({
+    sortBy,
     pageNumber,
     pageSize,
   });

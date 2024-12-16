@@ -47,11 +47,13 @@ const FiltersColumn = () => {
   };
 
   const handleSortChange = (e) => {
+    console.log("Dispatching SortBy:", localSortBy);
     setLocalSortBy(e.target.value);
   };
 
   const handleApplyFilters = () => {
     dispatch(setFilters(localFilters));
+    console.log("localSortBy", localSortBy);
     dispatch(setSortBy(localSortBy));
   };
 
@@ -74,6 +76,7 @@ const FiltersColumn = () => {
         >
           <option value="popularity">Popularity</option>
           <option value="rating">Rating</option>
+          <option value="releaseYear">Release Year</option>
         </select>
       </div>
       <div>

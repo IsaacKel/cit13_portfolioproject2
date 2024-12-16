@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   query: "",
+  sortBy: "popularity",
   results: [],
   currentPage: 1,
   pageSize: 10,
@@ -16,6 +17,10 @@ const namesSearchSlice = createSlice({
   reducers: {
     setQuery: (state, action) => {
       state.query = action.payload;
+    },
+    setSortBy: (state, action) => {
+      console.log("Redux setSortBy Action Payload:", action.payload);
+      state.sortBy = action.payload;
     },
     setResults: (state, action) => {
       state.results = action.payload.items;
@@ -34,7 +39,13 @@ const namesSearchSlice = createSlice({
   },
 });
 
-export const { setQuery, setResults, setCurrentPage, setLoading, setError } =
-  namesSearchSlice.actions;
+export const {
+  setQuery,
+  setSortBy,
+  setResults,
+  setCurrentPage,
+  setLoading,
+  setError,
+} = namesSearchSlice.actions;
 
 export default namesSearchSlice.reducer;

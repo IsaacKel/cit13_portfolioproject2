@@ -23,9 +23,10 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("name/{searchTerm}")]
-        public ActionResult<PagedResponse<SearchName>> GetSearchNamesSorted(string searchTerm, string sortType = "popularity", int pageNumber = 1, int pageSize = DefaultPageSize)
+        public ActionResult<PagedResponse<SearchName>> GetSearchNamesSorted(string searchTerm, string sortBy, int pageNumber = 1, int pageSize = DefaultPageSize)
         {
-            var names = _dataService.GetSearchNamesSorted(searchTerm, sortType);
+            Console.WriteLine("SORT BY: " + sortBy);
+            var names = _dataService.GetSearchNamesSorted(searchTerm, sortBy);
             if (names == null || !names.Any())
             {
                 return NotFound();
@@ -76,6 +77,19 @@ namespace WebApi.Controllers
                     Rating = rt.Rating,
                     StartYear = rt.StartYear,
                     Genre = rt.Genre
+                });
+            }
+            else if (sortBy == "releaseYear")
+            {
+                var releaseYearTitles = _dataService.GetSearchTitlesYear(query, titleType, genre, year);
+                titles = releaseYearTitles.Select(ryt => new SearchTitle
+                {
+                    TConst = ryt.TConst,
+                    PrimaryTitle = ryt.PrimaryTitle,
+                    Poster = ryt.Poster,
+                    Rating = ryt.Rating,
+                    StartYear = ryt.StartYear,
+                    Genre = ryt.Genre
                 });
             }
             else

@@ -339,7 +339,7 @@ namespace DataLayer
     }
     public IList<SearchName> GetSearchNames(string searchTerm)
     {
-      return _context.SearchNames.FromSqlInterpolated($"select * from search_names_by_text({searchTerm})").ToList();
+      return _context.SearchNames.FromSqlInterpolated($"select * from search_names_by_text_sorted({searchTerm})").ToList();
     }
     public IList<SearchTitle> GetSearchTitles(string searchTerm)
     {
