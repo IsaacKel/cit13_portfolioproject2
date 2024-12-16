@@ -1,5 +1,5 @@
-//const baseURL = "http://localhost:5003/api";
-const baseURL = "https://localhost:5003/api";
+const baseURL = "http://localhost:5003/api";
+// const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -672,6 +672,7 @@ export const isBookmarked = async (identifier) => {
     return false;
   }
 };
+
 export const addRating = async (tConst, rating) => {
   try {
     const token =
@@ -704,29 +705,81 @@ export const addRating = async (tConst, rating) => {
   }
 };
 
-export const fetchUserRatings = async () => {
+export const fetchUserRatings = async (pageNumber = 1, pageSize = 10) => {
   try {
     const token =
-      localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
-    const response = await fetch(`${baseURL}/UserRating`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      localStorage.getItem("token") || sessionStorage.getItem("token");
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    let allRatings = [];
+    let currentPage = 1;
+    let totalPages = 1;
+
+    while (currentPage <= totalPages) {
+      const response = await fetch(
+        `${baseURL}/UserRating/?pageNumber=${currentPage}&pageSize=${pageSize}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch ratings");
+      }
+
+      const data = await response.json();
+      allRatings = allRatings.concat(data.items);
+
+      totalPages = data.numberPages;
+      currentPage++;
     }
 
-    return await response.json();
+    console.log(allRatings);
+
+    return { items: allRatings };
   } catch (error) {
-    console.error("Error fetching user ratings:", error);
+    console.error("Error fetching all ratings:", error);
     throw error;
   }
 };
+
+export const isRated = async (tConst) => {
+  try {
+    const ratingsData = await fetchUserRatings();
+    const ratings = ratingsData.items || [];
+
+    return ratings.some((rating) => rating.tConst === tConst);
+  } catch (error) {
+    console.error("Error checking if title is rated:", error);
+    return false;
+  }
+};
+
+// export const fetchUserRatings = async () => {
+//   try {
+//     const token =
+//       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
+//     const response = await fetch(`${baseURL}/UserRating`, {
+//       method: "GET",
+//       credentials: "include",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error fetching user ratings:", error);
+//     throw error;
+//   }
+// };
 export const fetchUserSearchHistory = async () => {
   try {
     const token =
@@ -752,7 +805,8 @@ export const fetchUserSearchHistory = async () => {
 };
 export const deleteRating = async (ratingId) => {
   try {
-    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
     const response = await fetch(`${baseURL}/Rate/Delete/${ratingId}`, {
       method: "GET",
       headers: {

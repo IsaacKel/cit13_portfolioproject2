@@ -6,7 +6,7 @@ import {
   fetchTitleData,
   fetchSimilarTitles,
   fetchTitlePrincipals,
-  formatTitleType,
+  isRated,
 } from "../services/apiService";
 import Bookmark from "../components/Bookmark";
 import Rate from "../components/Rate";
@@ -29,6 +29,7 @@ const IndividualTitle = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isBookmarkedStatus, setIsBookmarkedStatus] = useState(null);
+  const [isRatedStatus, setIsRatedStatus] = useState(null);
 
   // Fetch main title data, similar titles, and cast/crew
   useEffect(() => {
@@ -102,6 +103,17 @@ const IndividualTitle = () => {
     checkBookmarkStatus();
   }, [titleData, isBookmarked]);
 
+  // Check rating status
+  useEffect(() => {
+    const checkRatingStatus = async () => {
+      if (titleData?.tConst) {
+        const result = await isRated(titleData.tConst);
+        setIsRatedStatus(result);
+      }
+    };
+    checkRatingStatus();
+  }, [titleData]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -129,14 +141,22 @@ const IndividualTitle = () => {
               </span>
             </div>
           )}
-          <button
-            className="bookmark-style"
-            onClick={() => setShowRateModal(true)}
-          >
-            + Add Rating
-          </button>
+          {isRatedStatus ? (
+            <span className="bookmark-style disabled" disabled>
+              Rated
+            </span>
+          ) : (
+            <button
+              className="bookmark-style"
+              onClick={() => setShowRateModal(true)}
+            >
+              + Add Rating
+            </button>
+          )}
           {isBookmarkedStatus ? (
-            <span className="bookmark-style disabled"disabled>Bookmarked</span>
+            <span className="bookmark-style disabled" disabled>
+              Bookmarked
+            </span>
           ) : (
             <button
               className="bookmark-style"
@@ -249,7 +269,13 @@ const IndividualTitle = () => {
         }}
         identifier={tConst}
       />
-      <Rate show={showRateModal} onClose={() => setShowRateModal(false)} />
+      <Rate
+        show={showRateModal}
+        onClose={() => {
+          setShowRateModal(false);
+          setIsRatedStatus(true);
+        }}
+      />
     </div>
   );
 };
