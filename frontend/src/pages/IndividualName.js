@@ -129,7 +129,9 @@ const IndividualName = () => {
                 <span className="rating">⭐ {nameData.nRating}</span>
               )}
               {isBookmarkedStatus ? (
-                <span className="bookmark-style disabled"disabled>Bookmarked</span>
+                <span className="bookmark-style disabled" disabled>
+                  Bookmarked
+                </span>
               ) : (
                 <button
                   className="bookmark-style"
@@ -272,10 +274,8 @@ const IndividualName = () => {
           {/* Bookmark Modal */}
           <Bookmark
             show={showBookmarkModal}
-            onClose={() => {
-              setShowBookmarkModal(false);
-              setIsBookmarkedStatus(true);
-            }}
+            onClose={() => setShowBookmarkModal(false)}
+            onBookmarkSuccess={() => setIsBookmarkedStatus(true)}
             identifier={nConst}
           />
         </>

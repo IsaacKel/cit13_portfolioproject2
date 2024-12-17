@@ -263,18 +263,14 @@ const IndividualTitle = () => {
 
       <Bookmark
         show={showBookmarkModal}
-        onClose={() => {
-          setShowBookmarkModal(false);
-          setIsBookmarkedStatus(true);
-        }}
+        onClose={() => setShowBookmarkModal(false)}
+        onBookmarkSuccess={() => setIsBookmarkedStatus(true)}
         identifier={tConst}
       />
       <Rate
         show={showRateModal}
-        onClose={() => {
-          setShowRateModal(false);
-          setIsRatedStatus(true);
-        }}
+        onClose={() => setShowRateModal(false)}
+        onRateSuccess={() => setIsRatedStatus(true)}
       />
     </div>
   );

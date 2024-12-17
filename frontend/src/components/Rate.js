@@ -8,7 +8,7 @@ import "./Bookmark.css";
 import "./NavBar.css";
 import StarRating from "./StarRating";
 
-const Rate = ({ show, onClose }) => {
+const Rate = ({ show, onClose, onRateSuccess }) => {
   const [rating, setRating] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const { isLoggedIn } = useContext(AuthContext);
@@ -17,7 +17,10 @@ const Rate = ({ show, onClose }) => {
 
   const handleRate = async () => {
     try {
-      await addRating(tConst, rating);
+      const result = await addRating(tConst, rating);
+      if (result.success) {
+        onRateSuccess();
+      }
       setSuccessMessage("Rating added successfully!");
       setTimeout(() => {
         onClose();

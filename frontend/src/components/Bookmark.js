@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./Bookmark.css";
 import "./NavBar.css";
 
-const Bookmark = ({ show, onClose, identifier }) => {
+const Bookmark = ({ show, onClose, onBookmarkSuccess, identifier }) => {
   const [note, setNote] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const { isLoggedIn } = useContext(AuthContext);
@@ -15,7 +15,10 @@ const Bookmark = ({ show, onClose, identifier }) => {
 
   const handleBookmark = async () => {
     try {
-      await addBookmark(identifier, note);
+      const result = await addBookmark(identifier, note);
+      if (result.success) {
+        onBookmarkSuccess();
+      }
       setSuccessMessage("Bookmark added successfully!");
       setTimeout(() => {
         onClose();
