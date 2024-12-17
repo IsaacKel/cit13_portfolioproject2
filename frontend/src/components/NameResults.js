@@ -28,7 +28,6 @@ const NameResults = () => {
           currentPage,
           pageSize
         );
-        console.log("SortBy from Redux:", sortBy);
         dispatch(setResults(data));
       } catch (error) {
         dispatch(setError(error.message));

@@ -25,7 +25,6 @@ namespace WebApi.Controllers
         [HttpGet("name/{searchTerm}")]
         public ActionResult<PagedResponse<SearchName>> GetSearchNamesSorted(string searchTerm, string sortBy, int pageNumber = 1, int pageSize = DefaultPageSize)
         {
-            Console.WriteLine("SORT BY: " + sortBy);
             var names = _dataService.GetSearchNamesSorted(searchTerm, sortBy);
             if (names == null || !names.Any())
             {

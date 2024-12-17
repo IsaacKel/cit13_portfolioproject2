@@ -754,29 +754,6 @@ export const isRated = async (tConst) => {
   }
 };
 
-// export const fetchUserRatings = async () => {
-//   try {
-//     const token =
-//       localStorage.getItem("token") || sessionStorage.getItem("token"); // Retrieve token
-//     const response = await fetch(`${baseURL}/UserRating`, {
-//       method: "GET",
-//       credentials: "include",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-
-//     return await response.json();
-//   } catch (error) {
-//     console.error("Error fetching user ratings:", error);
-//     throw error;
-//   }
-// };
 export const fetchUserSearchHistory = async () => {
   try {
     const token =

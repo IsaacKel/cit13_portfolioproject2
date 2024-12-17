@@ -38,10 +38,10 @@ const UserPage = () => {
       try {
         const [userData, userBookmarks, userRatings, userSearchHistory] =
           await Promise.all([
-            fetchUserData(),
-            fetchBookmarks(),
-            fetchUserRatings(),
-            fetchUserSearchHistory(),
+            fetchUserData().catch(() => ({})),
+            fetchBookmarks().catch(() => ({ items: [] })),
+            fetchUserRatings().catch(() => ({ items: [] })),
+            fetchUserSearchHistory().catch(() => []),
           ]);
 
         setUser(userData || {});
@@ -49,42 +49,40 @@ const UserPage = () => {
         const bookmarksWithTitles = await Promise.all(
           userBookmarks.items.map(async (bookmark) => {
             if (bookmark.tConst) {
-              const titleData = await fetchTitleData(bookmark.tConst);
+              const titleData = await fetchTitleData(bookmark.tConst).catch(
+                () => ({})
+              );
               return { ...bookmark, title: titleData };
             } else if (bookmark.nConst) {
-              const nameData = await fetchNameData(bookmark.nConst);
-              const nameImage = await fetchImages(bookmark.nConst);
+              const nameData = await fetchNameData(bookmark.nConst).catch(
+                () => ({})
+              );
+              const nameImage = await fetchImages(bookmark.nConst).catch(
+                () => ({})
+              );
               return { ...bookmark, name: nameData, image: nameImage };
             }
             return bookmark;
           })
         );
         setBookmarks({ items: bookmarksWithTitles });
-      } catch (err) {
-        console.error(err);
-      }
 
-      try {
-        const userRatings = await fetchUserRatings();
         const ratingsWithTitles = await Promise.all(
           userRatings.items.map(async (rating) => {
-            const titleData = await fetchTitleData(rating.tConst);
+            const titleData = await fetchTitleData(rating.tConst).catch(
+              () => ({})
+            );
             return { ...rating, title: titleData };
           })
         );
         setRatings(ratingsWithTitles || []);
-      } catch (err) {
-        setRatings([]);
-      }
 
-      try {
-        const userSearchHistory = await fetchUserSearchHistory();
         setSearchHistory(userSearchHistory || []);
       } catch (err) {
-        setSearchHistory([]);
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     fetchData();
@@ -278,11 +276,7 @@ const UserPage = () => {
                         {new Date(rating.createdAt).toLocaleDateString("en-GB")}
                       </p>
                     </div>
-                    <button
-                      onClick={() =>
-                        handleDeleteRating(rating.id)
-                      }
-                    >
+                    <button onClick={() => handleDeleteRating(rating.id)}>
                       Delete
                     </button>
                   </div>
