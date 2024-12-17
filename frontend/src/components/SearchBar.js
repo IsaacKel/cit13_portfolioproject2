@@ -15,7 +15,8 @@ const SearchBar = () => {
 
   const [searchQuery, setSearchQuery] = useState(query || "");
 
-  const isAuthenticated = !!localStorage.getItem("token");
+  const isAuthenticated =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
 
   const handleSearch = async () => {
     try {
