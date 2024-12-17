@@ -1,5 +1,5 @@
-// const baseURL = "http://localhost:5003/api";
-const baseURL = "https://localhost:5003/api";
+const baseURL = "http://localhost:5003/api";
+// const baseURL = "https://localhost:5003/api";
 const userBaseURL = `${baseURL}/v3/user`;
 
 // Function to register a user
@@ -113,7 +113,6 @@ export const fetchNamesSearch = async (query, sortBy, pageNumber, pageSize) => {
         return { ...person, imageUrl };
       })
     );
-    console.log(nameData);
     return {
       items: namesWithImages,
       numberPages: nameData.numberPages || 1,
@@ -735,8 +734,6 @@ export const fetchUserRatings = async (pageNumber = 1, pageSize = 10) => {
       totalPages = data.numberPages;
       currentPage++;
     }
-
-    console.log(allRatings);
 
     return { items: allRatings };
   } catch (error) {

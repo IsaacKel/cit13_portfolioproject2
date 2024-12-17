@@ -47,13 +47,11 @@ const FiltersColumn = () => {
   };
 
   const handleSortChange = (e) => {
-    console.log("Dispatching SortBy:", localSortBy);
     setLocalSortBy(e.target.value);
   };
 
   const handleApplyFilters = () => {
     dispatch(setFilters(localFilters));
-    console.log("localSortBy", localSortBy);
     dispatch(setSortBy(localSortBy));
   };
 

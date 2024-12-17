@@ -19,7 +19,6 @@ const namesSearchSlice = createSlice({
       state.query = action.payload;
     },
     setSortBy: (state, action) => {
-      console.log("Redux setSortBy Action Payload:", action.payload);
       state.sortBy = action.payload;
     },
     setResults: (state, action) => {

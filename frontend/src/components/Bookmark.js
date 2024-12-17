@@ -17,7 +17,7 @@ const Bookmark = ({ show, onClose, onBookmarkSuccess, identifier }) => {
     try {
       const result = await addBookmark(identifier, note);
       if (result.success) {
-        onBookmarkSuccess();
+        onBookmarkSuccess(true);
       }
       setSuccessMessage("Bookmark added successfully!");
       setTimeout(() => {
